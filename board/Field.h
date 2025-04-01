@@ -17,6 +17,8 @@ public:
 
     void placeFigure(std::unique_ptr<Figure> figure);
 
+    friend std::ostream &operator<<(std::ostream &os, const Field &field);
+
     ~Field() = default;
 };
 
