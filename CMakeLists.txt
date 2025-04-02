@@ -2,14 +2,15 @@ cmake_minimum_required(VERSION 3.16)
 
 add_executable(Chess main.cpp
         Constants.h
-        Constants.cpp
-        board/Board.cpp
-        board/Board.h
+        board/ChessBoard.cpp
+        board/ChessBoard.h
         board/Field.cpp
         board/Field.h
-        board/Board.h
+        board/ChessBoard.h
         board/figures/Figure.cpp
-        board/figures/Figure.h)
+        board/figures/Figure.h
+        board/figures/King.cpp
+        board/figures/King.h)
 
 project(Chess VERSION 0.1 LANGUAGES CXX)
 
