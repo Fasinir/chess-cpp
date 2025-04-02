@@ -1,7 +1,3 @@
-//
-// Created by Programming on 31.03.2025.
-//
-
 #include "Field.h"
 #include <ostream>
 
@@ -24,14 +20,14 @@ void Field::removeFigure() {
 
 Field::Field(const Field &other) {
     if (other.figure) {
-        figure = other.figure->clone(); // Call clone() to copy the figure
+        figure = other.figure->clone();
     }
 }
 
 Field &Field::operator=(const Field &other) {
     if (this != &other) {
         if (other.figure) {
-            figure = other.figure->clone(); // Assuming Figure has a copy constructor
+            figure = other.figure->clone();
         } else {
             figure.reset();
         }
