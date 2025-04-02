@@ -8,8 +8,8 @@ add_executable(Chess main.cpp
         board/Field.cpp
         board/Field.h
         board/Board.h
-        board/Figure.cpp
-        board/Figure.h)
+        board/figures/Figure.cpp
+        board/figures/Figure.h)
 
 project(Chess VERSION 0.1 LANGUAGES CXX)
 

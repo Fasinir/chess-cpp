@@ -9,6 +9,7 @@ public:
 
     static const std::vector<int> RANKS;
     static const std::vector<char> FILES;
+    enum class Color { WHITE, BLACK };
 };
 
 #endif // CONSTANTS_H
