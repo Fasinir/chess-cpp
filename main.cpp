@@ -1,10 +1,10 @@
-#include "mainwindow.h"
+#include <iostream>
+#include <ostream>
 
-#include <QApplication>
+#include "board/ChessBoard.h"
 
 int main(int argc, char *argv[]) {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    return a.exec();
+    std::unique_ptr<ChessBoard> chessBoard = ChessBoard::STANDARD_BOARD();
+    std::cout << *chessBoard << std::endl;
+    return 0;
 }
