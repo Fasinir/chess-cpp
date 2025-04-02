@@ -2,7 +2,12 @@
 
 #include <ostream>
 
+#include "figures/Bishop.h"
 #include "figures/King.h"
+#include "figures/Knight.h"
+#include "figures/Pawn.h"
+#include "figures/Queen.h"
+#include "figures/Rook.h"
 
 std::ostream &operator<<(std::ostream &os, const ChessBoard &board) {
     os << "  ";
@@ -27,11 +32,32 @@ std::ostream &operator<<(std::ostream &os, const ChessBoard &board) {
 std::unique_ptr<ChessBoard> ChessBoard::STANDARD_BOARD() {
     std::unique_ptr<ChessBoard> board = std::make_unique<ChessBoard>();
 
-    // Place white king at e1 (row 0, column 4)
-    board->placeFigure(std::make_unique<King>(Constants::Color::WHITE), 0, 4);
+    // King
+    board->placeFigure(std::make_unique<King>(Constants::Color::WHITE), 7, 4);
+    board->placeFigure(std::make_unique<King>(Constants::Color::BLACK), 0, 4);
+    // Queen
+    board->placeFigure(std::make_unique<Queen>(Constants::Color::WHITE), 7, 3);
+    board->placeFigure(std::make_unique<Queen>(Constants::Color::BLACK), 0, 3);
+    // Bishop
+    board->placeFigure(std::make_unique<Bishop>(Constants::Color::WHITE), 7, 2);
+    board->placeFigure(std::make_unique<Bishop>(Constants::Color::WHITE), 7, 5);
+    board->placeFigure(std::make_unique<Bishop>(Constants::Color::BLACK), 0, 2);
+    board->placeFigure(std::make_unique<Bishop>(Constants::Color::BLACK), 0, 5);
+    // Knight
+    board->placeFigure(std::make_unique<Knight>(Constants::Color::WHITE), 7, 1);
+    board->placeFigure(std::make_unique<Knight>(Constants::Color::WHITE), 7, 6);
+    board->placeFigure(std::make_unique<Knight>(Constants::Color::BLACK), 0, 1);
+    board->placeFigure(std::make_unique<Knight>(Constants::Color::BLACK), 0, 6);
+    // Rook
+    board->placeFigure(std::make_unique<Rook>(Constants::Color::WHITE), 7, 0);
+    board->placeFigure(std::make_unique<Rook>(Constants::Color::WHITE), 7, 7);
+    board->placeFigure(std::make_unique<Rook>(Constants::Color::BLACK), 0, 0);
+    board->placeFigure(std::make_unique<Rook>(Constants::Color::BLACK), 0, 7);
 
-    // Place black king at e8 (row 7, column 4)
-    board->placeFigure(std::make_unique<King>(Constants::Color::BLACK), 7, 4);
+    for (int i = 0; i < Constants::BOARD_SIZE; i++) {
+        board->placeFigure(std::make_unique<Pawn>(Constants::Color::WHITE), 6, i);
+        board->placeFigure(std::make_unique<Pawn>(Constants::Color::BLACK), 1, i);
+    }
 
     return board;
 }

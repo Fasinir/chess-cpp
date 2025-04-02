@@ -10,7 +10,17 @@ add_executable(Chess main.cpp
         board/figures/Figure.cpp
         board/figures/Figure.h
         board/figures/King.cpp
-        board/figures/King.h)
+        board/figures/King.h
+        board/figures/Queen.cpp
+        board/figures/Queen.h
+        board/figures/Bishop.cpp
+        board/figures/Bishop.h
+        board/figures/Knight.cpp
+        board/figures/Knight.h
+        board/figures/Rook.cpp
+        board/figures/Rook.h
+        board/figures/Pawn.cpp
+        board/figures/Pawn.h)
 
 project(Chess VERSION 0.1 LANGUAGES CXX)
 
