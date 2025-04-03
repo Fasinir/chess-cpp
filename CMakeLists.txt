@@ -20,7 +20,13 @@ add_executable(Chess main.cpp
         board/figures/Rook.cpp
         board/figures/Rook.h
         board/figures/Pawn.cpp
-        board/figures/Pawn.h)
+        board/figures/Pawn.h
+        board/move/Coordinates.cpp
+        board/move/Coordinates.h
+        board/move/Move.cpp
+        board/move/Move.h
+        board/move/MoveMethod.cpp
+        board/move/MoveMethod.h)
 
 project(Chess VERSION 0.1 LANGUAGES CXX)
 
