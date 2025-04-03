@@ -25,8 +25,10 @@ add_executable(Chess main.cpp
         board/move/Coordinates.h
         board/move/Move.cpp
         board/move/Move.h
-        board/move/MoveMethod.cpp
-        board/move/MoveMethod.h)
+        board/move/MoveType.h
+        ChessColor.h
+        board/move/MoveType.cpp
+        PrintUtils.h)
 
 project(Chess VERSION 0.1 LANGUAGES CXX)
 

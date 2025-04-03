@@ -8,14 +8,14 @@ class Figure;
 
 class Field {
     std::unique_ptr<Figure> figure;
-
 public:
     Field() = default;
+
     ~Field() = default;
 
     Field(const Field &other);
 
-    Field& operator=(const Field& other);
+    Field &operator=(const Field &other);
 
     [[nodiscard]] bool hasFigure() const;
 

@@ -1,7 +1,14 @@
 #include "Pawn.h"
 
+
+Pawn::Pawn(ChessColor color) : Figure(color) {
+    this->moves = std::vector{
+        MoveType::PAWN_TAKING, MoveType::PAWN_SINGLE_MOVE, MoveType::PAWN_TAKING, MoveType::EN_PASSANT
+    };
+}
+
 char Pawn::getSymbol() const {
-    return this->color == Constants::Color::WHITE ? 'P' : 'p';
+    return this->color == ChessColor::WHITE ? 'P' : 'p';
 }
 
 std::unique_ptr<Figure> Pawn::clone() const {

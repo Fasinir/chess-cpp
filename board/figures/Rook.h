@@ -5,8 +5,7 @@
 
 class Rook : public Figure {
 public:
-    explicit Rook(Constants::Color color): Figure(color) {
-    }
+    explicit Rook(ChessColor color);
 
     [[nodiscard]] char getSymbol() const override;
 

@@ -1,12 +1,12 @@
 #ifndef BISHOP_H
 #define BISHOP_H
 #include "Figure.h"
+#include "../../ChessColor.h"
 
 
 class Bishop : public Figure {
 public:
-    explicit Bishop(Constants::Color color): Figure(color) {
-    }
+    explicit Bishop(ChessColor color);
 
     [[nodiscard]] char getSymbol() const override;
 

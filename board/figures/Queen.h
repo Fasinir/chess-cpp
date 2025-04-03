@@ -5,8 +5,7 @@
 
 class Queen : public Figure {
 public:
-    explicit Queen(Constants::Color color) : Figure(color) {
-    };
+    explicit Queen(ChessColor color);
 
     [[nodiscard]] char getSymbol() const override;
 

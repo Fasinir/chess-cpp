@@ -5,8 +5,7 @@
 
 class Pawn : public Figure {
 public:
-    explicit Pawn(Constants::Color color): Figure(color) {
-    }
+    explicit Pawn(ChessColor color);
 
     [[nodiscard]] char getSymbol() const override;
 
