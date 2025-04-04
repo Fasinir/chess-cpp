@@ -10,12 +10,18 @@ class Move {
     MoveType type;
 
 public:
-    Move(const Coordinates from, const Coordinates to, MoveType type) : from(from), to(to), type(type) {
+    Move(const Coordinates from, const Coordinates to, const MoveType type) : from(from), to(to), type(type) {
     };
 
     ~Move() = default;
 
     friend std::ostream &operator<<(std::ostream &os, const Move &move);
+
+    [[nodiscard]] Coordinates getFrom() const;
+
+    [[nodiscard]] Coordinates getTo() const;
+
+    [[nodiscard]] MoveType getType() const;
 };
 
 

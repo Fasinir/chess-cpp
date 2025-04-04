@@ -5,7 +5,7 @@ Knight::Knight(ChessColor color) : Figure(color) {
 }
 
 char Knight::getSymbol() const {
-    return this->color == ChessColor::WHITE ? 'K' : 'k';
+    return this->color == ChessColor::WHITE ? 'N' : 'n';
 }
 
 std::unique_ptr<Figure> Knight::clone() const {

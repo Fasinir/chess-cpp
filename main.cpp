@@ -11,6 +11,7 @@
 #include "board/figures/Queen.h"
 #include "board/figures/Rook.h"
 #include "PrintUtils.h"
+#include "board/move/MoveApplier.h"
 
 
 int main(int argc, char *argv[]) {
@@ -32,5 +33,15 @@ int main(int argc, char *argv[]) {
     std::cout << king.getMoves() << std::endl;
     std::cout << rook.getMoves() << std::endl;
     std::cout << knight.getMoves() << std::endl;
+
+    // Applying move
+    Coordinates coordinatesThree(0, 1);
+    Coordinates coordinatesFour(4, 4);
+    move = Move(coordinatesThree, coordinatesFour, MoveType::PAWN_SINGLE_MOVE);
+    MoveApplier moveApplier;
+    std::unique_ptr<ApplyMoveResult> moveResult = moveApplier.applyMove(*chessBoard, move);
+    std::cout << *chessBoard << std::endl;
+    moveApplier.undoMove(*chessBoard, *moveResult);
+    std::cout << *chessBoard << std::endl;
     return 0;
 }

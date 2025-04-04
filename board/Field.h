@@ -1,13 +1,15 @@
 #ifndef FIELD_H
 #define FIELD_H
 #include <memory>
+#include <optional>
 
 #include "figures/Figure.h"
 
 class Figure;
 
 class Field {
-    std::unique_ptr<Figure> figure;
+    std::optional<std::shared_ptr<Figure> > figure;
+
 public:
     Field() = default;
 
@@ -21,10 +23,11 @@ public:
 
     void removeFigure();
 
-    void placeFigure(std::unique_ptr<Figure> figure);
+    std::optional<std::shared_ptr<Figure> > placeFigure(const std::shared_ptr<Figure>& figure);
+
+    [[nodiscard]] std::optional<std::shared_ptr<Figure> > getFigure() const;
 
     friend std::ostream &operator<<(std::ostream &os, const Field &field);
-
 };
 
 

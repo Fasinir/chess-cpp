@@ -13,7 +13,11 @@ public:
 
     ~Coordinates() = default;
 
-    friend std::ostream& operator<<(std::ostream& os, const Coordinates& coordinates);
+    [[nodiscard]] int getX() const;
+
+    [[nodiscard]] int getY() const;
+
+    friend std::ostream &operator<<(std::ostream &os, const Coordinates &coordinates);
 };
 
 

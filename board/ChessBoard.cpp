@@ -62,6 +62,15 @@ std::unique_ptr<ChessBoard> ChessBoard::STANDARD_BOARD() {
     return board;
 }
 
-void ChessBoard::placeFigure(std::unique_ptr<Figure> figure, int row, int col) {
-    this->board.at(row).at(col).placeFigure(std::move(figure));
+std::optional<std::shared_ptr<Figure> >
+ChessBoard::placeFigure(const std::shared_ptr<Figure> &figure, int row, int col) {
+    return this->board.at(row).at(col).placeFigure(figure);
+}
+
+std::optional<std::shared_ptr<Figure> > ChessBoard::figureAt(int row, int col) const {
+    return board.at(row).at(col).getFigure();
+}
+
+void ChessBoard::removeFigure(int row, int col) {
+    board.at(row).at(col).removeFigure();
 }
