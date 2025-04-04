@@ -25,6 +25,8 @@ public:
 
     std::vector<MoveType> &getMoves();
 
+    const ChessColor &getColor() const;
+
     friend std::ostream &operator<<(std::ostream &os, const Figure &figure);
 };
 

@@ -13,3 +13,7 @@ std::ostream &operator<<(std::ostream &os, const Figure &figure) {
 std::vector<MoveType> &Figure::getMoves() {
     return moves;
 }
+
+const ChessColor &Figure::getColor() const {
+    return color;
+}
