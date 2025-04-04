@@ -54,9 +54,19 @@ std::unique_ptr<ApplyMoveResult> MoveApplier::handleCastle(ChessBoard &chessBoar
     return std::make_unique<ApplyMoveResult>(move);
 }
 
-
 std::unique_ptr<ApplyMoveResult> MoveApplier::handleEnPassant(ChessBoard &chessBoard, const Move &move) {
-    return std::make_unique<ApplyMoveResult>(move);
+    Coordinates from = move.getFrom();
+    Coordinates to = move.getTo();
+    std::shared_ptr<Figure> fromPawn = chessBoard.figureAt(from.getX(), from.getY()).value();
+    chessBoard.placeFigure(fromPawn, to.getX(), to.getY());
+    chessBoard.removeFigure(from.getX(), from.getY());
+    int takenPawnX = to.getX() == 2
+                         ? to.getX() + 1
+                         : to.getX() - 1;
+    int takenPawnY = to.getY();
+    std::optional<std::shared_ptr<Figure> > optionalFromPawn = chessBoard.figureAt(takenPawnX, takenPawnY);
+    chessBoard.removeFigure(takenPawnX, takenPawnY);
+    return std::make_unique<ApplyMoveResult>(move, optionalFromPawn);
 }
 
 void MoveApplier::undoDefaultMove(ChessBoard &chessBoard, const ApplyMoveResult &applyMoveResult) {
@@ -92,4 +102,15 @@ void MoveApplier::undoCastleMove(ChessBoard &chessBoard, const ApplyMoveResult &
 }
 
 void MoveApplier::undoEnPassant(ChessBoard &chessBoard, const ApplyMoveResult &applyMoveResult) {
+    Move move = applyMoveResult.getMove();
+    Coordinates from = move.getFrom();
+    Coordinates to = move.getTo();
+    std::shared_ptr<Figure> takingPawn = chessBoard.figureAt(to.getX(), to.getY()).value();
+    chessBoard.placeFigure(takingPawn, from.getX(), from.getY());
+    chessBoard.removeFigure(to.getX(), to.getY());
+    int takenPawnX = to.getX() == 2
+                         ? to.getX() + 1
+                         : to.getX() - 1;
+    int takenPawnY = to.getY();
+    chessBoard.placeFigure(applyMoveResult.getTakenFigure().value(), takenPawnX, takenPawnY);
 }

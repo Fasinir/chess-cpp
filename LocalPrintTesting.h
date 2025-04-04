@@ -3,7 +3,7 @@
 #include "board/figures/Pawn.h"
 #include "board/move/Coordinates.h"
 #include "board/move/Move.h"
-#include "ChessColor.h";
+#include "ChessColor.h"
 #include "board/figures/Bishop.h"
 #include "board/figures/King.h"
 #include "board/figures/Knight.h"
@@ -14,6 +14,14 @@
 
 class LocalPrintTesting {
 public:
+    static void clearBoard(ChessBoard &chessBoard) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                chessBoard.removeFigure(i, j);
+            }
+        }
+    }
+
     static void printMove() {
         Coordinates coordinatesOne(0, 0);
         Coordinates coordinatesTwo(1, 1);
@@ -49,11 +57,7 @@ public:
     }
 
     static void castlingOne(ChessBoard &chessBoard) {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                chessBoard.removeFigure(i, j);
-            }
-        }
+        clearBoard(chessBoard);
         chessBoard.placeFigure(std::make_unique<King>(ChessColor::WHITE), 7, 4);
         chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 7, 0);
         std::cout << chessBoard << std::endl;
@@ -68,11 +72,7 @@ public:
     }
 
     static void castlingTwo(ChessBoard &chessBoard) {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                chessBoard.removeFigure(i, j);
-            }
-        }
+        clearBoard(chessBoard);
         chessBoard.placeFigure(std::make_unique<King>(ChessColor::WHITE), 7, 4);
         chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 7, 7);
         std::cout << chessBoard << std::endl;
@@ -87,11 +87,7 @@ public:
     }
 
     static void castlingThree(ChessBoard &chessBoard) {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                chessBoard.removeFigure(i, j);
-            }
-        }
+        clearBoard(chessBoard);
         chessBoard.placeFigure(std::make_unique<King>(ChessColor::BLACK), 0, 4);
         chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 0, 0);
         std::cout << chessBoard << std::endl;
@@ -106,17 +102,81 @@ public:
     }
 
     static void castlingFour(ChessBoard &chessBoard) {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                chessBoard.removeFigure(i, j);
-            }
-        }
+        clearBoard(chessBoard);
         chessBoard.placeFigure(std::make_unique<King>(ChessColor::BLACK), 0, 4);
         chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 0, 7);
         std::cout << chessBoard << std::endl;
         Coordinates coordinatesOne = Coordinates(0, 4);
         Coordinates coordinatesTwo = Coordinates(0, 6);
         Move move = Move(coordinatesOne, coordinatesTwo, MoveType::CASTLE);
+        MoveApplier moveApplier;
+        std::unique_ptr<ApplyMoveResult> moveResult = moveApplier.applyMove(chessBoard, move);
+        std::cout << chessBoard << std::endl;
+        moveApplier.undoMove(chessBoard, *moveResult);
+        std::cout << chessBoard << std::endl;
+    }
+
+    static void enPassantOne(ChessBoard &chessBoard) {
+        clearBoard(chessBoard);
+        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::BLACK);
+        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::WHITE);
+        chessBoard.placeFigure(takingPawn, 4, 4);
+        chessBoard.placeFigure(takenPawn, 4, 3);
+        std::cout << chessBoard << std::endl;
+        Coordinates from = Coordinates(4, 4);
+        Coordinates to = Coordinates(5, 3);
+        Move move = Move(from, to, MoveType::EN_PASSANT);
+        MoveApplier moveApplier;
+        std::unique_ptr<ApplyMoveResult> moveResult = moveApplier.applyMove(chessBoard, move);
+        std::cout << chessBoard << std::endl;
+        moveApplier.undoMove(chessBoard, *moveResult);
+        std::cout << chessBoard << std::endl;
+    }
+
+    static void enPassantTwo(ChessBoard &chessBoard) {
+        clearBoard(chessBoard);
+        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::WHITE);
+        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::BLACK);
+        chessBoard.placeFigure(takingPawn, 3, 4);
+        chessBoard.placeFigure(takenPawn, 3, 3);
+        std::cout << chessBoard << std::endl;
+        Coordinates from = Coordinates(3, 4);
+        Coordinates to = Coordinates(2, 3);
+        Move move = Move(from, to, MoveType::EN_PASSANT);
+        MoveApplier moveApplier;
+        std::unique_ptr<ApplyMoveResult> moveResult = moveApplier.applyMove(chessBoard, move);
+        std::cout << chessBoard << std::endl;
+        moveApplier.undoMove(chessBoard, *moveResult);
+        std::cout << chessBoard << std::endl;
+    }
+
+    static void enPassantThree(ChessBoard &chessBoard) {
+        clearBoard(chessBoard);
+        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::BLACK);
+        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::WHITE);
+        chessBoard.placeFigure(takingPawn, 4, 4);
+        chessBoard.placeFigure(takenPawn, 4, 5);
+        std::cout << chessBoard << std::endl;
+        Coordinates from = Coordinates(4, 4);
+        Coordinates to = Coordinates(5, 5);
+        Move move = Move(from, to, MoveType::EN_PASSANT);
+        MoveApplier moveApplier;
+        std::unique_ptr<ApplyMoveResult> moveResult = moveApplier.applyMove(chessBoard, move);
+        std::cout << chessBoard << std::endl;
+        moveApplier.undoMove(chessBoard, *moveResult);
+        std::cout << chessBoard << std::endl;
+    }
+
+    static void enPassantFour(ChessBoard &chessBoard) {
+        clearBoard(chessBoard);
+        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::WHITE);
+        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::BLACK);
+        chessBoard.placeFigure(takingPawn, 3, 4);
+        chessBoard.placeFigure(takenPawn, 3, 3);
+        std::cout << chessBoard << std::endl;
+        Coordinates from = Coordinates(3, 4);
+        Coordinates to = Coordinates(2, 3);
+        Move move = Move(from, to, MoveType::EN_PASSANT);
         MoveApplier moveApplier;
         std::unique_ptr<ApplyMoveResult> moveResult = moveApplier.applyMove(chessBoard, move);
         std::cout << chessBoard << std::endl;
