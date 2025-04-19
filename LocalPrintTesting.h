@@ -58,8 +58,8 @@ public:
 
     static void castlingOne(ChessBoard &chessBoard) {
         clearBoard(chessBoard);
-        chessBoard.placeFigure(std::make_unique<King>(ChessColor::WHITE), 7, 4);
-        chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 7, 0);
+        chessBoard.placeFigure(std::make_unique<King>(ChessColor::BLACK), 7, 4);
+        chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 7, 0);
         std::cout << chessBoard << std::endl;
         Coordinates coordinatesOne = Coordinates(7, 4);
         Coordinates coordinatesTwo = Coordinates(7, 2);
@@ -73,8 +73,8 @@ public:
 
     static void castlingTwo(ChessBoard &chessBoard) {
         clearBoard(chessBoard);
-        chessBoard.placeFigure(std::make_unique<King>(ChessColor::WHITE), 7, 4);
-        chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 7, 7);
+        chessBoard.placeFigure(std::make_unique<King>(ChessColor::BLACK), 7, 4);
+        chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 7, 7);
         std::cout << chessBoard << std::endl;
         Coordinates coordinatesOne = Coordinates(7, 4);
         Coordinates coordinatesTwo = Coordinates(7, 6);
@@ -88,8 +88,8 @@ public:
 
     static void castlingThree(ChessBoard &chessBoard) {
         clearBoard(chessBoard);
-        chessBoard.placeFigure(std::make_unique<King>(ChessColor::BLACK), 0, 4);
-        chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 0, 0);
+        chessBoard.placeFigure(std::make_unique<King>(ChessColor::WHITE), 0, 4);
+        chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 0, 0);
         std::cout << chessBoard << std::endl;
         Coordinates coordinatesOne = Coordinates(0, 4);
         Coordinates coordinatesTwo = Coordinates(0, 2);
@@ -103,8 +103,8 @@ public:
 
     static void castlingFour(ChessBoard &chessBoard) {
         clearBoard(chessBoard);
-        chessBoard.placeFigure(std::make_unique<King>(ChessColor::BLACK), 0, 4);
-        chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 0, 7);
+        chessBoard.placeFigure(std::make_unique<King>(ChessColor::WHITE), 0, 4);
+        chessBoard.placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 0, 7);
         std::cout << chessBoard << std::endl;
         Coordinates coordinatesOne = Coordinates(0, 4);
         Coordinates coordinatesTwo = Coordinates(0, 6);
@@ -118,8 +118,8 @@ public:
 
     static void enPassantOne(ChessBoard &chessBoard) {
         clearBoard(chessBoard);
-        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::BLACK);
-        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::WHITE);
+        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::WHITE);
+        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::BLACK);
         chessBoard.placeFigure(takingPawn, 4, 4);
         chessBoard.placeFigure(takenPawn, 4, 3);
         std::cout << chessBoard << std::endl;
@@ -135,8 +135,8 @@ public:
 
     static void enPassantTwo(ChessBoard &chessBoard) {
         clearBoard(chessBoard);
-        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::WHITE);
-        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::BLACK);
+        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::BLACK);
+        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::WHITE);
         chessBoard.placeFigure(takingPawn, 3, 4);
         chessBoard.placeFigure(takenPawn, 3, 3);
         std::cout << chessBoard << std::endl;
@@ -152,8 +152,8 @@ public:
 
     static void enPassantThree(ChessBoard &chessBoard) {
         clearBoard(chessBoard);
-        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::BLACK);
-        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::WHITE);
+        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::WHITE);
+        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::BLACK);
         chessBoard.placeFigure(takingPawn, 4, 4);
         chessBoard.placeFigure(takenPawn, 4, 5);
         std::cout << chessBoard << std::endl;
@@ -169,8 +169,8 @@ public:
 
     static void enPassantFour(ChessBoard &chessBoard) {
         clearBoard(chessBoard);
-        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::WHITE);
-        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::BLACK);
+        std::shared_ptr<Figure> takingPawn = std::make_unique<Pawn>(ChessColor::BLACK);
+        std::shared_ptr<Figure> takenPawn = std::make_unique<Pawn>(ChessColor::WHITE);
         chessBoard.placeFigure(takingPawn, 3, 4);
         chessBoard.placeFigure(takenPawn, 3, 3);
         std::cout << chessBoard << std::endl;
