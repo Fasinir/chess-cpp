@@ -18,6 +18,10 @@ public:
     [[nodiscard]] int getY() const;
 
     friend std::ostream &operator<<(std::ostream &os, const Coordinates &coordinates);
+
+    [[nodiscard]] std::string toAlgebraicNotation() const;
+
+    static Coordinates fromAlgebraicNotation(const std::string &algebraicNotation);
 };
 
 

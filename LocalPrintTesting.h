@@ -183,6 +183,20 @@ public:
         moveApplier.undoMove(chessBoard, *moveResult);
         std::cout << chessBoard << std::endl;
     }
+
+    static void printCoordinates() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 7; j++) {
+                Coordinates coordinates = Coordinates(i, j);
+                std::string algebraicNotation = coordinates.toAlgebraicNotation();
+                std::cout << algebraicNotation << "->" << Coordinates::fromAlgebraicNotation(algebraicNotation) << ", ";
+            }
+            Coordinates coordinates = Coordinates(i, 8);
+            std::string algebraicNotation = coordinates.toAlgebraicNotation();
+            std::cout << algebraicNotation << "->" << Coordinates::fromAlgebraicNotation(algebraicNotation) <<
+                    std::endl;
+        }
+    }
 };
 
 

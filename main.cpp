@@ -18,5 +18,6 @@ int main(int argc, char *argv[]) {
     LocalPrintTesting::enPassantTwo(*chessBoard);
     LocalPrintTesting::enPassantThree(*chessBoard);
     LocalPrintTesting::enPassantFour(*chessBoard);
+    LocalPrintTesting::printCoordinates();
     return 0;
 }
