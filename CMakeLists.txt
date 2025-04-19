@@ -33,7 +33,10 @@ add_executable(Chess main.cpp
         board/move/MoveApplier.h
         board/move/ApplyMoveResult.cpp
         board/move/ApplyMoveResult.h
-        LocalPrintTesting.h)
+        LocalPrintTesting.h
+        board/move/LegalMoveGetter.cpp
+        board/move/LegalMoveGetter.h
+)
 
 project(Chess VERSION 0.1 LANGUAGES CXX)
 

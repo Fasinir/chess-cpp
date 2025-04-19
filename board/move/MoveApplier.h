@@ -7,7 +7,7 @@
 class MoveApplier {
     std::unique_ptr<ApplyMoveResult> handleDefault(ChessBoard &chessBoard, const Move &move);
 
-    std::unique_ptr<ApplyMoveResult> handleCastle(ChessBoard &board, const Move &move);
+    std::unique_ptr<ApplyMoveResult> handleCastle(ChessBoard &chessBoard, const Move &move);
 
     std::unique_ptr<ApplyMoveResult> handleEnPassant(ChessBoard &chessBoard, const Move &move);
 

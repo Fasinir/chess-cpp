@@ -7,9 +7,8 @@ std::ostream& operator<<(std::ostream& os, MoveType moveType) {
         case MoveType::EN_PASSANT: os << "En Passant"; break;
         case MoveType::PAWN_TAKING: os << "Pawn Taking"; break;
         case MoveType::KNIGHT: os << "Knight"; break;
-        case MoveType::DIAGONAL: os << "Diagonal"; break;
-        case MoveType::VERTICAL: os << "Vertical"; break;
-        case MoveType::HORIZONTAL: os << "Horizontal"; break;
+        case MoveType::BISHOP: os << "Diagonal"; break;
+        case MoveType::ROOK: os << "Straight"; break;
         case MoveType::KING: os << "King"; break;
         case MoveType::CASTLE: os << "Castle"; break;
         default: os << "Unknown MoveType"; break;

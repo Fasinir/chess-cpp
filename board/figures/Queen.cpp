@@ -2,7 +2,7 @@
 
 Queen::Queen(ChessColor color) : Figure(color) {
     this->moves = std::vector{
-        MoveType::VERTICAL, MoveType::HORIZONTAL, MoveType::DIAGONAL
+        MoveType::ROOK, MoveType::BISHOP
     };
 }
 

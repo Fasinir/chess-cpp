@@ -1,7 +1,7 @@
 #include "Rook.h"
 
 Rook::Rook(ChessColor color) : Figure(color) {
-    this->moves = std::vector{MoveType::VERTICAL, MoveType::HORIZONTAL};
+    this->moves = std::vector{MoveType::ROOK};
 }
 
 char Rook::getSymbol() const {

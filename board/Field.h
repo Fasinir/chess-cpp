@@ -5,7 +5,6 @@
 
 #include "figures/Figure.h"
 
-class Figure;
 
 class Field {
     std::optional<std::shared_ptr<Figure> > figure;

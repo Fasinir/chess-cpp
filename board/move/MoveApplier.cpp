@@ -27,12 +27,9 @@ void MoveApplier::undoMove(ChessBoard &chessBoard, const ApplyMoveResult &applyM
 std::unique_ptr<ApplyMoveResult> MoveApplier::handleDefault(ChessBoard &chessBoard, const Move &move) {
     Coordinates from = move.getFrom();
     Coordinates to = move.getTo();
-    std::optional<std::shared_ptr<Figure> > optionalFromFigure = chessBoard.figureAt(from.getX(), from.getY());
-    if (!optionalFromFigure.has_value()) {
-        throw std::invalid_argument("From figure does not exist");
-    }
+    std::shared_ptr<Figure> optionalFromFigure = chessBoard.figureAt(from.getX(), from.getY()).value();
     chessBoard.removeFigure(from.getX(), from.getY());
-    const std::shared_ptr<Figure> &fromFigure = optionalFromFigure.value();
+    const std::shared_ptr<Figure> &fromFigure = optionalFromFigure;
     std::optional<std::shared_ptr<Figure> > optionalToFigure = chessBoard.placeFigure(
         fromFigure,
         to.getX(), to.getY());

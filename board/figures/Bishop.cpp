@@ -1,7 +1,7 @@
 #include "Bishop.h"
 
 Bishop::Bishop(ChessColor color) : Figure(color) {
-    this->moves = std::vector{MoveType::VERTICAL};
+    this->moves = std::vector{MoveType::BISHOP};
 }
 
 char Bishop::getSymbol() const {
