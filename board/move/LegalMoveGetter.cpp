@@ -71,7 +71,7 @@ std::vector<Move> LegalMoveGetter::handlePawnSingleMove(const ChessBoard &chessB
 
 std::vector<Move> LegalMoveGetter::handlePawnDoubleMove(const ChessBoard &chessBoard, Coordinates from) {
     std::vector<Move> legalMoves{};
-    if (!doubleMoveChecker->canDoubleMove(from)) {
+    if (from.getY() != 1 && from.getY() != 6) {
         return legalMoves;
     }
     std::shared_ptr<Figure> pawn = chessBoard.figureAt(from.getX(), from.getY()).value();
@@ -189,14 +189,14 @@ std::vector<Move> LegalMoveGetter::handleStraight(const ChessBoard &chessBoard, 
         while (j < 8
                && isWithinBounds(toX, toY)
                && !chessBoard.figureAt(toX, toY).has_value()) {
-            legalMoves.emplace_back(from, Coordinates(toX, toY), MoveType::BISHOP);
+            legalMoves.emplace_back(from, Coordinates(toX, toY), MoveType::ROOK);
             j++;
             toX = from.getX() + xMultiple[i] * j;
             toY = from.getY() + yMultiple[i] * j;
         }
         if (isWithinBounds(toX, toY)) {
             if (chessBoard.figureAt(toX, toY).value()->getColor() != color) {
-                legalMoves.emplace_back(from, Coordinates(toX, toY), MoveType::BISHOP);
+                legalMoves.emplace_back(from, Coordinates(toX, toY), MoveType::ROOK);
             }
         }
     }
@@ -280,4 +280,11 @@ std::vector<Move> LegalMoveGetter::handleCastle(ChessBoard &chessBoard, Coordina
         }
     }
     return legalMoves;
+}
+
+LegalMoveGetter::LegalMoveGetter() {
+    this->enPassantChecker = std::make_unique<EnPassantChecker>();
+    this->checkChecker = std::make_unique<CheckChecker>();
+    this->castleChecker = std::make_unique<CastleChecker>();
+    this->moveApplier = std::make_unique<MoveApplier>();
 }

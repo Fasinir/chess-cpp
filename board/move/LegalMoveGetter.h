@@ -7,14 +7,12 @@
 #include "../ChessBoard.h"
 #include "checkers/CastleChecker.h"
 #include "checkers/CheckChecker.h"
-#include "checkers/DoubleMoveChecker.h"
 #include "checkers/EnPassantChecker.h"
 
 class LegalMoveGetter {
     std::shared_ptr<EnPassantChecker> enPassantChecker;
     std::shared_ptr<CheckChecker> checkChecker;
     std::shared_ptr<CastleChecker> castleChecker;
-    std::shared_ptr<DoubleMoveChecker> doubleMoveChecker;
     std::shared_ptr<MoveApplier> moveApplier;
 
     bool isWithinBounds(int x, int y);
@@ -40,13 +38,13 @@ class LegalMoveGetter {
 public:
     LegalMoveGetter(std::shared_ptr<EnPassantChecker> enPassantChecker, std::shared_ptr<CheckChecker> checkChecker,
                     std::shared_ptr<CastleChecker> castleChecker,
-                    std::shared_ptr<DoubleMoveChecker> doubleMoveChecker,
                     std::shared_ptr<MoveApplier> moveApplier) : enPassantChecker(enPassantChecker),
                                                                 checkChecker(checkChecker),
                                                                 castleChecker(castleChecker),
-                                                                doubleMoveChecker(doubleMoveChecker),
                                                                 moveApplier(moveApplier) {
     }
+
+    LegalMoveGetter();
 
     ~LegalMoveGetter() = default;
 

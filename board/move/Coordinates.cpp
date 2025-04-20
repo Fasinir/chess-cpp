@@ -30,3 +30,7 @@ Coordinates Coordinates::fromAlgebraicNotation(const std::string &algebraicNotat
     int xCoordinate = std::distance(Constants::FILES.begin(), it);
     return Coordinates(xCoordinate, yCoordinate);
 }
+
+bool Coordinates::operator==(const Coordinates &b) const {
+    return this->getX() == b.getX() && this->getY() == b.getY();
+}

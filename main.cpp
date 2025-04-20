@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
     std::unique_ptr<ChessBoard> chessBoard = ChessBoard::STANDARD_BOARD();
-    std::cout << *chessBoard << std::endl;
+    //std::cout << *chessBoard << std::endl;
     //LocalPrintTesting::printMove();
     //LocalPrintTesting::viewFigures();
     //LocalPrintTesting::applyDefaultMove(*chessBoard);
@@ -20,5 +20,10 @@ int main(int argc, char *argv[]) {
     //LocalPrintTesting::enPassantFour(*chessBoard);
     //LocalPrintTesting::printCoordinates();
     LocalPrintTesting::legalMovesForStandardBoard();
+    //LocalPrintTesting::legalMovesForBishop();
+    //LocalPrintTesting::legalMovesForRook();
+    //LocalPrintTesting::legalMovesForQueen();
+    //LocalPrintTesting::legalMovesForKing();
+    //LocalPrintTesting::legalMovesForPawn();
     return 0;
 }

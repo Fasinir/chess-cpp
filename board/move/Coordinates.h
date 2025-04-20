@@ -21,6 +21,8 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const Coordinates &coordinates);
 
+    bool operator==(const Coordinates &b) const;
+
     [[nodiscard]] std::string toAlgebraicNotation() const;
 
     static Coordinates fromAlgebraicNotation(const std::string &algebraicNotation);

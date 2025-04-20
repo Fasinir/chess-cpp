@@ -1,21 +1,23 @@
 #ifndef ENPASSANTCHECKER_H
 #define ENPASSANTCHECKER_H
 #include <memory>
+#include <optional>
 
 #include "../Coordinates.h"
 
 
 class EnPassantChecker {
 private:
-    std::unique_ptr<Coordinates> enPassantCoordinates;
+    std::optional<Coordinates> enPassantCoordinates;
 
 public:
-    EnPassantChecker() : enPassantCoordinates(nullptr) {
-    }
+    EnPassantChecker() = default;
 
     ~EnPassantChecker() = default;
 
     bool canBeTakenEnPassant(Coordinates coordinates);
+
+    void setEnPassantCoordinates(Coordinates coordinates);
 };
 
 

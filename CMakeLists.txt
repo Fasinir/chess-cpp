@@ -42,8 +42,6 @@ add_executable(Chess main.cpp
         board/move/checkers/EnPassantChecker.h
         board/move/checkers/CastleChecker.cpp
         board/move/checkers/CastleChecker.h
-        board/move/checkers/DoubleMoveChecker.cpp
-        board/move/checkers/DoubleMoveChecker.h
 )
 
 project(Chess VERSION 0.1 LANGUAGES CXX)
