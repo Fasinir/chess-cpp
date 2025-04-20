@@ -191,7 +191,7 @@ public:
                 std::string algebraicNotation = coordinates.toAlgebraicNotation();
                 std::cout << algebraicNotation << "->" << Coordinates::fromAlgebraicNotation(algebraicNotation) << ", ";
             }
-            Coordinates coordinates = Coordinates(i, 8);
+            Coordinates coordinates = Coordinates(i, 7);
             std::string algebraicNotation = coordinates.toAlgebraicNotation();
             std::cout << algebraicNotation << "->" << Coordinates::fromAlgebraicNotation(algebraicNotation) <<
                     std::endl;

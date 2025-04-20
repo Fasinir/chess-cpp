@@ -36,6 +36,14 @@ add_executable(Chess main.cpp
         LocalPrintTesting.h
         board/move/LegalMoveGetter.cpp
         board/move/LegalMoveGetter.h
+        board/move/checkers/CheckChecker.cpp
+        board/move/checkers/CheckChecker.h
+        board/move/checkers/EnPassantChecker.cpp
+        board/move/checkers/EnPassantChecker.h
+        board/move/checkers/CastleChecker.cpp
+        board/move/checkers/CastleChecker.h
+        board/move/checkers/DoubleMoveChecker.cpp
+        board/move/checkers/DoubleMoveChecker.h
 )
 
 project(Chess VERSION 0.1 LANGUAGES CXX)

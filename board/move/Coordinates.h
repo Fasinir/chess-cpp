@@ -11,6 +11,8 @@ public:
     Coordinates(const int x, const int y) : x(x), y(y) {
     };
 
+    Coordinates(const Coordinates &other) = default;
+
     ~Coordinates() = default;
 
     [[nodiscard]] int getX() const;
