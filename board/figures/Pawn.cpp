@@ -3,7 +3,7 @@
 
 Pawn::Pawn(ChessColor color) : Figure(color) {
     this->moves = std::vector{
-        MoveType::PAWN_TAKING, MoveType::PAWN_SINGLE_MOVE, MoveType::PAWN_TAKING, MoveType::EN_PASSANT
+        MoveType::PAWN_TAKING, MoveType::PAWN_SINGLE_MOVE, MoveType::PAWN_DOUBLE_MOVE, MoveType::EN_PASSANT
     };
 }
 

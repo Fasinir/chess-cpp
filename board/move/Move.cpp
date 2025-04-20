@@ -1,7 +1,7 @@
 #include "Move.h"
 
 std::ostream &operator<<(std::ostream &os, const Move &move) {
-    os << move.from << "->" << move.to;
+    os << move.from << "->" << move.to << "(" << move.type << ")";
     return os;
 }
 

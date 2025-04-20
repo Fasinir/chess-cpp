@@ -42,11 +42,11 @@ std::unique_ptr<ApplyMoveResult> MoveApplier::handleCastle(ChessBoard &chessBoar
     std::shared_ptr<Figure> king = chessBoard.figureAt(from.getX(), from.getY()).value();
     chessBoard.placeFigure(king, to.getX(), to.getY());
     chessBoard.removeFigure(from.getX(), from.getY());
-    int rookX = from.getX();
-    int rookY = to.getY() == 2 ? 0 : 7;
+    int rookX = to.getX() == 2 ? 0 : 7;
+    int rookY = to.getY();
     std::shared_ptr<Figure> rook = chessBoard.figureAt(rookX, rookY).value();
-    int newRookY = to.getY() == 2 ? 3 : 5;
-    chessBoard.placeFigure(rook, from.getX(), newRookY);
+    int newRookX = to.getX() == 2 ? 3 : 5;
+    chessBoard.placeFigure(rook, newRookX, from.getY());
     chessBoard.removeFigure(rookX, rookY);
     return std::make_unique<ApplyMoveResult>(move);
 }
@@ -57,10 +57,10 @@ std::unique_ptr<ApplyMoveResult> MoveApplier::handleEnPassant(ChessBoard &chessB
     std::shared_ptr<Figure> fromPawn = chessBoard.figureAt(from.getX(), from.getY()).value();
     chessBoard.placeFigure(fromPawn, to.getX(), to.getY());
     chessBoard.removeFigure(from.getX(), from.getY());
-    int takenPawnX = to.getX() == 2
-                         ? to.getX() + 1
-                         : to.getX() - 1;
-    int takenPawnY = to.getY();
+    int takenPawnX = to.getX();
+    int takenPawnY = to.getY() == 2
+                         ? to.getY() + 1
+                         : to.getY() - 1;
     std::optional<std::shared_ptr<Figure> > optionalFromPawn = chessBoard.figureAt(takenPawnX, takenPawnY);
     chessBoard.removeFigure(takenPawnX, takenPawnY);
     return std::make_unique<ApplyMoveResult>(move, optionalFromPawn);
@@ -89,11 +89,11 @@ void MoveApplier::undoCastleMove(ChessBoard &chessBoard, const ApplyMoveResult &
     chessBoard.placeFigure(king, from.getX(), from.getY());
     chessBoard.removeFigure(to.getX(), to.getY());
 
-    int currentRookX = to.getX();
-    int currentRookY = to.getY() == 2 ? 3 : 5;
+    int currentRookX = to.getX() == 2 ? 3 : 5;
+    int currentRookY = to.getY();
     std::shared_ptr<Figure> rook = chessBoard.figureAt(currentRookX, currentRookY).value();
-    int newRookX = to.getX();
-    int newRookY = to.getY() == 2 ? 0 : 7;
+    int newRookX = to.getX() == 2 ? 0 : 7;
+    int newRookY = to.getY();
     chessBoard.placeFigure(rook, newRookX, newRookY);
     chessBoard.removeFigure(currentRookX, currentRookY);
 }
@@ -105,9 +105,9 @@ void MoveApplier::undoEnPassant(ChessBoard &chessBoard, const ApplyMoveResult &a
     std::shared_ptr<Figure> takingPawn = chessBoard.figureAt(to.getX(), to.getY()).value();
     chessBoard.placeFigure(takingPawn, from.getX(), from.getY());
     chessBoard.removeFigure(to.getX(), to.getY());
-    int takenPawnX = to.getX() == 2
-                         ? to.getX() + 1
-                         : to.getX() - 1;
-    int takenPawnY = to.getY();
+    int takenPawnX = to.getX();
+    int takenPawnY = to.getY() == 2
+                         ? to.getY() + 1
+                         : to.getY() - 1;
     chessBoard.placeFigure(applyMoveResult.getTakenFigure().value(), takenPawnX, takenPawnY);
 }

@@ -8,6 +8,7 @@
 #include "figures/Pawn.h"
 #include "figures/Queen.h"
 #include "figures/Rook.h"
+#include "move/Coordinates.h"
 
 std::ostream &operator<<(std::ostream &os, const ChessBoard &board) {
     os << "  ";
@@ -15,10 +16,10 @@ std::ostream &operator<<(std::ostream &os, const ChessBoard &board) {
         os << "____";
     }
     os << "_" << std::endl;
-    for (int i = board.board.size() - 1; i >= 0; i--) {
+    for (int i = Constants::BOARD_SIZE - 1; i >= 0; i--) {
         os << Constants::RANKS.at(i) << " ";
-        for (int j = 0; j < board.board[i].size(); j++) {
-            os << "|_" << board.board[i][j] << "_";
+        for (int j = 0; j < Constants::BOARD_SIZE; j++) {
+            os << "|_" << board.board[j][i] << "_";
         }
         os << "|" << std::endl;
     }
@@ -33,44 +34,44 @@ std::unique_ptr<ChessBoard> ChessBoard::STANDARD_BOARD() {
     std::unique_ptr<ChessBoard> board = std::make_unique<ChessBoard>();
 
     // King
-    board->placeFigure(std::make_unique<King>(ChessColor::BLACK), 7, 4);
-    board->placeFigure(std::make_unique<King>(ChessColor::WHITE), 0, 4);
+    board->placeFigure(std::make_unique<King>(ChessColor::BLACK), 4, 7);
+    board->placeFigure(std::make_unique<King>(ChessColor::WHITE), 4, 0);
     // Queen
-    board->placeFigure(std::make_unique<Queen>(ChessColor::BLACK), 7, 3);
-    board->placeFigure(std::make_unique<Queen>(ChessColor::WHITE), 0, 3);
+    board->placeFigure(std::make_unique<Queen>(ChessColor::BLACK), 3, 7);
+    board->placeFigure(std::make_unique<Queen>(ChessColor::WHITE), 3, 0);
     // Bishop
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::BLACK), 7, 2);
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::BLACK), 7, 5);
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::WHITE), 0, 2);
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::WHITE), 0, 5);
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::BLACK), 2, 7);
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::BLACK), 5, 7);
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::WHITE), 2, 0);
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::WHITE), 5, 0);
     // Knight
-    board->placeFigure(std::make_unique<Knight>(ChessColor::BLACK), 7, 1);
-    board->placeFigure(std::make_unique<Knight>(ChessColor::BLACK), 7, 6);
-    board->placeFigure(std::make_unique<Knight>(ChessColor::WHITE), 0, 1);
-    board->placeFigure(std::make_unique<Knight>(ChessColor::WHITE), 0, 6);
+    board->placeFigure(std::make_unique<Knight>(ChessColor::BLACK), 1, 7);
+    board->placeFigure(std::make_unique<Knight>(ChessColor::BLACK), 6, 7);
+    board->placeFigure(std::make_unique<Knight>(ChessColor::WHITE), 1, 0);
+    board->placeFigure(std::make_unique<Knight>(ChessColor::WHITE), 6, 0);
     // Rook
-    board->placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 7, 0);
+    board->placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 0, 7);
     board->placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 7, 7);
     board->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 0, 0);
-    board->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 0, 7);
+    board->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 7, 0);
 
     for (int i = 0; i < Constants::BOARD_SIZE; i++) {
-        board->placeFigure(std::make_unique<Pawn>(ChessColor::BLACK), 6, i);
-        board->placeFigure(std::make_unique<Pawn>(ChessColor::WHITE), 1, i);
+        board->placeFigure(std::make_unique<Pawn>(ChessColor::BLACK), i, 6);
+        board->placeFigure(std::make_unique<Pawn>(ChessColor::WHITE), i, 1);
     }
 
     return board;
 }
 
 std::optional<std::shared_ptr<Figure> >
-ChessBoard::placeFigure(const std::shared_ptr<Figure> &figure, int row, int col) {
-    return this->board.at(row).at(col).placeFigure(figure);
+ChessBoard::placeFigure(const std::shared_ptr<Figure> &figure, int x, int y) {
+    return this->board.at(x).at(y).placeFigure(figure);
 }
 
-std::optional<std::shared_ptr<Figure> > ChessBoard::figureAt(int row, int col) const {
-    return board.at(row).at(col).getFigure();
+std::optional<std::shared_ptr<Figure> > ChessBoard::figureAt(int x, int y) const {
+    return board.at(x).at(y).getFigure();
 }
 
-void ChessBoard::removeFigure(int row, int col) {
-    board.at(row).at(col).removeFigure();
+void ChessBoard::removeFigure(int x, int y) {
+    board.at(x).at(y).removeFigure();
 }

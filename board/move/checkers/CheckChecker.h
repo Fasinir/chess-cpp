@@ -9,6 +9,11 @@ class CheckChecker {
     Coordinates blackKingCoordinates;
 
 public:
+    CheckChecker() : whiteKingCoordinates(-1, -1), blackKingCoordinates(-1, -1) {
+    };
+
+    ~CheckChecker() = default;
+
     bool isInCheck(ChessBoard &chessBoard, ChessColor color);
 };
 

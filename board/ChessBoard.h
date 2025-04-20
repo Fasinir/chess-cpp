@@ -22,15 +22,15 @@ public:
     /**
      *
      * @param figure figure to be placed
-     * @param row
-     * @param col
+     * @param x
+     * @param y
      * @return optional of pointer to figure that was previously at these coordinates
      */
-    std::optional<std::shared_ptr<Figure> > placeFigure(const std::shared_ptr<Figure>& figure, int row, int col);
+    std::optional<std::shared_ptr<Figure> > placeFigure(const std::shared_ptr<Figure>& figure, int x, int y);
 
-    [[nodiscard]] std::optional<std::shared_ptr<Figure> > figureAt(int row, int col) const;
+    [[nodiscard]] std::optional<std::shared_ptr<Figure> > figureAt(int x, int y) const;
 
-    void removeFigure(int row, int col);
+    void removeFigure(int x, int y);
 
     friend std::ostream &operator<<(std::ostream &os, const ChessBoard &board);
 };
