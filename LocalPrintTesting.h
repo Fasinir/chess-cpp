@@ -282,6 +282,20 @@ public:
         std::cout << legalMoveGetter.getLegalMovesForCoordinate(*chessBoard, Coordinates(4, 4)) << std::endl;
         std::cout << legalMoveGetter.getLegalMovesForCoordinate(*chessBoard, Coordinates(1, 1)) << std::endl;
     }
+
+    static void legalMovesForKingCastle() {
+        std::shared_ptr legalMoveGetter = std::make_shared<LegalMoveGetter>();
+        std::unique_ptr<ChessBoard> chessBoard = std::make_unique<ChessBoard>();
+        chessBoard->placeFigure(std::make_unique<King>(ChessColor::WHITE), 4, 0);
+        chessBoard->placeFigure(std::make_unique<King>(ChessColor::BLACK), 4, 7);
+        chessBoard->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 0, 0);
+        chessBoard->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 7, 0);
+        chessBoard->placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 0, 7);
+        chessBoard->placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 7, 7);
+        std::cout << *chessBoard << std::endl;
+        std::cout << legalMoveGetter->getLegalMovesForCoordinate(*chessBoard, Coordinates(4, 0)) << std::endl;
+        std::cout << legalMoveGetter->getLegalMovesForCoordinate(*chessBoard, Coordinates(4, 7)) << std::endl;
+    }
 };
 
 

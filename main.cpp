@@ -19,11 +19,12 @@ int main(int argc, char *argv[]) {
     //LocalPrintTesting::enPassantThree(*chessBoard);
     //LocalPrintTesting::enPassantFour(*chessBoard);
     //LocalPrintTesting::printCoordinates();
-    LocalPrintTesting::legalMovesForStandardBoard();
+    //LocalPrintTesting::legalMovesForStandardBoard();
     //LocalPrintTesting::legalMovesForBishop();
     //LocalPrintTesting::legalMovesForRook();
     //LocalPrintTesting::legalMovesForQueen();
     //LocalPrintTesting::legalMovesForKing();
     //LocalPrintTesting::legalMovesForPawn();
+    //LocalPrintTesting::legalMovesForKingCastle();
     return 0;
 }

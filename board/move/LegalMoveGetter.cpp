@@ -227,57 +227,50 @@ std::vector<Move> LegalMoveGetter::handleKing(ChessBoard &chessBoard, Coordinate
 std::vector<Move> LegalMoveGetter::handleCastle(ChessBoard &chessBoard, Coordinates from) {
     // A player may not castle out of, through, or into check.
     std::vector<Move> legalMoves{};
-    ChessColor color = chessBoard.figureAt(from.getX(), from.getY()).value()->getColor();
+    auto castleLambda = [this](ChessBoard &chessBoard, Coordinates from, int emptyStartIndex, int emptyEndIndex,
+                               int noCheckStartIndex, int noCheckEndIndex,
+                               int destinationX, int destinationY) {
+        // check if previously castled / moved figure
+        if (!castleChecker->canCastle(Coordinates(destinationX, destinationY))) {
+            return false;
+        }
+        ChessColor color = chessBoard.figureAt(from.getX(), from.getY()).value()->getColor();
+        if (checkChecker->isInCheck(chessBoard, color)) {
+            return false;
+        }
+        bool pathIsEmpty = true;
+        for (int i = emptyStartIndex; i <= emptyEndIndex; i++) {
+            Coordinates coordinates = Coordinates(i, destinationY);
+            if (chessBoard.figureAt(coordinates.getX(), coordinates.getY()).has_value()) {
+                pathIsEmpty = false;
+            }
+        }
+        if (!pathIsEmpty) {
+            return false;
+        }
+        bool willResultInCheck = false;
+        for (int i = noCheckStartIndex; i <= noCheckEndIndex; i++) {
+            Move move = Move(from, Coordinates(i, destinationY), MoveType::KING);
+            std::shared_ptr applyMoveResult = moveApplier->applyMove(chessBoard, move);
+            if (checkChecker->isInCheck(chessBoard, color)) {
+                willResultInCheck = true;
+            }
+            moveApplier->undoMove(chessBoard, *applyMoveResult);
+        }
+        return !willResultInCheck;
+    };
     // Long castle
     int destinationY = from.getY();
-    int destinationXLong = from.getX() - 2;
-    if (castleChecker->canCastle(Coordinates(destinationXLong, destinationY))) {
-        bool pathIsEmpty = true;
-        for (int i = 1; i < from.getX(); i++) {
-            Coordinates coordinates = Coordinates(i, destinationY);
-            if (chessBoard.figureAt(coordinates.getX(), coordinates.getY()).has_value()) {
-                pathIsEmpty = false;
-            }
-        }
-        bool willResultInCheck = false;
-        if (pathIsEmpty) {
-            for (int i = destinationXLong; i < from.getX(); i++) {
-                Move move = Move(from, Coordinates(i, destinationY), MoveType::KING);
-                std::shared_ptr applyMoveResult = moveApplier->applyMove(chessBoard, move);
-                if (checkChecker->isInCheck(chessBoard, color)) {
-                    willResultInCheck = true;
-                }
-                moveApplier->undoMove(chessBoard, *applyMoveResult);
-            }
-        }
-        if (pathIsEmpty && !willResultInCheck) {
-            legalMoves.emplace_back(from, Coordinates(destinationXLong, destinationY), MoveType::CASTLE);
-        }
+    if (castleLambda(chessBoard, from, from.getX() - 3, from.getX() - 1,
+                     from.getX() - 2, from.getX() - 1,
+                     from.getX() - 2, destinationY)) {
+        legalMoves.emplace_back(from, Coordinates(from.getX() - 2, destinationY), MoveType::CASTLE);
     }
     // short castle
-    int destinationXShort = from.getX() + 2;
-    if (castleChecker->canCastle(Coordinates(destinationXLong, destinationY))) {
-        bool pathIsEmpty = true;
-        for (int i = destinationXShort; i > from.getX(); i--) {
-            Coordinates coordinates = Coordinates(i, destinationY);
-            if (chessBoard.figureAt(coordinates.getX(), coordinates.getY()).has_value()) {
-                pathIsEmpty = false;
-            }
-        }
-        bool willResultInCheck = false;
-        if (pathIsEmpty) {
-            for (int i = destinationXShort; i > from.getX(); i--) {
-                Move move = Move(from, Coordinates(i, destinationY), MoveType::KING);
-                std::shared_ptr applyMoveResult = moveApplier->applyMove(chessBoard, move);
-                if (checkChecker->isInCheck(chessBoard, color)) {
-                    willResultInCheck = true;
-                }
-                moveApplier->undoMove(chessBoard, *applyMoveResult);
-            }
-        }
-        if (pathIsEmpty && !willResultInCheck) {
-            legalMoves.emplace_back(from, Coordinates(destinationXLong, destinationY), MoveType::CASTLE);
-        }
+    if (castleLambda(chessBoard, from, from.getX() + 1, from.getX() + 2,
+                     from.getX() + 1, from.getX() + 2,
+                     from.getX() + 2, destinationY)) {
+        legalMoves.emplace_back(from, Coordinates(from.getX() + 2, destinationY), MoveType::CASTLE);
     }
     return legalMoves;
 }
