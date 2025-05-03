@@ -1,6 +1,6 @@
 #include <ostream>
 
-#include "board/ChessBoard.h"
+#include "model/board/ChessBoard.h"
 #include "LocalPrintTesting.h"
 
 

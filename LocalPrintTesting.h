@@ -1,17 +1,17 @@
 #ifndef LOCALPRINTTESTING_H
 #define LOCALPRINTTESTING_H
-#include "board/figures/Pawn.h"
-#include "board/move/Coordinates.h"
-#include "board/move/Move.h"
-#include "ChessColor.h"
-#include "board/figures/Bishop.h"
-#include "board/figures/King.h"
-#include "board/figures/Knight.h"
-#include "board/figures/Queen.h"
-#include "board/figures/Rook.h"
+#include "model/board/figures/Pawn.h"
+#include "model/board/move/Coordinates.h"
+#include "model/board/move/Move.h"
+#include "model/ChessColor.h"
+#include "model/board/figures/Bishop.h"
+#include "model/board/figures/King.h"
+#include "model/board/figures/Knight.h"
+#include "model/board/figures/Queen.h"
+#include "model/board/figures/Rook.h"
 #include "PrintUtils.h"
-#include "board/move/LegalMoveGetter.h"
-#include "board/move/MoveApplier.h"
+#include "model/board/move/LegalMoveGetter.h"
+#include "model/board/move/MoveApplier.h"
 
 class LocalPrintTesting {
 public:

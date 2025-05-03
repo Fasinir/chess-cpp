@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 add_executable(Chess main.cpp
-        Constants.h
+        model/Constants.h
         model/board/ChessBoard.cpp
         model/board/ChessBoard.h
         model/board/Field.cpp
@@ -26,7 +26,7 @@ add_executable(Chess main.cpp
         model/board/move/Move.cpp
         model/board/move/Move.h
         model/board/move/MoveType.h
-        ChessColor.h
+        model/ChessColor.h
         model/board/move/MoveType.cpp
         PrintUtils.h
         model/board/move/MoveApplier.cpp
