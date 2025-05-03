@@ -21,9 +21,9 @@ class LegalMoveGetter {
 
     std::vector<Move> handlePawnDoubleMove(const ChessBoard &chessBoard, Coordinates from);
 
-    std::vector<Move> handlePawnEnPassant(ChessBoard &chessBoard, Coordinates from);
+    std::vector<Move> handlePawnEnPassant(const ChessBoard &chessBoard, Coordinates from);
 
-    std::vector<Move> handlePawnTaking(ChessBoard &chessBoard, Coordinates from);
+    std::vector<Move> handlePawnTaking(const ChessBoard &chessBoard, Coordinates from);
 
     std::vector<Move> handleKnight(const ChessBoard &chessBoard, Coordinates from);
 
@@ -31,7 +31,7 @@ class LegalMoveGetter {
 
     std::vector<Move> handleStraight(const ChessBoard &chessBoard, Coordinates from);
 
-    std::vector<Move> handleKing(ChessBoard &chessBoard, Coordinates from);
+    std::vector<Move> handleKing(const ChessBoard &chessBoard, Coordinates from);
 
     std::vector<Move> handleCastle(ChessBoard &chessBoard, Coordinates from);
 

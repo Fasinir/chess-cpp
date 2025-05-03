@@ -54,7 +54,6 @@ std::vector<Move> LegalMoveGetter::getLegalMovesForCoordinate(ChessBoard &chessB
     return legalMoves;
 }
 
-
 std::vector<Move> LegalMoveGetter::handlePawnSingleMove(const ChessBoard &chessBoard, Coordinates from) {
     std::vector<Move> legalMoves{};
     std::shared_ptr<Figure> pawn = chessBoard.figureAt(from.getX(), from.getY()).value();
@@ -91,7 +90,7 @@ std::vector<Move> LegalMoveGetter::handlePawnDoubleMove(const ChessBoard &chessB
     return legalMoves;
 }
 
-std::vector<Move> LegalMoveGetter::handlePawnEnPassant(ChessBoard &chessBoard, Coordinates from) {
+std::vector<Move> LegalMoveGetter::handlePawnEnPassant(const ChessBoard &chessBoard, Coordinates from) {
     std::vector<Move> legalMoves{};
     ChessColor color = chessBoard.figureAt(from.getX(), from.getY()).value()->getColor();
     int eligibleYCoordinate = color == ChessColor::WHITE ? 4 : 3;
@@ -111,7 +110,7 @@ std::vector<Move> LegalMoveGetter::handlePawnEnPassant(ChessBoard &chessBoard, C
     return legalMoves;
 }
 
-std::vector<Move> LegalMoveGetter::handlePawnTaking(ChessBoard &chessBoard, Coordinates from) {
+std::vector<Move> LegalMoveGetter::handlePawnTaking(const ChessBoard &chessBoard, Coordinates from) {
     std::vector<Move> legalMoves{};
     std::shared_ptr<Figure> pawn = chessBoard.figureAt(from.getX(), from.getY()).value();
     int destinationXOne = from.getX() + 1;
@@ -203,7 +202,7 @@ std::vector<Move> LegalMoveGetter::handleStraight(const ChessBoard &chessBoard, 
     return legalMoves;
 }
 
-std::vector<Move> LegalMoveGetter::handleKing(ChessBoard &chessBoard, Coordinates from) {
+std::vector<Move> LegalMoveGetter::handleKing(const ChessBoard &chessBoard, Coordinates from) {
     std::vector<Move> legalMoves{};
     constexpr int xDiff[] = {1, 1, 1, 0, -1, -1, -1, 0};
     constexpr int yDiff[] = {1, 0, -1, -1, -1, 0, 1, 1};
