@@ -58,7 +58,7 @@
      <widget class="QWidget" name="formLayoutWidget">
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>260</x>
         <y>180</y>
         <width>260</width>
         <height>208</height>
@@ -175,15 +175,56 @@
      </widget>
     </widget>
     <widget class="QWidget" name="gamePage">
-     <widget class="QGraphicsView" name="boardGraphicsView">
+     <widget class="QWidget" name="verticalLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>30</y>
-        <width>721</width>
-        <height>541</height>
+        <x>0</x>
+        <y>0</y>
+        <width>801</width>
+        <height>601</height>
        </rect>
       </property>
+      <layout class="QVBoxLayout" name="gamePageVerticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="blackPlayerHorizontalLayout">
+         <item>
+          <widget class="QLabel" name="blackPlayerTimerLabel">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="blackPlayerNameLabel">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QGraphicsView" name="boardGraphicsView"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="whitePlayerHorizontalLayout">
+         <item>
+          <widget class="QLabel" name="whitePlayerTimerLabel">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="whitePlayerNameLabel">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </widget>
    </widget>

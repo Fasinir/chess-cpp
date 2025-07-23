@@ -3,6 +3,7 @@
 #include <QGraphicsRectItem>
 #include <QTime>
 #include <QDebug>
+#include <QRandomGenerator>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -53,21 +54,44 @@ void MainWindow::proceedToGamePage() {
     ui->stackedWidget->setCurrentWidget(ui->gamePage);
     drawChessBoard();
 
-    // Place full set of pieces for both sides
-    for (int col = 0; col < 8; ++col) {
-        placePiece("../assets/black_pawn.svg", PieceColor::Black, 1, col);
-        placePiece("../assets/white_pawn.svg", PieceColor::White, 6, col);
+    QString player1Name = ui->playerOneLineEdit->text();
+    QString player2Name;
+
+    if (currentGameMode == GameMode::Engine) {
+        player2Name = ui->chessEngineComboBox->currentText();  // Engine name
+    } else {
+        player2Name = ui->playerTwoLineEdit->text();           // Human vs Human
     }
 
-    QStringList pieceOrder = {
-        "rook", "knight", "bishop", "queen",
-        "king", "bishop", "knight", "rook"
-    };
+    // Determine which player is white and which is black
+    QString whitePlayerName, blackPlayerName;
+    QString colorChoice = ui->colorComboBox->currentText();
 
-    for (int col = 0; col < 8; ++col) {
-        placePiece(QString("../assets/black_%1.svg").arg(pieceOrder[col]), PieceColor::Black, 0, col);
-        placePiece(QString("../assets/white_%1.svg").arg(pieceOrder[col]), PieceColor::White, 7, col);
+    if (colorChoice == "White") {
+        whitePlayerName = player1Name;
+        blackPlayerName = player2Name;
+    } else if (colorChoice == "Black") {
+        whitePlayerName = player2Name;
+        blackPlayerName = player1Name;
+    } else {
+        // Random assignment
+        if (QRandomGenerator::global()->bounded(2) == 0) {
+            whitePlayerName = player1Name;
+            blackPlayerName = player2Name;
+        } else {
+            whitePlayerName = player2Name;
+            blackPlayerName = player1Name;
+        }
     }
+
+    // Update the GUI labels
+    ui->whitePlayerNameLabel->setText(whitePlayerName);
+    ui->blackPlayerNameLabel->setText(blackPlayerName);
+
+    // Set timers too (assuming time was fetched earlier)
+    QString initialTime = ui->timeEdit->time().toString("hh:mm:ss");
+    ui->whitePlayerTimerLabel->setText(initialTime);
+    ui->blackPlayerTimerLabel->setText(initialTime);
 }
 
 void MainWindow::drawChessBoard() {
@@ -96,6 +120,22 @@ void MainWindow::drawChessBoard() {
 
     // Optional: Resize view to fit the scene exactly (if view size changes)
     ui->boardGraphicsView->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
+
+    // Place full set of pieces for both sides
+    for (int col = 0; col < 8; ++col) {
+        placePiece("../assets/black_pawn.svg", PieceColor::Black, 1, col);
+        placePiece("../assets/white_pawn.svg", PieceColor::White, 6, col);
+    }
+
+    QStringList pieceOrder = {
+        "rook", "knight", "bishop", "queen",
+        "king", "bishop", "knight", "rook"
+    };
+
+    for (int col = 0; col < 8; ++col) {
+        placePiece(QString("../assets/black_%1.svg").arg(pieceOrder[col]), PieceColor::Black, 0, col);
+        placePiece(QString("../assets/white_%1.svg").arg(pieceOrder[col]), PieceColor::White, 7, col);
+    }
 }
 
 void MainWindow::placePiece(const QString &svgPath, PieceColor color, int row, int col) {
