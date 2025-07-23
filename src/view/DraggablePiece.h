@@ -14,12 +14,14 @@ public:
 
     PieceColor color;
 
-    signals:
-        void pieceMoved(int fromRow, int fromCol, int toRow, int toCol);
+signals:
+    void pieceMoved(int fromRow, int fromCol, int toRow, int toCol);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:

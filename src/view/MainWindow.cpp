@@ -58,9 +58,9 @@ void MainWindow::proceedToGamePage() {
     QString player2Name;
 
     if (currentGameMode == GameMode::Engine) {
-        player2Name = ui->chessEngineComboBox->currentText();  // Engine name
+        player2Name = ui->chessEngineComboBox->currentText(); // Engine name
     } else {
-        player2Name = ui->playerTwoLineEdit->text();           // Human vs Human
+        player2Name = ui->playerTwoLineEdit->text(); // Human vs Human
     }
 
     // Determine which player is white and which is black

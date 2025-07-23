@@ -3,7 +3,7 @@
 
 DraggablePiece::DraggablePiece(const QString &svgPath, PieceColor color, int startRow, int startCol, int tileSize)
     : QGraphicsSvgItem(svgPath), color(color), tileSize(tileSize),
-    originalRow(startRow), originalCol(startCol) {
+      originalRow(startRow), originalCol(startCol) {
     setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsScenePositionChanges);
     setZValue(1);
 
@@ -36,7 +36,7 @@ void DraggablePiece::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
     // Remove opponent piece if present
     QList<QGraphicsItem *> itemsAtPos = scene()->items(QRectF(snappedPos, QSizeF(tileSize, tileSize)));
-    for (QGraphicsItem *item : itemsAtPos) {
+    for (QGraphicsItem *item: itemsAtPos) {
         if (item == this) continue;
 
         auto *otherPiece = dynamic_cast<DraggablePiece *>(item);
