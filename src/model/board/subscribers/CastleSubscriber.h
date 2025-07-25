@@ -2,10 +2,10 @@
 #define CASTLECHECKER_H
 #include <vector>
 
-#include "../Coordinates.h"
+#include "../move/Coordinates.h"
 
 
-class CastleChecker {
+class CastleSubscriber {
 private:
     std::vector<Coordinates> availableCastles;
 

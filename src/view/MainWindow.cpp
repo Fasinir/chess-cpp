@@ -51,48 +51,51 @@ void MainWindow::updatePlayer2ColorLabel() {
 }
 
 void MainWindow::proceedToGamePage() {
-    ui->stackedWidget->setCurrentWidget(ui->gamePage);
-    drawChessBoard();
+    GameSettings settings;
 
-    QString player1Name = ui->playerOneLineEdit->text();
-    QString player2Name;
+    settings.mode = currentGameMode;
+    settings.player1Name = ui->playerOneLineEdit->text();
+    settings.baseTime = ui->timeEdit->time();
+    settings.incrementSeconds = ui->incrementSpinBox->value();
 
     if (currentGameMode == GameMode::Engine) {
-        player2Name = ui->chessEngineComboBox->currentText(); // Engine name
+        settings.player2Name = ui->chessEngineComboBox->currentText();
     } else {
-        player2Name = ui->playerTwoLineEdit->text(); // Human vs Human
+        settings.player2Name = ui->playerTwoLineEdit->text();
     }
 
-    // Determine which player is white and which is black
-    QString whitePlayerName, blackPlayerName;
     QString colorChoice = ui->colorComboBox->currentText();
-
     if (colorChoice == "White") {
-        whitePlayerName = player1Name;
-        blackPlayerName = player2Name;
+        settings.whitePlayerName = settings.player1Name;
+        settings.blackPlayerName = settings.player2Name;
     } else if (colorChoice == "Black") {
-        whitePlayerName = player2Name;
-        blackPlayerName = player1Name;
+        settings.whitePlayerName = settings.player2Name;
+        settings.blackPlayerName = settings.player1Name;
     } else {
-        // Random assignment
         if (QRandomGenerator::global()->bounded(2) == 0) {
-            whitePlayerName = player1Name;
-            blackPlayerName = player2Name;
+            settings.whitePlayerName = settings.player1Name;
+            settings.blackPlayerName = settings.player2Name;
         } else {
-            whitePlayerName = player2Name;
-            blackPlayerName = player1Name;
+            settings.whitePlayerName = settings.player2Name;
+            settings.blackPlayerName = settings.player1Name;
         }
     }
 
-    // Update the GUI labels
-    ui->whitePlayerNameLabel->setText(whitePlayerName);
-    ui->blackPlayerNameLabel->setText(blackPlayerName);
+    // Store or pass to controller
+    this->gameSettings = settings;
 
-    // Set timers too (assuming time was fetched earlier)
-    QString initialTime = ui->timeEdit->time().toString("hh:mm:ss");
-    ui->whitePlayerTimerLabel->setText(initialTime);
-    ui->blackPlayerTimerLabel->setText(initialTime);
+    // Update UI
+    ui->whitePlayerNameLabel->setText(settings.whitePlayerName);
+    ui->blackPlayerNameLabel->setText(settings.blackPlayerName);
+
+    QString formattedTime = settings.baseTime.toString("hh:mm:ss");
+    ui->whitePlayerTimerLabel->setText(formattedTime);
+    ui->blackPlayerTimerLabel->setText(formattedTime);
+
+    ui->stackedWidget->setCurrentWidget(ui->gamePage);
+    drawChessBoard();
 }
+
 
 void MainWindow::drawChessBoard() {
     if (scene) delete scene;

@@ -3,17 +3,17 @@
 #include <memory>
 #include <optional>
 
-#include "../Coordinates.h"
+#include "../move/Coordinates.h"
 
 
-class EnPassantChecker {
+class EnPassantSubscriber {
 private:
     std::optional<Coordinates> enPassantCoordinates;
 
 public:
-    EnPassantChecker() = default;
+    EnPassantSubscriber() = default;
 
-    ~EnPassantChecker() = default;
+    ~EnPassantSubscriber() = default;
 
     bool canBeTakenEnPassant(Coordinates coordinates);
 

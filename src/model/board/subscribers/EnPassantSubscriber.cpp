@@ -1,12 +1,12 @@
-#include "EnPassantChecker.h"
+#include "EnPassantSubscriber.h"
 
-bool EnPassantChecker::canBeTakenEnPassant(Coordinates coordinates) {
+bool EnPassantSubscriber::canBeTakenEnPassant(Coordinates coordinates) {
     if (this->enPassantCoordinates.has_value()) {
         return coordinates == this->enPassantCoordinates;
     }
     return false;
 }
 
-void EnPassantChecker::setEnPassantCoordinates(Coordinates coordinates) {
+void EnPassantSubscriber::setEnPassantCoordinates(Coordinates coordinates) {
     this->enPassantCoordinates = coordinates;
 }

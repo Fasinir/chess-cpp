@@ -57,12 +57,19 @@ set(PROJECT_SOURCES
         LocalPrintTesting.h
         src/model/board/move/LegalMoveGetter.cpp
         src/model/board/move/LegalMoveGetter.h
-        src/model/board/move/checkers/EnPassantChecker.cpp
-        src/model/board/move/checkers/EnPassantChecker.h
-        src/model/board/move/checkers/CastleChecker.cpp
-        src/model/board/move/checkers/CastleChecker.h
-        src/model/board/move/KingPositionSubscriber.cpp
-        src/model/board/move/KingPositionSubscriber.h
+        src/model/board/subscribers/EnPassantSubscriber.cpp
+        src/model/board/subscribers/EnPassantSubscriber.h
+        src/model/board/subscribers/CastleSubscriber.cpp
+        src/model/board/subscribers/CastleSubscriber.h
+        src/model/board/subscribers/KingPositionSubscriber.cpp
+        src/model/board/subscribers/KingPositionSubscriber.h
+        src/model/board/subscribers/PubSubManagerSingleton.cpp
+        src/model/board/subscribers/PubSubManagerSingleton.h
+        src/model/board/subscribers/ThreefoldSubscriber.cpp
+        src/model/board/subscribers/ThreefoldSubscriber.h
+        src/model/board/subscribers/FiftyMoveSubscriber.cpp
+        src/model/board/subscribers/FiftyMoveSubscriber.h
+        src/view/GameSettings.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

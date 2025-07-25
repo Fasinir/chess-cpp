@@ -1,6 +1,6 @@
 #ifndef KINGPOSITIONSUBSCRIBER_H
 #define KINGPOSITIONSUBSCRIBER_H
-#include "Coordinates.h"
+#include "../move/Coordinates.h"
 #include "../../ChessColor.h"
 
 

@@ -121,11 +121,11 @@ std::vector<Move> LegalMoveGetter::handlePawnEnPassant(const ChessBoard &chessBo
         int toXTwo = from.getX() - 1;
         int toY = color == ChessColor::WHITE ? from.getY() + 1 : from.getY() - 1;
         Coordinates one = Coordinates(toXOne, toY);
-        if (enPassantChecker->canBeTakenEnPassant(one)) {
+        if (enPassantSubscriber->canBeTakenEnPassant(one)) {
             legalMoves.emplace_back(from, one, MoveType::EN_PASSANT);
         }
         Coordinates two = Coordinates(toXTwo, toY);
-        if (enPassantChecker->canBeTakenEnPassant(two)) {
+        if (enPassantSubscriber->canBeTakenEnPassant(two)) {
             legalMoves.emplace_back(from, two, MoveType::EN_PASSANT);
         }
     }
@@ -325,8 +325,8 @@ bool LegalMoveGetter::hasVisionOn(const ChessBoard &chessBoard, ChessColor color
 }
 
 LegalMoveGetter::LegalMoveGetter() {
-    this->enPassantChecker = std::make_unique<EnPassantChecker>();
-    this->castleChecker = std::make_unique<CastleChecker>();
+    this->enPassantSubscriber = std::make_unique<EnPassantSubscriber>();
+    this->castleChecker = std::make_unique<CastleSubscriber>();
     this->moveApplier = std::make_unique<MoveApplier>();
     this->kingPositionSubscriber = std::make_unique<KingPositionSubscriber>();
 }

@@ -2,16 +2,16 @@
 #define LEGALMOVEGETTER_H
 #include <vector>
 
-#include "KingPositionSubscriber.h"
+#include "../subscribers/KingPositionSubscriber.h"
 #include "Move.h"
 #include "MoveApplier.h"
 #include "../ChessBoard.h"
-#include "checkers/CastleChecker.h"
-#include "checkers/EnPassantChecker.h"
+#include "../subscribers/CastleSubscriber.h"
+#include "../subscribers/EnPassantSubscriber.h"
 
 class LegalMoveGetter {
-    std::shared_ptr<EnPassantChecker> enPassantChecker;
-    std::shared_ptr<CastleChecker> castleChecker;
+    std::shared_ptr<EnPassantSubscriber> enPassantSubscriber;
+    std::shared_ptr<CastleSubscriber> castleChecker;
     std::shared_ptr<MoveApplier> moveApplier;
     std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber;
 
@@ -37,14 +37,13 @@ class LegalMoveGetter {
 
     std::vector<Move> generateMoves(const ChessBoard &chessBoard, ChessColor color);
 
-    bool hasVisionOn(const ChessBoard &chessBoard, ChessColor color, Coordinates coordinates);
 
 public:
-    LegalMoveGetter(std::shared_ptr<EnPassantChecker> enPassantChecker,
-                    std::shared_ptr<CastleChecker> castleChecker,
+    LegalMoveGetter(std::shared_ptr<EnPassantSubscriber> enPassantChecker,
+                    std::shared_ptr<CastleSubscriber> castleChecker,
                     std::shared_ptr<MoveApplier> moveApplier,
                     std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber)
-        : enPassantChecker(enPassantChecker),
+        : enPassantSubscriber(enPassantChecker),
           castleChecker(castleChecker),
           moveApplier(moveApplier),
           kingPositionSubscriber(kingPositionSubscriber) {
@@ -58,6 +57,8 @@ public:
     std::vector<Move> getMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from, bool skipCastle);
 
     std::vector<Move> getLegalMovesForColor(ChessBoard &chessBoard, ChessColor color);
+    bool hasVisionOn(const ChessBoard &chessBoard, ChessColor color, Coordinates coordinates);
+
 };
 
 

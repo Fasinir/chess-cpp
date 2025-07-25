@@ -1,0 +1,13 @@
+
+#ifndef PUBSUBMANAGERSINGLETON_H
+#define PUBSUBMANAGERSINGLETON_H
+
+
+
+class PubSubManagerSingleton {
+
+};
+
+
+
+#endif //PUBSUBMANAGERSINGLETON_H
