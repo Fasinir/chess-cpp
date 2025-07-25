@@ -2,20 +2,20 @@
 #define LEGALMOVEGETTER_H
 #include <vector>
 
+#include "KingPositionSubscriber.h"
 #include "Move.h"
 #include "MoveApplier.h"
 #include "../ChessBoard.h"
 #include "checkers/CastleChecker.h"
-#include "checkers/CheckChecker.h"
 #include "checkers/EnPassantChecker.h"
 
 class LegalMoveGetter {
     std::shared_ptr<EnPassantChecker> enPassantChecker;
-    std::shared_ptr<CheckChecker> checkChecker;
     std::shared_ptr<CastleChecker> castleChecker;
     std::shared_ptr<MoveApplier> moveApplier;
+    std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber;
 
-    bool isWithinBounds(int x, int y);
+    static bool isWithinBounds(int x, int y);
 
     std::vector<Move> handlePawnSingleMove(const ChessBoard &chessBoard, Coordinates from);
 
@@ -33,22 +33,31 @@ class LegalMoveGetter {
 
     std::vector<Move> handleKing(const ChessBoard &chessBoard, Coordinates from);
 
-    std::vector<Move> handleCastle(ChessBoard &chessBoard, Coordinates from);
+    std::vector<Move> handleCastle(const ChessBoard &chessBoard, Coordinates from);
+
+    std::vector<Move> generateMoves(const ChessBoard &chessBoard, ChessColor color);
+
+    bool hasVisionOn(const ChessBoard &chessBoard, ChessColor color, Coordinates coordinates);
 
 public:
-    LegalMoveGetter(std::shared_ptr<EnPassantChecker> enPassantChecker, std::shared_ptr<CheckChecker> checkChecker,
+    LegalMoveGetter(std::shared_ptr<EnPassantChecker> enPassantChecker,
                     std::shared_ptr<CastleChecker> castleChecker,
-                    std::shared_ptr<MoveApplier> moveApplier) : enPassantChecker(enPassantChecker),
-                                                                checkChecker(checkChecker),
-                                                                castleChecker(castleChecker),
-                                                                moveApplier(moveApplier) {
+                    std::shared_ptr<MoveApplier> moveApplier,
+                    std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber)
+        : enPassantChecker(enPassantChecker),
+          castleChecker(castleChecker),
+          moveApplier(moveApplier),
+          kingPositionSubscriber(kingPositionSubscriber) {
     }
 
     LegalMoveGetter();
 
     ~LegalMoveGetter() = default;
 
-    std::vector<Move> getLegalMovesForCoordinate(ChessBoard &chessBoard, Coordinates from);
+    std::vector<Move> getMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from);
+    std::vector<Move> getMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from, bool skipCastle);
+
+    std::vector<Move> getLegalMovesForColor(ChessBoard &chessBoard, ChessColor color);
 };
 
 

@@ -57,12 +57,12 @@ set(PROJECT_SOURCES
         LocalPrintTesting.h
         src/model/board/move/LegalMoveGetter.cpp
         src/model/board/move/LegalMoveGetter.h
-        src/model/board/move/checkers/CheckChecker.cpp
-        src/model/board/move/checkers/CheckChecker.h
         src/model/board/move/checkers/EnPassantChecker.cpp
         src/model/board/move/checkers/EnPassantChecker.h
         src/model/board/move/checkers/CastleChecker.cpp
         src/model/board/move/checkers/CastleChecker.h
+        src/model/board/move/KingPositionSubscriber.cpp
+        src/model/board/move/KingPositionSubscriber.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

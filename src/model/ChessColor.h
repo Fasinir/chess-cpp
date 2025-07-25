@@ -2,7 +2,9 @@
 #define CHESSCOLOR_H
 
 
-enum class ChessColor { WHITE, BLACK };
+enum class ChessColor {
+    WHITE, BLACK
+};
 
 
 #endif //CHESSCOLOR_H
