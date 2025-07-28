@@ -1,8 +1,10 @@
-#ifndef CHESSCONTROLLER_H
-#define CHESSCONTROLLER_H
+#pragma once
 
-#include <QObject>
-#include <QString>
+#include <memory>
+#include "../model/board/ChessBoard.h"
+#include "../model/board/move/MoveApplier.h"
+#include "../model/board/move/LegalMoveGetter.h"
+#include "../view/GameSettings.h"
 
 class ChessController : public QObject {
     Q_OBJECT
@@ -10,10 +12,28 @@ class ChessController : public QObject {
 public:
     explicit ChessController(QObject *parent = nullptr);
 
+    void startGame(const GameSettings &settings);
+    [[nodiscard]] ChessBoard *getBoard() const { return board.get(); }
+
+
+public slots:
     void onPieceMoved(int fromRow, int fromCol, int toRow, int toCol);
 
-private:
-    QString toSquare(int row, int col);
-};
+signals:
+    void illegalMoveAttempted();
 
-#endif // CHESSCONTROLLER_H
+    void boardUpdated(); // UI can react to this
+
+private:
+    std::unique_ptr<ChessBoard> board;
+    std::unique_ptr<MoveApplier> moveApplier;
+    std::unique_ptr<LegalMoveGetter> moveGetter;
+    std::unique_ptr<KingPositionSubscriber> kingPositionSubscriber;
+    GameSettings settings;
+    std::vector<Move> currentLegalMoves;
+
+    bool whiteToMove = true;
+
+
+    void nextTurn();
+};

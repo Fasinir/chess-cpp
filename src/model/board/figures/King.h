@@ -10,6 +10,8 @@ public:
     [[nodiscard]] char getSymbol() const override;
 
     [[nodiscard]] std::unique_ptr<Figure> clone() const override;
+
+    [[nodiscard]] std::string getName() const override;
 };
 
 

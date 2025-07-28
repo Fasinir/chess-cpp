@@ -33,6 +33,9 @@ private slots:
 
     void proceedToGamePage();
 
+    void drawBoardFromModel();
+
+
 private:
     Ui::MainWindow *ui;
     GameMode currentGameMode;

@@ -13,3 +13,7 @@ char Queen::getSymbol() const {
 std::unique_ptr<Figure> Queen::clone() const {
     return std::make_unique<Queen>(*this);
 }
+
+std::string Queen::getName() const {
+    return "queen";
+}

@@ -14,3 +14,7 @@ char Pawn::getSymbol() const {
 std::unique_ptr<Figure> Pawn::clone() const {
     return std::make_unique<Pawn>(*this);
 }
+
+std::string Pawn::getName() const {
+    return "pawn";
+}
