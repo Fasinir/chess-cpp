@@ -35,7 +35,7 @@ class LegalMoveGetter {
 
     std::vector<Move> handleCastle(const ChessBoard &chessBoard, Coordinates from);
 
-    std::vector<Move> generateMoves(const ChessBoard &chessBoard, ChessColor color);
+    std::vector<Move> generateMoves(const ChessBoard &chessBoard, ChessColor color, bool skipCastle);
 
 
 public:
@@ -53,8 +53,7 @@ public:
 
     ~LegalMoveGetter() = default;
 
-    std::vector<Move> getMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from);
-    std::vector<Move> getMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from, bool skipCastle);
+    std::vector<Move> generateMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from, bool skipCastle);
 
     std::vector<Move> getLegalMovesForColor(ChessBoard &chessBoard, ChessColor color);
     bool hasVisionOn(const ChessBoard &chessBoard, ChessColor color, Coordinates coordinates);

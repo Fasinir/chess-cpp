@@ -4,12 +4,9 @@ bool LegalMoveGetter::isWithinBounds(int x, int y) {
     return x >= 0 && y >= 0 && x < Constants::BOARD_SIZE && y < Constants::BOARD_SIZE;
 }
 
-std::vector<Move> LegalMoveGetter::getMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from) {
-    return getMovesForCoordinate(chessBoard, from, false);
-}
 
-std::vector<Move> LegalMoveGetter::getMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from,
-                                                         bool skipCastle) {
+std::vector<Move> LegalMoveGetter::generateMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from,
+                                                              bool skipCastle) {
     // TODO: make it a visitor pattern?
     if (!chessBoard.figureAt(from.getX(), from.getY()).has_value())
         return {};
@@ -56,11 +53,11 @@ std::vector<Move> LegalMoveGetter::getMovesForCoordinate(const ChessBoard &chess
 }
 
 std::vector<Move> LegalMoveGetter::getLegalMovesForColor(ChessBoard &chessBoard, ChessColor color) {
-    std::vector<Move> movesToVerify = generateMoves(chessBoard, color);
+    std::vector<Move> movesToVerify = generateMoves(chessBoard, color, false);
     std::vector<Move> legalMoves;
     for (auto move: movesToVerify) {
         std::shared_ptr applyMoveResult = moveApplier->applyMove(chessBoard, move);
-        std::vector<Move> enemyMoves = generateMoves(chessBoard, Constants::oppositeColor(color));
+        std::vector<Move> enemyMoves = generateMoves(chessBoard, Constants::oppositeColor(color), true);
         bool willResultInCheck = false;
         for (auto enemyMove: enemyMoves) {
             if (enemyMove.getTo() == kingPositionSubscriber->getKingCoordinates(color)) {
@@ -251,6 +248,13 @@ std::vector<Move> LegalMoveGetter::handleCastle(const ChessBoard &chessBoard, Co
     auto castleLambda = [this](const ChessBoard &chessBoard, Coordinates from, int emptyStartIndex, int emptyEndIndex,
                                int noCheckStartIndex, int noCheckEndIndex,
                                int destinationX, int destinationY) {
+        // TODO: remove this abomination
+        if (!((from == Coordinates(4, 0) && (Coordinates(destinationX, destinationY) == Coordinates(6, 0) ||
+                                             Coordinates(destinationX, destinationY) == Coordinates(2, 0))) ||
+              ((from == Coordinates(4, 7) && (Coordinates(destinationX, destinationY) == Coordinates(6, 7) ||
+                                              Coordinates(destinationX, destinationY) == Coordinates(2, 7)))))) {
+            return false;
+        }
         // check if previously castled / moved figure
         if (!castleChecker->canCastle(Coordinates(destinationX, destinationY))) {
             return false;
@@ -295,7 +299,7 @@ std::vector<Move> LegalMoveGetter::handleCastle(const ChessBoard &chessBoard, Co
     return legalMoves;
 }
 
-std::vector<Move> LegalMoveGetter::generateMoves(const ChessBoard &chessBoard, ChessColor color) {
+std::vector<Move> LegalMoveGetter::generateMoves(const ChessBoard &chessBoard, ChessColor color, bool skipCastle) {
     std::vector<Move> moves{};
     for (int i = 0; i < Constants::BOARD_SIZE; i++) {
         for (int j = 0; j < Constants::BOARD_SIZE; j++) {
@@ -303,7 +307,7 @@ std::vector<Move> LegalMoveGetter::generateMoves(const ChessBoard &chessBoard, C
             if (chessBoard.figureAt(coordinates.getX(), coordinates.getY()).has_value()) {
                 std::shared_ptr<Figure> figure = chessBoard.figureAt(coordinates.getX(), coordinates.getY()).value();
                 if (figure->getColor() == color) {
-                    std::vector<Move> coordinateMoves = getMovesForCoordinate(chessBoard, coordinates, true);
+                    std::vector<Move> coordinateMoves = generateMovesForCoordinate(chessBoard, coordinates, skipCastle);
                     for (auto move: coordinateMoves) {
                         moves.emplace_back(move);
                     }
@@ -315,7 +319,7 @@ std::vector<Move> LegalMoveGetter::generateMoves(const ChessBoard &chessBoard, C
 }
 
 bool LegalMoveGetter::hasVisionOn(const ChessBoard &chessBoard, ChessColor color, Coordinates coordinates) {
-    std::vector<Move> moves = generateMoves(chessBoard, color);
+    std::vector<Move> moves = generateMoves(chessBoard, color, true);
     for (auto move: moves) {
         if (move.getTo() == coordinates) {
             return true;
