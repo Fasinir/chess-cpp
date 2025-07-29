@@ -3,21 +3,24 @@
 #include <memory>
 #include <optional>
 
+#include "Subscriber.h"
 #include "../move/Coordinates.h"
 
 
-class EnPassantSubscriber {
-private:
+class EnPassantSubscriber : Subscriber {
+
     std::optional<Coordinates> enPassantCoordinates;
 
 public:
     EnPassantSubscriber() = default;
 
-    ~EnPassantSubscriber() = default;
+    ~EnPassantSubscriber() override = default;
 
     bool canBeTakenEnPassant(Coordinates coordinates);
 
     void setEnPassantCoordinates(Coordinates coordinates);
+
+    void notify(Move move) override;
 };
 
 

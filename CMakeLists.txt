@@ -63,13 +63,13 @@ set(PROJECT_SOURCES
         src/model/board/subscribers/CastleSubscriber.h
         src/model/board/subscribers/KingPositionSubscriber.cpp
         src/model/board/subscribers/KingPositionSubscriber.h
-        src/model/board/subscribers/PubSubManagerSingleton.cpp
-        src/model/board/subscribers/PubSubManagerSingleton.h
-        src/model/board/subscribers/ThreefoldSubscriber.cpp
-        src/model/board/subscribers/ThreefoldSubscriber.h
+        src/model/board/subscribers/MoveSubscriptionManager.cpp
+        src/model/board/subscribers/MoveSubscriptionManager.h
         src/model/board/subscribers/FiftyMoveSubscriber.cpp
         src/model/board/subscribers/FiftyMoveSubscriber.h
         src/view/GameSettings.h
+        src/model/board/subscribers/Subscriber.cpp
+        src/model/board/subscribers/Subscriber.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
