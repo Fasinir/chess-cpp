@@ -7,14 +7,12 @@
 #include "../move/Coordinates.h"
 
 
-class EnPassantSubscriber : Subscriber {
+class EnPassantSubscriber : public Subscriber {
 
     std::optional<Coordinates> enPassantCoordinates;
 
 public:
     EnPassantSubscriber() = default;
-
-    ~EnPassantSubscriber() override = default;
 
     bool canBeTakenEnPassant(Coordinates coordinates);
 

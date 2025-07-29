@@ -5,14 +5,12 @@
 #include "Subscriber.h"
 
 
-class FiftyMoveSubscriber : Subscriber {
+class FiftyMoveSubscriber : public Subscriber {
     int count;
     std::vector<Coordinates> pawnCoordinates;
 
 public:
     FiftyMoveSubscriber();
-
-    ~FiftyMoveSubscriber() override;
 
     void notify(Move move) override;
 };

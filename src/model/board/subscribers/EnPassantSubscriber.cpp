@@ -10,3 +10,7 @@ bool EnPassantSubscriber::canBeTakenEnPassant(Coordinates coordinates) {
 void EnPassantSubscriber::setEnPassantCoordinates(Coordinates coordinates) {
     this->enPassantCoordinates = coordinates;
 }
+
+void EnPassantSubscriber::notify(Move move) {
+    //todo implement
+}

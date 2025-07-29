@@ -1,5 +1,6 @@
 #ifndef LEGALMOVEGETTER_H
 #define LEGALMOVEGETTER_H
+#include <utility>
 #include <vector>
 
 #include "../subscribers/KingPositionSubscriber.h"
@@ -43,10 +44,10 @@ public:
                     std::shared_ptr<CastleSubscriber> castleChecker,
                     std::shared_ptr<MoveApplier> moveApplier,
                     std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber)
-        : enPassantSubscriber(enPassantChecker),
-          castleChecker(castleChecker),
-          moveApplier(moveApplier),
-          kingPositionSubscriber(kingPositionSubscriber) {
+        : enPassantSubscriber(std::move(enPassantChecker)),
+          castleChecker(std::move(castleChecker)),
+          moveApplier(std::move(moveApplier)),
+          kingPositionSubscriber(std::move(kingPositionSubscriber)) {
     }
 
     LegalMoveGetter();

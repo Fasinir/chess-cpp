@@ -8,8 +8,15 @@
 ChessController::ChessController(QObject *parent)
     : QObject(parent),
       board(ChessBoard::STANDARD_BOARD()),
-      moveApplier(std::make_unique<MoveApplier>()),
-      moveGetter(std::make_unique<LegalMoveGetter>()), settings() {
+      moveApplier(std::make_unique<MoveApplier>()), settings(), manager(std::make_unique<MoveSubscriptionManager>()) {
+    std::shared_ptr<EnPassantSubscriber> enPassantSubscriber = std::make_shared<EnPassantSubscriber>();
+    std::shared_ptr<CastleSubscriber> castleChecker = std::make_shared<CastleSubscriber>();
+    std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber = std::make_shared<KingPositionSubscriber>();
+
+    this->moveGetter = std::make_unique<LegalMoveGetter>(enPassantSubscriber, castleChecker,
+                                                         std::make_shared<MoveApplier>(),
+                                                         kingPositionSubscriber);
+    manager->addSubscription(castleChecker);
 }
 
 void ChessController::startGame(const GameSettings &settings) {
@@ -68,6 +75,7 @@ void ChessController::onPieceMoved(int fromRow, int fromCol, int toRow, int toCo
     std::cout << "Move accepted: " << *it << "\n";
 
     moveApplier->applyMove(*board, *it);
+    manager->notifySubscribers(*it);
     emit boardUpdated();
 
     whiteToMove = !whiteToMove;

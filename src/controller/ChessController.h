@@ -5,6 +5,8 @@
 #include "../model/board/move/MoveApplier.h"
 #include "../model/board/move/LegalMoveGetter.h"
 #include "../view/GameSettings.h"
+#include "../model/board/subscribers/MoveSubscriptionManager.h"
+
 
 class ChessController : public QObject {
     Q_OBJECT
@@ -31,6 +33,7 @@ private:
     std::unique_ptr<KingPositionSubscriber> kingPositionSubscriber;
     GameSettings settings;
     std::vector<Move> currentLegalMoves;
+    std::unique_ptr<MoveSubscriptionManager> manager;
 
     bool whiteToMove = true;
 

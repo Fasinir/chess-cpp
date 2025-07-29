@@ -6,7 +6,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add Svg to the find_package line
@@ -57,6 +57,7 @@ set(PROJECT_SOURCES
         LocalPrintTesting.h
         src/model/board/move/LegalMoveGetter.cpp
         src/model/board/move/LegalMoveGetter.h
+        src/model/board/subscribers/Subscriber.h
         src/model/board/subscribers/EnPassantSubscriber.cpp
         src/model/board/subscribers/EnPassantSubscriber.h
         src/model/board/subscribers/CastleSubscriber.cpp
@@ -69,7 +70,6 @@ set(PROJECT_SOURCES
         src/model/board/subscribers/FiftyMoveSubscriber.h
         src/view/GameSettings.h
         src/model/board/subscribers/Subscriber.cpp
-        src/model/board/subscribers/Subscriber.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

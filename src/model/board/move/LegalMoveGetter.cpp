@@ -248,14 +248,6 @@ std::vector<Move> LegalMoveGetter::handleCastle(const ChessBoard &chessBoard, Co
     auto castleLambda = [this](const ChessBoard &chessBoard, Coordinates from, int emptyStartIndex, int emptyEndIndex,
                                int noCheckStartIndex, int noCheckEndIndex,
                                int destinationX, int destinationY) {
-        // TODO: remove this abomination
-        if (!((from == Coordinates(4, 0) && (Coordinates(destinationX, destinationY) == Coordinates(6, 0) ||
-                                             Coordinates(destinationX, destinationY) == Coordinates(2, 0))) ||
-              ((from == Coordinates(4, 7) && (Coordinates(destinationX, destinationY) == Coordinates(6, 7) ||
-                                              Coordinates(destinationX, destinationY) == Coordinates(2, 7)))))) {
-            return false;
-        }
-        // check if previously castled / moved figure
         if (!castleChecker->canCastle(Coordinates(destinationX, destinationY))) {
             return false;
         }

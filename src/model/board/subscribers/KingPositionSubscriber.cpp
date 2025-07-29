@@ -7,3 +7,7 @@ Coordinates KingPositionSubscriber::getKingCoordinates(const ChessColor color) c
     }
     return blackKingCoordinates;
 }
+
+void KingPositionSubscriber::notify(Move move) {
+    //todo implement
+}

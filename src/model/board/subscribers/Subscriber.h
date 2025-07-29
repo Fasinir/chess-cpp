@@ -9,7 +9,7 @@ public:
 
     virtual ~Subscriber() = default;
 
-    virtual void notify(Move move);
+    virtual void notify(Move move) = 0;
 };
 
 

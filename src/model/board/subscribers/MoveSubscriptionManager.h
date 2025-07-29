@@ -1,30 +1,24 @@
 #ifndef PUBSUBMANAGERSINGLETON_H
 #define PUBSUBMANAGERSINGLETON_H
-#include <unordered_map>
+#include <memory>
 #include <unordered_set>
 
 #include "Subscriber.h"
-#include "../move/Coordinates.h"
 #include "../move/Move.h"
 
-
 class MoveSubscriptionManager {
-    std::unordered_map<Coordinates, std::unordered_set<Subscriber *> > subscribers;
-    std::unordered_set<Subscriber *> entireBoardSubscribers;
+    std::unordered_set<std::shared_ptr<Subscriber> > entireBoardSubscribers;
+
 public:
-    MoveSubscriptionManager();
+    MoveSubscriptionManager() = default;
 
     ~MoveSubscriptionManager() = default;
 
     void notifySubscribers(Move move);
 
-    void removeSubscription(Subscriber *subscriber, Coordinates coordinates);
+    void removeSubscription(const std::shared_ptr<Subscriber>& subscriber);
 
-    void removeSubscriptionToEntireBoard(Subscriber *subscriber);
-
-    void addSubscription(Subscriber *subscriber, Coordinates coordinates);
-
-    void addSubscriptionToEntireBoard(Subscriber *subscriber);
+    void addSubscription(const std::shared_ptr<Subscriber>& subscriber);
 };
 
 
