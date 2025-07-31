@@ -1,15 +1,18 @@
 #ifndef ENPASSANTCHECKER_H
 #define ENPASSANTCHECKER_H
-#include <memory>
 #include <optional>
+#include <unordered_set>
 
 #include "Subscriber.h"
 #include "../move/Coordinates.h"
 
 
 class EnPassantSubscriber : public Subscriber {
+    std::unordered_set<Coordinates> unmovedPawns;
 
-    std::optional<Coordinates> enPassantCoordinates;
+    std::optional<Coordinates> enPassantCoordinates;\
+
+    void updateUnmovedPawns(const ChessBoard &chessBoard);
 
 public:
     EnPassantSubscriber() = default;
@@ -18,7 +21,7 @@ public:
 
     void setEnPassantCoordinates(Coordinates coordinates);
 
-    void notify(Move move) override;
+    void notify(Move move, const ChessBoard &chessBoard) override;
 };
 
 

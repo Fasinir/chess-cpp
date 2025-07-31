@@ -27,7 +27,7 @@ public:
 
     std::vector<MoveType> &getMoves();
 
-    const ChessColor &getColor() const;
+    [[nodiscard]] const ChessColor &getColor() const;
 
     friend std::ostream &operator<<(std::ostream &os, const Figure &figure);
 };

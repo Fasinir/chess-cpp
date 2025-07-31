@@ -8,15 +8,16 @@
 ChessController::ChessController(QObject *parent)
     : QObject(parent),
       board(ChessBoard::STANDARD_BOARD()),
-      moveApplier(std::make_unique<MoveApplier>()), settings(), manager(std::make_unique<MoveSubscriptionManager>()) {
+      moveApplier(std::make_unique<MoveApplier>()), settings(), manager(std::make_unique<MoveSubscriptionManager>()),
+      kingPositionSubscriber(std::make_shared<KingPositionSubscriber>()) {
     std::shared_ptr<EnPassantSubscriber> enPassantSubscriber = std::make_shared<EnPassantSubscriber>();
     std::shared_ptr<CastleSubscriber> castleChecker = std::make_shared<CastleSubscriber>();
-    std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber = std::make_shared<KingPositionSubscriber>();
 
     this->moveGetter = std::make_unique<LegalMoveGetter>(enPassantSubscriber, castleChecker,
                                                          std::make_shared<MoveApplier>(),
                                                          kingPositionSubscriber);
     manager->addSubscription(castleChecker);
+    manager->addSubscription(kingPositionSubscriber);
 }
 
 void ChessController::startGame(const GameSettings &settings) {
@@ -38,10 +39,10 @@ void ChessController::nextTurn() {
             << currentLegalMoves.size() << "\n";
 
     if (currentLegalMoves.empty()) {
-        auto kingPosSub = std::make_shared<KingPositionSubscriber>(); // If not injected elsewhere
-        Coordinates kingPos = kingPosSub->getKingCoordinates(color);
-
-        bool inCheck = moveGetter->hasVisionOn(*board, Constants::oppositeColor(color), kingPos);
+        Coordinates kingPos = kingPositionSubscriber->getKingCoordinates(color);
+        std::shared_ptr visionBoard = std::make_shared<VisionBoard>(
+            moveGetter->getLegalMovesForColor(*board, Constants::oppositeColor(color)));
+        bool inCheck = visionBoard->hasVisionOn(kingPos);
 
         QString resultText;
         if (inCheck)
@@ -75,7 +76,7 @@ void ChessController::onPieceMoved(int fromRow, int fromCol, int toRow, int toCo
     std::cout << "Move accepted: " << *it << "\n";
 
     moveApplier->applyMove(*board, *it);
-    manager->notifySubscribers(*it);
+    manager->notifySubscribers(*it, *board);
     emit boardUpdated();
 
     whiteToMove = !whiteToMove;

@@ -30,7 +30,7 @@ private:
     std::unique_ptr<ChessBoard> board;
     std::unique_ptr<MoveApplier> moveApplier;
     std::unique_ptr<LegalMoveGetter> moveGetter;
-    std::unique_ptr<KingPositionSubscriber> kingPositionSubscriber;
+    std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber;
     GameSettings settings;
     std::vector<Move> currentLegalMoves;
     std::unique_ptr<MoveSubscriptionManager> manager;

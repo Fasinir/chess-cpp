@@ -14,7 +14,7 @@ public:
 
     ~MoveSubscriptionManager() = default;
 
-    void notifySubscribers(Move move);
+    void notifySubscribers(Move move, const ChessBoard &chessBoard);
 
     void removeSubscription(const std::shared_ptr<Subscriber>& subscriber);
 

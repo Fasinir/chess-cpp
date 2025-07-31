@@ -12,7 +12,7 @@ class FiftyMoveSubscriber : public Subscriber {
 public:
     FiftyMoveSubscriber();
 
-    void notify(Move move) override;
+    void notify(Move move, const ChessBoard &chessBoard) override;
 };
 
 

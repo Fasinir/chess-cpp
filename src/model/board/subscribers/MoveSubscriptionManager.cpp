@@ -3,9 +3,9 @@
 
 #include <iostream>
 
-void MoveSubscriptionManager::notifySubscribers(Move move) {
+void MoveSubscriptionManager::notifySubscribers(Move move, const ChessBoard &chessBoard) {
     for (auto const& subscriber : entireBoardSubscribers) {
-        subscriber->notify(move);
+        subscriber->notify(move, chessBoard);
     }
 }
 

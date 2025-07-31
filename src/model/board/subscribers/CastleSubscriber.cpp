@@ -31,7 +31,7 @@ bool CastleSubscriber::canCastle(const Coordinates coordinates) const {
     return availableCastles.contains(coordinates);
 }
 
-void CastleSubscriber::notify(const Move move) {
+void CastleSubscriber::notify(const Move move, const ChessBoard &chessBoard) {
     // White
     handleCastles(move, 0);
     // Black

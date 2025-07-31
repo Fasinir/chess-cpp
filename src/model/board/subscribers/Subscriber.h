@@ -1,5 +1,6 @@
 #ifndef SUBSCRIBER_H
 #define SUBSCRIBER_H
+#include "../ChessBoard.h"
 #include "../move/Move.h"
 
 
@@ -9,7 +10,7 @@ public:
 
     virtual ~Subscriber() = default;
 
-    virtual void notify(Move move) = 0;
+    virtual void notify(Move move, const ChessBoard &chessBoard) = 0;
 };
 
 

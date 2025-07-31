@@ -15,7 +15,7 @@ public:
 
     [[nodiscard]] Coordinates getKingCoordinates(ChessColor color) const;
 
-    void notify(Move move) override;
+    void notify(Move move, const ChessBoard &chessBoard) override;
 };
 
 

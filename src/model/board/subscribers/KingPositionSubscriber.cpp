@@ -8,6 +8,14 @@ Coordinates KingPositionSubscriber::getKingCoordinates(const ChessColor color) c
     return blackKingCoordinates;
 }
 
-void KingPositionSubscriber::notify(Move move) {
+void KingPositionSubscriber::notify(Move move, const ChessBoard &chessBoard) {
     //todo implement
+    if (whiteKingCoordinates == move.getFrom()) {
+        whiteKingCoordinates = move.getTo();
+        std::cout << "WhiteKingCoordinates: " << whiteKingCoordinates << "\n";
+    }
+    if (blackKingCoordinates == move.getFrom()) {
+        blackKingCoordinates = move.getTo();
+        std::cout << "BlackKingCoordinates: " << blackKingCoordinates << "\n";
+    }
 }

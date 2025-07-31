@@ -6,6 +6,7 @@
 #include "../subscribers/KingPositionSubscriber.h"
 #include "Move.h"
 #include "MoveApplier.h"
+#include "VisionBoard.h"
 #include "../ChessBoard.h"
 #include "../subscribers/CastleSubscriber.h"
 #include "../subscribers/EnPassantSubscriber.h"
@@ -32,11 +33,11 @@ class LegalMoveGetter {
 
     std::vector<Move> handleStraight(const ChessBoard &chessBoard, Coordinates from);
 
-    std::vector<Move> handleKing(const ChessBoard &chessBoard, Coordinates from);
+    std::vector<Move> handleKing(const ChessBoard &chessBoard, Coordinates from, const std::shared_ptr<VisionBoard> &visionBoard);
 
-    std::vector<Move> handleCastle(const ChessBoard &chessBoard, Coordinates from);
+    std::vector<Move> handleCastle(const ChessBoard &chessBoard, Coordinates from, const std::shared_ptr<VisionBoard>& visionBoard);
 
-    std::vector<Move> generateMoves(const ChessBoard &chessBoard, ChessColor color, bool skipCastle);
+    std::vector<Move> generateMoves(const ChessBoard &chessBoard, ChessColor color, bool skipCastle, const std::shared_ptr<VisionBoard>& visionBoard);
 
 
 public:
@@ -54,7 +55,7 @@ public:
 
     ~LegalMoveGetter() = default;
 
-    std::vector<Move> generateMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from, bool skipCastle);
+    std::vector<Move> generateMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from, bool skipCastle, const std::shared_ptr<VisionBoard>& visionBoard);
 
     std::vector<Move> getLegalMovesForColor(ChessBoard &chessBoard, ChessColor color);
     bool hasVisionOn(const ChessBoard &chessBoard, ChessColor color, Coordinates coordinates);

@@ -70,6 +70,8 @@ set(PROJECT_SOURCES
         src/model/board/subscribers/FiftyMoveSubscriber.h
         src/view/GameSettings.h
         src/model/board/subscribers/Subscriber.cpp
+        src/model/board/move/VisionBoard.cpp
+        src/model/board/move/VisionBoard.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
