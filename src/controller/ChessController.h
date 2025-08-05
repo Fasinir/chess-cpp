@@ -4,6 +4,7 @@
 #include "../model/board/ChessBoard.h"
 #include "../model/board/move/MoveApplier.h"
 #include "../model/board/move/LegalMoveGetter.h"
+#include "../model/board/subscribers/FiftyMoveSubscriber.h"
 #include "../view/GameSettings.h"
 #include "../model/board/subscribers/MoveSubscriptionManager.h"
 
@@ -31,6 +32,7 @@ private:
     std::unique_ptr<MoveApplier> moveApplier;
     std::unique_ptr<LegalMoveGetter> moveGetter;
     std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber;
+    std::shared_ptr<FiftyMoveSubscriber> fiftyMoveSubscriber;
     GameSettings settings;
     std::vector<Move> currentLegalMoves;
     std::unique_ptr<MoveSubscriptionManager> manager;

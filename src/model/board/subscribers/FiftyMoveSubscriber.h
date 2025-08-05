@@ -2,17 +2,20 @@
 #define FIFTYMOVESUBSCRIBER_H
 #include <vector>
 
+#include "PawnPositionSubscriber.h"
 #include "Subscriber.h"
 
 
 class FiftyMoveSubscriber : public Subscriber {
     int count;
-    std::vector<Coordinates> pawnCoordinates;
+    std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber;
 
 public:
-    FiftyMoveSubscriber();
+    explicit FiftyMoveSubscriber(std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber);
 
-    void notify(Move move, const ChessBoard &chessBoard) override;
+    void notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) override;
+
+    bool fiftyMoveRuleIsReached();
 };
 
 

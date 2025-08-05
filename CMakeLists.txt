@@ -72,6 +72,8 @@ set(PROJECT_SOURCES
         src/model/board/subscribers/Subscriber.cpp
         src/model/board/move/VisionBoard.cpp
         src/model/board/move/VisionBoard.h
+        src/model/board/subscribers/PawnPositionSubscriber.cpp
+        src/model/board/subscribers/PawnPositionSubscriber.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

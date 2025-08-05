@@ -1,22 +1,19 @@
 #ifndef PUBSUBMANAGERSINGLETON_H
 #define PUBSUBMANAGERSINGLETON_H
 #include <memory>
-#include <unordered_set>
 
 #include "Subscriber.h"
 #include "../move/Move.h"
 
 class MoveSubscriptionManager {
-    std::unordered_set<std::shared_ptr<Subscriber> > entireBoardSubscribers;
+    std::vector<std::shared_ptr<Subscriber> > entireBoardSubscribers;
 
 public:
     MoveSubscriptionManager() = default;
 
     ~MoveSubscriptionManager() = default;
 
-    void notifySubscribers(Move move, const ChessBoard &chessBoard);
-
-    void removeSubscription(const std::shared_ptr<Subscriber>& subscriber);
+    void notifySubscribers(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) const;
 
     void addSubscription(const std::shared_ptr<Subscriber>& subscriber);
 };

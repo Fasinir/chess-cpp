@@ -9,7 +9,7 @@ class Coordinates {
 
 public:
     Coordinates(const int x, const int y) : x(x), y(y) {
-    };
+    }
 
     Coordinates(const Coordinates &other) = default;
 
@@ -34,7 +34,6 @@ struct std::hash<Coordinates> {
         return std::hash<int>()(coord.getX()) ^ (std::hash<int>()(coord.getY()) << 1);
     }
 };
-
 
 
 #endif //COORDINATES_H

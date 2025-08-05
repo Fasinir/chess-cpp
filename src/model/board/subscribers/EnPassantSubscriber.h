@@ -6,22 +6,21 @@
 #include "Subscriber.h"
 #include "../move/Coordinates.h"
 
-
 class EnPassantSubscriber : public Subscriber {
     std::unordered_set<Coordinates> unmovedPawns;
 
-    std::optional<Coordinates> enPassantCoordinates;\
-
-    void updateUnmovedPawns(const ChessBoard &chessBoard);
+    std::optional<Coordinates> enPassantCoordinates;
 
 public:
-    EnPassantSubscriber() = default;
+    EnPassantSubscriber();
 
-    bool canBeTakenEnPassant(Coordinates coordinates);
+    ~EnPassantSubscriber() override = default;
+
+    bool canBeTakenEnPassant(Coordinates coordinates) const;
 
     void setEnPassantCoordinates(Coordinates coordinates);
 
-    void notify(Move move, const ChessBoard &chessBoard) override;
+    void notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) override;
 };
 
 

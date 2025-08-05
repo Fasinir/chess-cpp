@@ -19,7 +19,7 @@ public:
 
     bool canCastle(Coordinates coordinates) const;
 
-    void notify(Move move, const ChessBoard &chessBoard) override;
+    void notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) override;
 };
 
 

@@ -5,19 +5,29 @@
 #include <QMessageBox>
 #include <iostream>
 
+#include "../model/board/subscribers/FiftyMoveSubscriber.h"
+#include "../model/board/subscribers/PawnPositionSubscriber.h"
+
 ChessController::ChessController(QObject *parent)
     : QObject(parent),
       board(ChessBoard::STANDARD_BOARD()),
-      moveApplier(std::make_unique<MoveApplier>()), settings(), manager(std::make_unique<MoveSubscriptionManager>()),
-      kingPositionSubscriber(std::make_shared<KingPositionSubscriber>()) {
+      moveApplier(std::make_unique<MoveApplier>()), kingPositionSubscriber(std::make_shared<KingPositionSubscriber>()),
+      settings(),
+      manager(std::make_unique<MoveSubscriptionManager>()) {
     std::shared_ptr<EnPassantSubscriber> enPassantSubscriber = std::make_shared<EnPassantSubscriber>();
     std::shared_ptr<CastleSubscriber> castleChecker = std::make_shared<CastleSubscriber>();
 
     this->moveGetter = std::make_unique<LegalMoveGetter>(enPassantSubscriber, castleChecker,
                                                          std::make_shared<MoveApplier>(),
                                                          kingPositionSubscriber);
+    std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber = std::make_shared<PawnPositionSubscriber>(
+        enPassantSubscriber);
+    this->fiftyMoveSubscriber = std::make_shared<FiftyMoveSubscriber>(pawnPositionSubscriber);
     manager->addSubscription(castleChecker);
     manager->addSubscription(kingPositionSubscriber);
+    manager->addSubscription(fiftyMoveSubscriber);
+    manager->addSubscription(pawnPositionSubscriber);
+    manager->addSubscription(enPassantSubscriber);
 }
 
 void ChessController::startGame(const GameSettings &settings) {
@@ -32,6 +42,9 @@ void ChessController::startGame(const GameSettings &settings) {
 }
 
 void ChessController::nextTurn() {
+    if (fiftyMoveSubscriber->fiftyMoveRuleIsReached()) {
+        QMessageBox::information(nullptr, "Game Over", "Draw by 50 move rule");
+    }
     ChessColor color = whiteToMove ? ChessColor::WHITE : ChessColor::BLACK;
     currentLegalMoves = moveGetter->getLegalMovesForColor(*board, color);
 
@@ -75,8 +88,8 @@ void ChessController::onPieceMoved(int fromRow, int fromCol, int toRow, int toCo
 
     std::cout << "Move accepted: " << *it << "\n";
 
-    moveApplier->applyMove(*board, *it);
-    manager->notifySubscribers(*it, *board);
+    auto applyMoveResult = moveApplier->applyMove(*board, *it);
+    manager->notifySubscribers(*applyMoveResult, *board);
     emit boardUpdated();
 
     whiteToMove = !whiteToMove;
