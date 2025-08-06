@@ -35,6 +35,8 @@ private slots:
 
     void drawBoardFromModel();
 
+    void handlePromotionRequested(Coordinates coordinates, ChessColor color);
+
 
 private:
     Ui::MainWindow *ui;

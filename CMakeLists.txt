@@ -74,6 +74,12 @@ set(PROJECT_SOURCES
         src/model/board/move/VisionBoard.h
         src/model/board/subscribers/PawnPositionSubscriber.cpp
         src/model/board/subscribers/PawnPositionSubscriber.h
+        src/model/board/subscribers/PromotionSubscriber.cpp
+        src/model/board/subscribers/PromotionSubscriber.h
+        src/view/PromotionDialog.h
+        src/view/PromotionDialog.cpp
+        src/view/PromotionDialog.ui
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

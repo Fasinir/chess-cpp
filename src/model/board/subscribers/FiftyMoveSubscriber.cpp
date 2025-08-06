@@ -16,6 +16,6 @@ void FiftyMoveSubscriber::notify(const ApplyMoveResult &applyMoveResult, const C
     }
 }
 
-bool FiftyMoveSubscriber::fiftyMoveRuleIsReached() {
+bool FiftyMoveSubscriber::fiftyMoveRuleIsReached() const {
     return count == 50;
 }

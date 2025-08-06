@@ -15,7 +15,7 @@ public:
 
     void notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) override;
 
-    bool fiftyMoveRuleIsReached();
+    bool fiftyMoveRuleIsReached() const;
 };
 
 

@@ -5,6 +5,10 @@
 #include <QMessageBox>
 #include <iostream>
 
+#include "../model/board/figures/Bishop.h"
+#include "../model/board/figures/Knight.h"
+#include "../model/board/figures/Queen.h"
+#include "../model/board/figures/Rook.h"
 #include "../model/board/subscribers/FiftyMoveSubscriber.h"
 #include "../model/board/subscribers/PawnPositionSubscriber.h"
 
@@ -23,9 +27,11 @@ ChessController::ChessController(QObject *parent)
     std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber = std::make_shared<PawnPositionSubscriber>(
         enPassantSubscriber);
     this->fiftyMoveSubscriber = std::make_shared<FiftyMoveSubscriber>(pawnPositionSubscriber);
+    this->promotionSubscriber = std::make_shared<PromotionSubscriber>(pawnPositionSubscriber);
     manager->addSubscription(castleChecker);
     manager->addSubscription(kingPositionSubscriber);
     manager->addSubscription(fiftyMoveSubscriber);
+    manager->addSubscription(promotionSubscriber);
     manager->addSubscription(pawnPositionSubscriber);
     manager->addSubscription(enPassantSubscriber);
 }
@@ -44,6 +50,14 @@ void ChessController::startGame(const GameSettings &settings) {
 void ChessController::nextTurn() {
     if (fiftyMoveSubscriber->fiftyMoveRuleIsReached()) {
         QMessageBox::information(nullptr, "Game Over", "Draw by 50 move rule");
+    }
+    if (promotionSubscriber->getPromotionCoordinates().has_value()) {
+        Coordinates promotionCoordinates = promotionSubscriber->getPromotionCoordinates().value();
+        ChessColor color = board->figureAt(promotionCoordinates.getX(), promotionCoordinates.getY()).value()->
+                getColor();
+        promotionSubscriber->resetPromotionCoordinates();
+        emit promotionRequested(promotionCoordinates, color);
+        return; // Pause the game until promotion is handled
     }
     ChessColor color = whiteToMove ? ChessColor::WHITE : ChessColor::BLACK;
     currentLegalMoves = moveGetter->getLegalMovesForColor(*board, color);
@@ -93,5 +107,34 @@ void ChessController::onPieceMoved(int fromRow, int fromCol, int toRow, int toCo
     emit boardUpdated();
 
     whiteToMove = !whiteToMove;
+    nextTurn();
+}
+
+void ChessController::promote(Coordinates coordinates, PromotionType type) {
+    std::shared_ptr<Figure> promoted;
+
+    switch (type) {
+        case PromotionType::QUEEN:
+            promoted = std::make_shared<Queen>(
+                board->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
+            break;
+        case PromotionType::ROOK:
+            promoted = std::make_shared<Rook>(
+                board->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
+            break;
+        case PromotionType::BISHOP:
+            promoted = std::make_shared<Bishop>(
+                board->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
+            break;
+        case PromotionType::KNIGHT:
+            promoted = std::make_shared<Knight>(
+                board->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
+            break;
+    }
+    board->removeFigure(coordinates.getX(), coordinates.getY());
+    board->placeFigure(promoted, coordinates.getX(), coordinates.getY());
+
+    emit boardUpdated();
+
     nextTurn();
 }

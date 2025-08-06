@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QRandomGenerator>
 
+#include "PromotionDialog.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -14,9 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->startEngineGameButton, &QPushButton::clicked, this, &MainWindow::startEngineGame);
     connect(ui->colorComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::updatePlayer2ColorLabel);
     connect(ui->startGameButton, &QPushButton::clicked, this, &MainWindow::proceedToGamePage);
-    connect(controller, &ChessController::boardUpdated, this, [this]() {
-        this->drawBoardFromModel(); // We'll implement this
-    });
+    connect(controller, &ChessController::boardUpdated, this, &MainWindow::drawBoardFromModel);
+    connect(controller, &ChessController::promotionRequested, this, &MainWindow::handlePromotionRequested);
 }
 
 MainWindow::~MainWindow() {
@@ -171,3 +172,12 @@ void MainWindow::drawBoardFromModel() {
         }
     }
 }
+
+void MainWindow::handlePromotionRequested(Coordinates coordinates, ChessColor color) {
+    PromotionDialog dialog(this);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        controller->promote(coordinates, dialog.selectedType());
+    }
+}
+
