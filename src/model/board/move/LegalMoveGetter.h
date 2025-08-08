@@ -1,21 +1,23 @@
 #ifndef LEGALMOVEGETTER_H
 #define LEGALMOVEGETTER_H
+#include <utility>
 #include <vector>
 
+#include "../subscribers/move_subs/KingPositionSubscriber.h"
 #include "Move.h"
 #include "MoveApplier.h"
+#include "VisionBoard.h"
 #include "../ChessBoard.h"
-#include "checkers/CastleChecker.h"
-#include "checkers/CheckChecker.h"
-#include "checkers/EnPassantChecker.h"
+#include "../subscribers/move_subs/CastleSubscriber.h"
+#include "../subscribers/move_subs/EnPassantSubscriber.h"
 
 class LegalMoveGetter {
-    std::shared_ptr<EnPassantChecker> enPassantChecker;
-    std::shared_ptr<CheckChecker> checkChecker;
-    std::shared_ptr<CastleChecker> castleChecker;
+    std::shared_ptr<EnPassantSubscriber> enPassantSubscriber;
+    std::shared_ptr<CastleSubscriber> castleChecker;
     std::shared_ptr<MoveApplier> moveApplier;
+    std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber;
 
-    bool isWithinBounds(int x, int y);
+    static bool isWithinBounds(int x, int y);
 
     std::vector<Move> handlePawnSingleMove(const ChessBoard &chessBoard, Coordinates from);
 
@@ -31,24 +33,33 @@ class LegalMoveGetter {
 
     std::vector<Move> handleStraight(const ChessBoard &chessBoard, Coordinates from);
 
-    std::vector<Move> handleKing(const ChessBoard &chessBoard, Coordinates from);
+    std::vector<Move> handleKing(const ChessBoard &chessBoard, Coordinates from, const std::shared_ptr<VisionBoard> &visionBoard);
 
-    std::vector<Move> handleCastle(ChessBoard &chessBoard, Coordinates from);
+    std::vector<Move> handleCastle(const ChessBoard &chessBoard, Coordinates from, const std::shared_ptr<VisionBoard>& visionBoard);
+
+    std::vector<Move> generateMoves(const ChessBoard &chessBoard, ChessColor color, bool skipCastle, const std::shared_ptr<VisionBoard>& visionBoard);
+
 
 public:
-    LegalMoveGetter(std::shared_ptr<EnPassantChecker> enPassantChecker, std::shared_ptr<CheckChecker> checkChecker,
-                    std::shared_ptr<CastleChecker> castleChecker,
-                    std::shared_ptr<MoveApplier> moveApplier) : enPassantChecker(enPassantChecker),
-                                                                checkChecker(checkChecker),
-                                                                castleChecker(castleChecker),
-                                                                moveApplier(moveApplier) {
+    LegalMoveGetter(std::shared_ptr<EnPassantSubscriber> enPassantChecker,
+                    std::shared_ptr<CastleSubscriber> castleChecker,
+                    std::shared_ptr<MoveApplier> moveApplier,
+                    std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber)
+        : enPassantSubscriber(std::move(enPassantChecker)),
+          castleChecker(std::move(castleChecker)),
+          moveApplier(std::move(moveApplier)),
+          kingPositionSubscriber(std::move(kingPositionSubscriber)) {
     }
 
     LegalMoveGetter();
 
     ~LegalMoveGetter() = default;
 
-    std::vector<Move> getLegalMovesForCoordinate(ChessBoard &chessBoard, Coordinates from);
+    std::vector<Move> generateMovesForCoordinate(const ChessBoard &chessBoard, Coordinates from, bool skipCastle, const std::shared_ptr<VisionBoard>& visionBoard);
+
+    std::vector<Move> getLegalMovesForColor(ChessBoard &chessBoard, ChessColor color);
+    bool hasVisionOn(const ChessBoard &chessBoard, ChessColor color, Coordinates coordinates);
+
 };
 
 

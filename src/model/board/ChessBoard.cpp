@@ -1,6 +1,7 @@
 #include "ChessBoard.h"
 
 #include <ostream>
+#include <sstream>
 
 #include "figures/Bishop.h"
 #include "figures/King.h"
@@ -74,4 +75,37 @@ std::optional<std::shared_ptr<Figure> > ChessBoard::figureAt(int x, int y) const
 
 void ChessBoard::removeFigure(int x, int y) {
     board.at(x).at(y).removeFigure();
+}
+
+std::string ChessBoard::toFENBoardPart() const {
+    std::ostringstream fen;
+
+    for (int rank = Constants::BOARD_SIZE - 1; rank >= 0; --rank) { // 8 to 1
+        int emptyCount = 0;
+
+        for (int file = 0; file < Constants::BOARD_SIZE; ++file) { // a to h
+            auto figOpt = board[file][rank].getFigure(); // file = x, rank = y
+            if (!figOpt.has_value()) {
+                emptyCount++;
+            } else {
+                // flush empty squares count
+                if (emptyCount > 0) {
+                    fen << emptyCount;
+                    emptyCount = 0;
+                }
+
+                auto fig = figOpt.value();
+                fen << fig->getSymbol();
+            }
+        }
+
+        // flush remaining empties at end of rank
+        if (emptyCount > 0)
+            fen << emptyCount;
+
+        if (rank > 0)
+            fen << '/';
+    }
+
+    return fen.str();
 }

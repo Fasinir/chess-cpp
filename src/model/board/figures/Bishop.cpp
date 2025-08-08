@@ -11,3 +11,7 @@ char Bishop::getSymbol() const {
 std::unique_ptr<Figure> Bishop::clone() const {
     return std::make_unique<Bishop>(*this);
 }
+
+std::string Bishop::getName() const {
+    return "bishop";
+}

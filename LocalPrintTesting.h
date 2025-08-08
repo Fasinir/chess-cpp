@@ -201,33 +201,36 @@ public:
 
     static void legalMovesForStandardBoard() {
         std::unique_ptr<ChessBoard> chessBoard = ChessBoard::STANDARD_BOARD();
-        std::shared_ptr enPassantChecker = std::make_unique<EnPassantChecker>();
-        std::shared_ptr checkChecker = std::make_unique<CheckChecker>();
-        std::shared_ptr castleChecker = std::make_unique<CastleChecker>();
+        std::shared_ptr enPassantSubscriber = std::make_unique<EnPassantSubscriber>();
+        std::shared_ptr castleChecker = std::make_unique<CastleSubscriber>();
         std::shared_ptr moveApplier = std::make_unique<MoveApplier>();
-        LegalMoveGetter legalMoveGetter = LegalMoveGetter(enPassantChecker, checkChecker, castleChecker, moveApplier);
+        std::shared_ptr kingPositionSubscriber = std::make_unique<KingPositionSubscriber>();
+        LegalMoveGetter legalMoveGetter = LegalMoveGetter(enPassantSubscriber, castleChecker, moveApplier,
+                                                          kingPositionSubscriber);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Coordinates coordinates = Coordinates(i, j);
                 std::cout << coordinates.toAlgebraicNotation() << ": ";
-                std::cout << legalMoveGetter.getLegalMovesForCoordinate(*chessBoard, coordinates) << std::endl;
+                std::cout << legalMoveGetter.generateMovesForCoordinate(*chessBoard, coordinates, false,
+                                                                        std::make_shared<VisionBoard>()) << std::endl;
             }
         }
     }
 
     static void legalMovesForBishop() {
-        std::unique_ptr<ChessBoard> chessBoard = std::make_unique<ChessBoard>();
-        std::shared_ptr enPassantChecker = std::make_unique<EnPassantChecker>();
-        std::shared_ptr checkChecker = std::make_unique<CheckChecker>();
-        std::shared_ptr castleChecker = std::make_unique<CastleChecker>();
+        std::unique_ptr<ChessBoard> chessBoard = ChessBoard::STANDARD_BOARD();
+        std::shared_ptr enPassantSubscriber = std::make_unique<EnPassantSubscriber>();
+        std::shared_ptr castleChecker = std::make_unique<CastleSubscriber>();
         std::shared_ptr moveApplier = std::make_unique<MoveApplier>();
-        LegalMoveGetter legalMoveGetter = LegalMoveGetter(enPassantChecker, checkChecker, castleChecker,
-                                                          moveApplier);
+        std::shared_ptr kingPositionSubscriber = std::make_unique<KingPositionSubscriber>();
+        LegalMoveGetter legalMoveGetter = LegalMoveGetter(enPassantSubscriber, castleChecker, moveApplier,
+                                                          kingPositionSubscriber);
         chessBoard->placeFigure(std::make_unique<Bishop>(ChessColor::WHITE), 3, 3);
         chessBoard->placeFigure(std::make_unique<Bishop>(ChessColor::WHITE), 0, 0);
         chessBoard->placeFigure(std::make_unique<Bishop>(ChessColor::BLACK), 4, 4);
         std::cout << *chessBoard << std::endl;
-        std::cout << legalMoveGetter.getLegalMovesForCoordinate(*chessBoard, Coordinates(3, 3)) << std::endl;
+        std::cout << legalMoveGetter.generateMovesForCoordinate(*chessBoard, Coordinates(3, 3), false,
+                                                                std::make_shared<VisionBoard>()) << std::endl;
     }
 
     static void legalMovesForRook() {
@@ -237,7 +240,8 @@ public:
         chessBoard->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 3, 6);
         chessBoard->placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 1, 3);
         std::cout << *chessBoard << std::endl;
-        std::cout << legalMoveGetter->getLegalMovesForCoordinate(*chessBoard, Coordinates(3, 3)) << std::endl;
+        std::cout << legalMoveGetter->generateMovesForCoordinate(*chessBoard, Coordinates(3, 3), false,
+                                                                 std::make_shared<VisionBoard>()) << std::endl;
     }
 
     static void legalMovesForQueen() {
@@ -249,7 +253,8 @@ public:
         chessBoard->placeFigure(std::make_unique<Bishop>(ChessColor::WHITE), 0, 0);
         chessBoard->placeFigure(std::make_unique<Bishop>(ChessColor::BLACK), 4, 4);
         std::cout << *chessBoard << std::endl;
-        std::cout << legalMoveGetter->getLegalMovesForCoordinate(*chessBoard, Coordinates(3, 3)) << std::endl;
+        std::cout << legalMoveGetter->generateMovesForCoordinate(*chessBoard, Coordinates(3, 3), false,
+                                                                 std::make_shared<VisionBoard>()) << std::endl;
     }
 
     static void legalMovesForKing() {
@@ -261,26 +266,29 @@ public:
         chessBoard->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 0, 0);
         chessBoard->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 7, 0);
         std::cout << *chessBoard << std::endl;
-        std::cout << legalMoveGetter->getLegalMovesForCoordinate(*chessBoard, Coordinates(4, 0)) << std::endl;
+        std::cout << legalMoveGetter->generateMovesForCoordinate(*chessBoard, Coordinates(4, 0), false,
+                                                                 std::make_shared<VisionBoard>()) << std::endl;
     }
 
     static void legalMovesForPawn() {
-        std::shared_ptr enPassantChecker = std::make_unique<EnPassantChecker>();
+        std::shared_ptr enPassantChecker = std::make_unique<EnPassantSubscriber>();
         enPassantChecker->setEnPassantCoordinates(Coordinates(3, 5));
-        std::shared_ptr checkChecker = std::make_unique<CheckChecker>();
-        std::shared_ptr castleChecker = std::make_unique<CastleChecker>();
+        std::unique_ptr<ChessBoard> chessBoard = ChessBoard::STANDARD_BOARD();
+        std::shared_ptr castleChecker = std::make_unique<CastleSubscriber>();
         std::shared_ptr moveApplier = std::make_unique<MoveApplier>();
-        LegalMoveGetter legalMoveGetter = LegalMoveGetter(enPassantChecker, checkChecker, castleChecker,
-                                                          moveApplier);
-        std::unique_ptr<ChessBoard> chessBoard = std::make_unique<ChessBoard>();
+        std::shared_ptr kingPositionSubscriber = std::make_shared<KingPositionSubscriber>();
+        LegalMoveGetter legalMoveGetter = LegalMoveGetter(enPassantChecker, castleChecker, moveApplier,
+                                                          kingPositionSubscriber);
         chessBoard->placeFigure(std::make_unique<Pawn>(ChessColor::WHITE), 4, 4);
         chessBoard->placeFigure(std::make_unique<Pawn>(ChessColor::BLACK), 3, 4);
         chessBoard->placeFigure(std::make_unique<Pawn>(ChessColor::BLACK), 5, 5);
         chessBoard->placeFigure(std::make_unique<Pawn>(ChessColor::WHITE), 1, 1);
 
         std::cout << *chessBoard << std::endl;
-        std::cout << legalMoveGetter.getLegalMovesForCoordinate(*chessBoard, Coordinates(4, 4)) << std::endl;
-        std::cout << legalMoveGetter.getLegalMovesForCoordinate(*chessBoard, Coordinates(1, 1)) << std::endl;
+        std::cout << legalMoveGetter.generateMovesForCoordinate(*chessBoard, Coordinates(4, 4), false,
+                                                                std::make_shared<VisionBoard>()) << std::endl;
+        std::cout << legalMoveGetter.generateMovesForCoordinate(*chessBoard, Coordinates(1, 1), false,
+                                                                std::make_shared<VisionBoard>()) << std::endl;
     }
 
     static void legalMovesForKingCastle() {
@@ -293,8 +301,19 @@ public:
         chessBoard->placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 0, 7);
         chessBoard->placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 7, 7);
         std::cout << *chessBoard << std::endl;
-        std::cout << legalMoveGetter->getLegalMovesForCoordinate(*chessBoard, Coordinates(4, 0)) << std::endl;
-        std::cout << legalMoveGetter->getLegalMovesForCoordinate(*chessBoard, Coordinates(4, 7)) << std::endl;
+        std::cout << legalMoveGetter->generateMovesForCoordinate(*chessBoard, Coordinates(4, 0), false,
+                                                                 std::make_shared<VisionBoard>()) << std::endl;
+        std::cout << legalMoveGetter->generateMovesForCoordinate(*chessBoard, Coordinates(4, 7), false,
+                                                                 std::make_shared<VisionBoard>()) << std::endl;
+    }
+
+    static void legalMovesForColor() {
+        std::shared_ptr legalMoveGetter = std::make_shared<LegalMoveGetter>();
+        std::unique_ptr<ChessBoard> chessBoard = ChessBoard::STANDARD_BOARD();
+        std::cout << "WHITE: " << std::endl;
+        std::cout << legalMoveGetter->getLegalMovesForColor(*chessBoard, ChessColor::WHITE) << std::endl;
+        std::cout << "BLACK: " << std::endl;
+        std::cout << legalMoveGetter->getLegalMovesForColor(*chessBoard, ChessColor::BLACK) << std::endl;
     }
 };
 

@@ -23,9 +23,11 @@ public:
 
     [[nodiscard]] virtual std::unique_ptr<Figure> clone() const = 0;
 
+    [[nodiscard]] virtual std::string getName() const = 0;
+
     std::vector<MoveType> &getMoves();
 
-    const ChessColor &getColor() const;
+    [[nodiscard]] const ChessColor &getColor() const;
 
     friend std::ostream &operator<<(std::ostream &os, const Figure &figure);
 };

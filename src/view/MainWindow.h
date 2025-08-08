@@ -5,6 +5,8 @@
 #include <QGraphicsScene>
 #include "DraggablePiece.h"
 #include "../controller/ChessController.h"
+#include "GameSettings.h"
+
 
 QT_BEGIN_NAMESPACE
 
@@ -13,8 +15,6 @@ namespace Ui {
 }
 
 QT_END_NAMESPACE
-
-enum class GameMode { Local, Engine };
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -33,11 +33,17 @@ private slots:
 
     void proceedToGamePage();
 
+    void drawBoardFromModel();
+
+    void handlePromotionRequested(Coordinates coordinates, ChessColor color);
+
+
 private:
     Ui::MainWindow *ui;
     GameMode currentGameMode;
     QGraphicsScene *scene = nullptr;
     ChessController *controller = nullptr;
+    GameSettings gameSettings;
 
 
     void showConfigScreen(GameMode mode);

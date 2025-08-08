@@ -11,3 +11,7 @@ char Knight::getSymbol() const {
 std::unique_ptr<Figure> Knight::clone() const {
     return std::make_unique<Knight>(*this);
 }
+
+std::string Knight::getName() const {
+    return "knight";
+}

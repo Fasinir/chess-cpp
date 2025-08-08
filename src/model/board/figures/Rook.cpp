@@ -11,3 +11,7 @@ char Rook::getSymbol() const {
 std::unique_ptr<Figure> Rook::clone() const {
     return std::make_unique<Rook>(*this);
 }
+
+std::string Rook::getName() const {
+    return "rook";
+}

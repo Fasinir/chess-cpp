@@ -6,7 +6,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add Svg to the find_package line
@@ -57,12 +57,33 @@ set(PROJECT_SOURCES
         LocalPrintTesting.h
         src/model/board/move/LegalMoveGetter.cpp
         src/model/board/move/LegalMoveGetter.h
-        src/model/board/move/checkers/CheckChecker.cpp
-        src/model/board/move/checkers/CheckChecker.h
-        src/model/board/move/checkers/EnPassantChecker.cpp
-        src/model/board/move/checkers/EnPassantChecker.h
-        src/model/board/move/checkers/CastleChecker.cpp
-        src/model/board/move/checkers/CastleChecker.h
+        src/model/board/subscribers/move_subs/MoveSubscriber.h
+        src/model/board/subscribers/move_subs/EnPassantSubscriber.cpp
+        src/model/board/subscribers/move_subs/EnPassantSubscriber.h
+        src/model/board/subscribers/move_subs/CastleSubscriber.cpp
+        src/model/board/subscribers/move_subs/CastleSubscriber.h
+        src/model/board/subscribers/move_subs/KingPositionSubscriber.cpp
+        src/model/board/subscribers/move_subs/KingPositionSubscriber.h
+        src/model/board/subscribers/move_subs/MoveSubscriptionManager.cpp
+        src/model/board/subscribers/move_subs/MoveSubscriptionManager.h
+        src/model/board/subscribers/move_subs/FiftyMoveSubscriber.cpp
+        src/model/board/subscribers/move_subs/FiftyMoveSubscriber.h
+        src/view/GameSettings.h
+        src/model/board/subscribers/move_subs/MoveSubscriber.cpp
+        src/model/board/move/VisionBoard.cpp
+        src/model/board/move/VisionBoard.h
+        src/model/board/subscribers/move_subs/PawnPositionSubscriber.cpp
+        src/model/board/subscribers/move_subs/PawnPositionSubscriber.h
+        src/model/board/subscribers/move_subs/PromotionSubscriber.cpp
+        src/model/board/subscribers/move_subs/PromotionSubscriber.h
+        src/view/PromotionDialog.h
+        src/view/PromotionDialog.cpp
+        src/view/PromotionDialog.ui
+        src/model/board/subscribers/board_subs/ThreefoldBoardSubscriber.cpp
+        src/model/board/subscribers/board_subs/ThreefoldBoardSubscriber.h
+        src/model/Utils.cpp
+        src/model/Utils.h
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

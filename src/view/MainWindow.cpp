@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QRandomGenerator>
 
+#include "PromotionDialog.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -14,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->startEngineGameButton, &QPushButton::clicked, this, &MainWindow::startEngineGame);
     connect(ui->colorComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::updatePlayer2ColorLabel);
     connect(ui->startGameButton, &QPushButton::clicked, this, &MainWindow::proceedToGamePage);
+    connect(controller, &ChessController::boardUpdated, this, &MainWindow::drawBoardFromModel);
+    connect(controller, &ChessController::promotionRequested, this, &MainWindow::handlePromotionRequested);
 }
 
 MainWindow::~MainWindow() {
@@ -51,48 +55,53 @@ void MainWindow::updatePlayer2ColorLabel() {
 }
 
 void MainWindow::proceedToGamePage() {
-    ui->stackedWidget->setCurrentWidget(ui->gamePage);
-    drawChessBoard();
+    GameSettings settings;
 
-    QString player1Name = ui->playerOneLineEdit->text();
-    QString player2Name;
+    settings.mode = currentGameMode;
+    settings.player1Name = ui->playerOneLineEdit->text();
+    settings.baseTime = ui->timeEdit->time();
+    settings.incrementSeconds = ui->incrementSpinBox->value();
 
     if (currentGameMode == GameMode::Engine) {
-        player2Name = ui->chessEngineComboBox->currentText(); // Engine name
+        settings.player2Name = ui->chessEngineComboBox->currentText();
     } else {
-        player2Name = ui->playerTwoLineEdit->text(); // Human vs Human
+        settings.player2Name = ui->playerTwoLineEdit->text();
     }
 
-    // Determine which player is white and which is black
-    QString whitePlayerName, blackPlayerName;
     QString colorChoice = ui->colorComboBox->currentText();
-
     if (colorChoice == "White") {
-        whitePlayerName = player1Name;
-        blackPlayerName = player2Name;
+        settings.whitePlayerName = settings.player1Name;
+        settings.blackPlayerName = settings.player2Name;
     } else if (colorChoice == "Black") {
-        whitePlayerName = player2Name;
-        blackPlayerName = player1Name;
+        settings.whitePlayerName = settings.player2Name;
+        settings.blackPlayerName = settings.player1Name;
     } else {
-        // Random assignment
         if (QRandomGenerator::global()->bounded(2) == 0) {
-            whitePlayerName = player1Name;
-            blackPlayerName = player2Name;
+            settings.whitePlayerName = settings.player1Name;
+            settings.blackPlayerName = settings.player2Name;
         } else {
-            whitePlayerName = player2Name;
-            blackPlayerName = player1Name;
+            settings.whitePlayerName = settings.player2Name;
+            settings.blackPlayerName = settings.player1Name;
         }
     }
 
-    // Update the GUI labels
-    ui->whitePlayerNameLabel->setText(whitePlayerName);
-    ui->blackPlayerNameLabel->setText(blackPlayerName);
+    // Store or pass to controller
+    this->gameSettings = settings;
 
-    // Set timers too (assuming time was fetched earlier)
-    QString initialTime = ui->timeEdit->time().toString("hh:mm:ss");
-    ui->whitePlayerTimerLabel->setText(initialTime);
-    ui->blackPlayerTimerLabel->setText(initialTime);
+    // Update UI
+    ui->whitePlayerNameLabel->setText(settings.whitePlayerName);
+    ui->blackPlayerNameLabel->setText(settings.blackPlayerName);
+
+    QString formattedTime = settings.baseTime.toString("hh:mm:ss");
+    ui->whitePlayerTimerLabel->setText(formattedTime);
+    ui->blackPlayerTimerLabel->setText(formattedTime);
+
+    ui->stackedWidget->setCurrentWidget(ui->gamePage);
+    drawChessBoard();
+    drawBoardFromModel();
+    controller->startGame(settings);
 }
+
 
 void MainWindow::drawChessBoard() {
     if (scene) delete scene;
@@ -120,22 +129,6 @@ void MainWindow::drawChessBoard() {
 
     // Optional: Resize view to fit the scene exactly (if view size changes)
     ui->boardGraphicsView->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
-
-    // Place full set of pieces for both sides
-    for (int col = 0; col < 8; ++col) {
-        placePiece("../assets/black_pawn.svg", PieceColor::Black, 1, col);
-        placePiece("../assets/white_pawn.svg", PieceColor::White, 6, col);
-    }
-
-    QStringList pieceOrder = {
-        "rook", "knight", "bishop", "queen",
-        "king", "bishop", "knight", "rook"
-    };
-
-    for (int col = 0; col < 8; ++col) {
-        placePiece(QString("../assets/black_%1.svg").arg(pieceOrder[col]), PieceColor::Black, 0, col);
-        placePiece(QString("../assets/white_%1.svg").arg(pieceOrder[col]), PieceColor::White, 7, col);
-    }
 }
 
 void MainWindow::placePiece(const QString &svgPath, PieceColor color, int row, int col) {
@@ -148,7 +141,42 @@ void MainWindow::placePiece(const QString &svgPath, PieceColor color, int row, i
     qreal offsetX = (tileSize - piece->boundingRect().width() * piece->scale()) / 2;
     qreal offsetY = (tileSize - piece->boundingRect().height() * piece->scale()) / 2;
 
-    piece->setPos(col * tileSize + offsetX, row * tileSize + offsetY);
+    piece->setPos(col * tileSize + offsetX, (7 - row) * tileSize + offsetY);
     connect(piece, &DraggablePiece::pieceMoved,
             controller, &ChessController::onPieceMoved);
+    connect(controller, &ChessController::illegalMoveAttempted, piece, &DraggablePiece::revertToOriginalPosition);
+}
+
+void MainWindow::drawBoardFromModel() {
+    // Remove all pieces, but leave the board tiles
+    for (auto item: scene->items()) {
+        auto *piece = dynamic_cast<DraggablePiece *>(item);
+        if (piece) {
+            scene->removeItem(piece);
+            delete piece;
+        }
+    }
+
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            auto optFigure = controller->getBoard()->figureAt(col, row);
+            if (!optFigure.has_value()) continue;
+
+            auto fig = optFigure.value();
+            QString colorPrefix = (fig->getColor() == ChessColor::WHITE) ? "white" : "black";
+            QString pieceName = QString::fromStdString(fig->getName());
+            QString path = QString("../assets/%1_%2.svg").arg(colorPrefix, pieceName);
+
+            PieceColor guiColor = (fig->getColor() == ChessColor::WHITE) ? PieceColor::White : PieceColor::Black;
+            placePiece(path, guiColor, row, col);
+        }
+    }
+}
+
+void MainWindow::handlePromotionRequested(Coordinates coordinates, ChessColor color) {
+    PromotionDialog dialog(color, this);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        controller->promote(coordinates, dialog.selectedType());
+    }
 }
