@@ -1,7 +1,7 @@
 #ifndef MOVEAPPLIER_H
 #define MOVEAPPLIER_H
 #include "ApplyMoveResult.h"
-#include "../ChessBoard.h"
+#include "../core/ChessBoard.h"
 
 
 class MoveApplier {

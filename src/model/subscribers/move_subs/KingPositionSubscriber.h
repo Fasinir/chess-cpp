@@ -2,7 +2,7 @@
 #define KINGPOSITIONSUBSCRIBER_H
 #include "MoveSubscriber.h"
 #include "../../move/Coordinates.h"
-#include "../../../ChessColor.h"
+#include "../../core/ChessColor.h"
 
 
 class KingPositionSubscriber : public MoveSubscriber {

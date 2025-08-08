@@ -14,7 +14,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets SvgWidgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets SvgWidgets)
 
 set(PROJECT_SOURCES
-        main.cpp
+        src/main.cpp
         src/view/MainWindow.cpp
         src/view/MainWindow.h
         src/view/MainWindow.ui
@@ -22,67 +22,66 @@ set(PROJECT_SOURCES
         src/controller/ChessController.h
         src/view/DraggablePiece.cpp
         src/view/DraggablePiece.h
-        src/model/Constants.h
-        src/model/board/ChessBoard.cpp
-        src/model/board/ChessBoard.h
-        src/model/board/Field.cpp
-        src/model/board/Field.h
-        src/model/board/ChessBoard.h
-        src/model/board/figures/Figure.cpp
-        src/model/board/figures/Figure.h
-        src/model/board/figures/King.cpp
-        src/model/board/figures/King.h
-        src/model/board/figures/Queen.cpp
-        src/model/board/figures/Queen.h
-        src/model/board/figures/Bishop.cpp
-        src/model/board/figures/Bishop.h
-        src/model/board/figures/Knight.cpp
-        src/model/board/figures/Knight.h
-        src/model/board/figures/Rook.cpp
-        src/model/board/figures/Rook.h
-        src/model/board/figures/Pawn.cpp
-        src/model/board/figures/Pawn.h
-        src/model/board/move/Coordinates.cpp
-        src/model/board/move/Coordinates.h
-        src/model/board/move/Move.cpp
-        src/model/board/move/Move.h
-        src/model/board/move/MoveType.h
-        src/model/ChessColor.h
-        src/model/board/move/MoveType.cpp
-        PrintUtils.h
-        src/model/board/move/MoveApplier.cpp
-        src/model/board/move/MoveApplier.h
-        src/model/board/move/ApplyMoveResult.cpp
-        src/model/board/move/ApplyMoveResult.h
-        LocalPrintTesting.h
-        src/model/board/move/LegalMoveGetter.cpp
-        src/model/board/move/LegalMoveGetter.h
-        src/model/board/subscribers/move_subs/MoveSubscriber.h
-        src/model/board/subscribers/move_subs/EnPassantSubscriber.cpp
-        src/model/board/subscribers/move_subs/EnPassantSubscriber.h
-        src/model/board/subscribers/move_subs/CastleSubscriber.cpp
-        src/model/board/subscribers/move_subs/CastleSubscriber.h
-        src/model/board/subscribers/move_subs/KingPositionSubscriber.cpp
-        src/model/board/subscribers/move_subs/KingPositionSubscriber.h
-        src/model/board/subscribers/move_subs/MoveSubscriptionManager.cpp
-        src/model/board/subscribers/move_subs/MoveSubscriptionManager.h
-        src/model/board/subscribers/move_subs/FiftyMoveSubscriber.cpp
-        src/model/board/subscribers/move_subs/FiftyMoveSubscriber.h
+        src/model/core/Constants.h
+        src/model/core/ChessBoard.cpp
+        src/model/core/ChessBoard.h
+        src/model/core/Field.cpp
+        src/model/core/Field.h
+        src/model/core/ChessBoard.h
+        src/model/figures/Figure.cpp
+        src/model/figures/Figure.h
+        src/model/figures/King.cpp
+        src/model/figures/King.h
+        src/model/figures/Queen.cpp
+        src/model/figures/Queen.h
+        src/model/figures/Bishop.cpp
+        src/model/figures/Bishop.h
+        src/model/figures/Knight.cpp
+        src/model/figures/Knight.h
+        src/model/figures/Rook.cpp
+        src/model/figures/Rook.h
+        src/model/figures/Pawn.cpp
+        src/model/figures/Pawn.h
+        src/model/move/Coordinates.cpp
+        src/model/move/Coordinates.h
+        src/model/move/Move.cpp
+        src/model/move/Move.h
+        src/model/move/MoveType.h
+        src/model/core/ChessColor.h
+        src/model/move/MoveType.cpp
+        src/PrintUtils.h
+        src/model/move/MoveApplier.cpp
+        src/model/move/MoveApplier.h
+        src/model/move/ApplyMoveResult.cpp
+        src/model/move/ApplyMoveResult.h
+        test/LocalPrintTesting.h
+        src/model/move/LegalMoveGetter.cpp
+        src/model/move/LegalMoveGetter.h
+        src/model/subscribers/move_subs/MoveSubscriber.h
+        src/model/subscribers/move_subs/EnPassantSubscriber.cpp
+        src/model/subscribers/move_subs/EnPassantSubscriber.h
+        src/model/subscribers/move_subs/CastleSubscriber.cpp
+        src/model/subscribers/move_subs/CastleSubscriber.h
+        src/model/subscribers/move_subs/KingPositionSubscriber.cpp
+        src/model/subscribers/move_subs/KingPositionSubscriber.h
+        src/model/subscribers/move_subs/MoveSubscriptionManager.cpp
+        src/model/subscribers/move_subs/MoveSubscriptionManager.h
+        src/model/subscribers/move_subs/FiftyMoveSubscriber.cpp
+        src/model/subscribers/move_subs/FiftyMoveSubscriber.h
         src/view/GameSettings.h
-        src/model/board/subscribers/move_subs/MoveSubscriber.cpp
-        src/model/board/move/VisionBoard.cpp
-        src/model/board/move/VisionBoard.h
-        src/model/board/subscribers/move_subs/PawnPositionSubscriber.cpp
-        src/model/board/subscribers/move_subs/PawnPositionSubscriber.h
-        src/model/board/subscribers/move_subs/PromotionSubscriber.cpp
-        src/model/board/subscribers/move_subs/PromotionSubscriber.h
+        src/model/move/VisionBoard.cpp
+        src/model/move/VisionBoard.h
+        src/model/subscribers/move_subs/PawnPositionSubscriber.cpp
+        src/model/subscribers/move_subs/PawnPositionSubscriber.h
+        src/model/subscribers/move_subs/PromotionSubscriber.cpp
+        src/model/subscribers/move_subs/PromotionSubscriber.h
         src/view/PromotionDialog.h
         src/view/PromotionDialog.cpp
         src/view/PromotionDialog.ui
-        src/model/board/subscribers/board_subs/ThreefoldBoardSubscriber.cpp
-        src/model/board/subscribers/board_subs/ThreefoldBoardSubscriber.h
-        src/model/Utils.cpp
-        src/model/Utils.h
+        src/model/subscribers/board_subs/ThreefoldBoardSubscriber.cpp
+        src/model/subscribers/board_subs/ThreefoldBoardSubscriber.h
+        src/model/core/Utils.cpp
+        src/model/core/Utils.h
 
 )
 

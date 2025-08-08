@@ -1,7 +1,7 @@
 #include "Coordinates.h"
 
-#include "../../Constants.h"
-#include <algorithm> // for std::find
+#include "../core/Constants.h"
+#include <algorithm>
 
 std::ostream &operator<<(std::ostream &os, const Coordinates &coordinates) {
     os << "[" << coordinates.x << ", " << coordinates.y << "]";

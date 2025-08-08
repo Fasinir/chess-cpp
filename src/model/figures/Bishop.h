@@ -1,7 +1,7 @@
 #ifndef BISHOP_H
 #define BISHOP_H
 #include "Figure.h"
-#include "../../ChessColor.h"
+#include "../core/ChessColor.h"
 
 
 class Bishop : public Figure {

@@ -1,12 +1,12 @@
 #include "Utils.h"
 
 #include "Constants.h"
-#include "board/move/Coordinates.h"
+#include "../move/Coordinates.h"
 
 #include <string>
 #include <sstream>
-#include "board/subscribers/move_subs/CastleSubscriber.h"
-#include "board/subscribers/move_subs/EnPassantSubscriber.h"
+#include "../subscribers/move_subs/CastleSubscriber.h"
+#include "../subscribers/move_subs/EnPassantSubscriber.h"
 
 std::string Utils::createFEN(const ChessBoard &board, const CastleSubscriber &castleSub,
                              const EnPassantSubscriber &enPassantSub, bool whiteToMove) {
@@ -36,4 +36,8 @@ std::string Utils::createFEN(const ChessBoard &board, const CastleSubscriber &ca
     // (5 and 6 halfmove / fullmove counters — optional for you right now)
     // We'll skip for now, but we could append " 0 1" if needed.
     return fen.str();
+}
+
+ChessColor Utils::oppositeColor(const ChessColor color) {
+    return color == ChessColor::WHITE ? ChessColor::BLACK : ChessColor::WHITE;
 }

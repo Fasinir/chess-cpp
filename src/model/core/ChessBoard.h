@@ -3,10 +3,10 @@
 
 #include <array>
 #include "Field.h"
-#include "../Constants.h"
+#include "Constants.h"
 #include <optional>
 
-#include "figures/Figure.h"
+#include "../figures/Figure.h"
 
 class ChessBoard {
     std::array<std::array<Field, Constants::BOARD_SIZE>, Constants::BOARD_SIZE> board;

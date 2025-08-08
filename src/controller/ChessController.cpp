@@ -1,16 +1,16 @@
 #include "ChessController.h"
 
-#include "../model/board/move/Coordinates.h"
-#include "../model/board/subscribers/move_subs/KingPositionSubscriber.h"
+#include "../model/move/Coordinates.h"
+#include "../model/subscribers/move_subs/KingPositionSubscriber.h"
 #include <QMessageBox>
 #include <iostream>
 
-#include "../model/board/figures/Bishop.h"
-#include "../model/board/figures/Knight.h"
-#include "../model/board/figures/Queen.h"
-#include "../model/board/figures/Rook.h"
-#include "../model/board/subscribers/move_subs/FiftyMoveSubscriber.h"
-#include "../model/board/subscribers/move_subs/PawnPositionSubscriber.h"
+#include "../model/figures/Bishop.h"
+#include "../model/figures/Knight.h"
+#include "../model/figures/Queen.h"
+#include "../model/figures/Rook.h"
+#include "../model/subscribers/move_subs/FiftyMoveSubscriber.h"
+#include "../model/subscribers/move_subs/PawnPositionSubscriber.h"
 
 ChessController::ChessController(QObject *parent)
     : QObject(parent),
@@ -72,7 +72,7 @@ void ChessController::nextTurn() {
     if (currentLegalMoves.empty()) {
         Coordinates kingPos = kingPositionSubscriber->getKingCoordinates(color);
         std::shared_ptr visionBoard = std::make_shared<VisionBoard>(
-            moveGetter->getLegalMovesForColor(*board, Constants::oppositeColor(color)));
+            moveGetter->getLegalMovesForColor(*board, Utils::oppositeColor(color)));
         bool inCheck = visionBoard->hasVisionOn(kingPos);
 
         QString resultText;

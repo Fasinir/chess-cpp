@@ -2,8 +2,8 @@
 #define THREEFOLDSUBSCRIBER_H
 #include <unordered_map>
 
-#include "../../ChessBoard.h"
-#include "../../../Utils.h"
+#include "../../core/ChessBoard.h"
+#include "../../core/Utils.h"
 #include "../move_subs/CastleSubscriber.h"
 #include "../move_subs/EnPassantSubscriber.h"
 

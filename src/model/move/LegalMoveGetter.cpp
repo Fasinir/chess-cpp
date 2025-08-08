@@ -1,6 +1,7 @@
 #include "LegalMoveGetter.h"
 
 #include "VisionBoard.h"
+#include "../core/Utils.h"
 
 bool LegalMoveGetter::isWithinBounds(int x, int y) {
     return x >= 0 && y >= 0 && x < Constants::BOARD_SIZE && y < Constants::BOARD_SIZE;
@@ -67,7 +68,7 @@ std::vector<Move> LegalMoveGetter::getLegalMovesForColor(ChessBoard &chessBoard,
             }
         }
         std::shared_ptr applyMoveResult = moveApplier->applyMove(chessBoard, move);
-        std::vector<Move> enemyMoves = generateMoves(chessBoard, Constants::oppositeColor(color), true,
+        std::vector<Move> enemyMoves = generateMoves(chessBoard, Utils::oppositeColor(color), true,
                                                      std::make_shared<VisionBoard>());
         std::shared_ptr<VisionBoard> visionBoard = std::make_shared<VisionBoard>(enemyMoves);
         Coordinates kingPosition = kingPositionSubscriber->getKingCoordinates(color);

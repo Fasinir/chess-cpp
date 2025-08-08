@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "MoveSubscriber.h"
-#include "../../move/Move.h"
 
 class MoveSubscriptionManager {
     std::vector<std::shared_ptr<MoveSubscriber> > entireBoardSubscribers;

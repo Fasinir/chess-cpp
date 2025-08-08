@@ -3,8 +3,8 @@
 #include <memory>
 #include <iostream>
 
-#include "../../ChessColor.h"
-#include "../../Constants.h"
+#include "../core/ChessColor.h"
+#include "../core/Constants.h"
 #include "../move/MoveType.h"
 
 

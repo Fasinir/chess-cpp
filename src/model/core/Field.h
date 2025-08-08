@@ -3,7 +3,7 @@
 #include <memory>
 #include <optional>
 
-#include "figures/Figure.h"
+#include "../figures/Figure.h"
 
 
 class Field {

@@ -7,7 +7,7 @@
 #include "Move.h"
 #include "MoveApplier.h"
 #include "VisionBoard.h"
-#include "../ChessBoard.h"
+#include "../core/ChessBoard.h"
 #include "../subscribers/move_subs/CastleSubscriber.h"
 #include "../subscribers/move_subs/EnPassantSubscriber.h"
 

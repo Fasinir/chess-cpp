@@ -1,6 +1,5 @@
 #ifndef FIFTYMOVESUBSCRIBER_H
 #define FIFTYMOVESUBSCRIBER_H
-#include <vector>
 
 #include "PawnPositionSubscriber.h"
 #include "MoveSubscriber.h"

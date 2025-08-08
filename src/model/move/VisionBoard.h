@@ -4,7 +4,7 @@
 
 #include "Coordinates.h"
 #include "Move.h"
-#include "../../Constants.h"
+#include "../core/Constants.h"
 
 class VisionBoard {
     std::array<std::array<bool, Constants::BOARD_SIZE>, Constants::BOARD_SIZE> board;
