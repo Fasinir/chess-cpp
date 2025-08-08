@@ -174,10 +174,9 @@ void MainWindow::drawBoardFromModel() {
 }
 
 void MainWindow::handlePromotionRequested(Coordinates coordinates, ChessColor color) {
-    PromotionDialog dialog(this);
+    PromotionDialog dialog(color, this);
 
     if (dialog.exec() == QDialog::Accepted) {
         controller->promote(coordinates, dialog.selectedType());
     }
 }
-

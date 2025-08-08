@@ -3,17 +3,17 @@
 #include <vector>
 
 #include "PawnPositionSubscriber.h"
-#include "Subscriber.h"
+#include "MoveSubscriber.h"
 
 
-class FiftyMoveSubscriber : public Subscriber {
+class FiftyMoveSubscriber : public MoveSubscriber {
     int count;
     std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber;
 
 public:
     explicit FiftyMoveSubscriber(std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber);
 
-    void notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) override;
+    void notify(const ApplyMoveResult &applyMoveResult) override;
 
     bool fiftyMoveRuleIsReached() const;
 };

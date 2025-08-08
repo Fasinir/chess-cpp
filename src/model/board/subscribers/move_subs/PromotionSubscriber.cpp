@@ -6,8 +6,7 @@ PromotionSubscriber::PromotionSubscriber(
     this->promotionCoordinates;
 }
 
-void PromotionSubscriber::notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) {
-    resetPromotionCoordinates();
+void PromotionSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
     int toYCoordinate = applyMoveResult.getMove().getTo().getY();
     if (pawnPositionSubscriber->getPawnPositions().contains(applyMoveResult.getMove().getFrom())
         && (toYCoordinate == 7 || toYCoordinate == 0)) {

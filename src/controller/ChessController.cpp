@@ -1,7 +1,7 @@
 #include "ChessController.h"
 
 #include "../model/board/move/Coordinates.h"
-#include "../model/board/subscribers/KingPositionSubscriber.h"
+#include "../model/board/subscribers/move_subs/KingPositionSubscriber.h"
 #include <QMessageBox>
 #include <iostream>
 
@@ -9,26 +9,26 @@
 #include "../model/board/figures/Knight.h"
 #include "../model/board/figures/Queen.h"
 #include "../model/board/figures/Rook.h"
-#include "../model/board/subscribers/FiftyMoveSubscriber.h"
-#include "../model/board/subscribers/PawnPositionSubscriber.h"
+#include "../model/board/subscribers/move_subs/FiftyMoveSubscriber.h"
+#include "../model/board/subscribers/move_subs/PawnPositionSubscriber.h"
 
 ChessController::ChessController(QObject *parent)
     : QObject(parent),
       board(ChessBoard::STANDARD_BOARD()),
       moveApplier(std::make_unique<MoveApplier>()), kingPositionSubscriber(std::make_shared<KingPositionSubscriber>()),
       settings(),
-      manager(std::make_unique<MoveSubscriptionManager>()) {
-    std::shared_ptr<EnPassantSubscriber> enPassantSubscriber = std::make_shared<EnPassantSubscriber>();
-    std::shared_ptr<CastleSubscriber> castleChecker = std::make_shared<CastleSubscriber>();
-
-    this->moveGetter = std::make_unique<LegalMoveGetter>(enPassantSubscriber, castleChecker,
+      manager(std::make_unique<MoveSubscriptionManager>()),
+      threefoldBoardSubscriber(std::make_unique<ThreefoldBoardSubscriber>()),
+      castleSubscriber(std::make_unique<CastleSubscriber>()),
+      enPassantSubscriber(std::make_shared<EnPassantSubscriber>()) {
+    this->moveGetter = std::make_unique<LegalMoveGetter>(enPassantSubscriber, castleSubscriber,
                                                          std::make_shared<MoveApplier>(),
                                                          kingPositionSubscriber);
     std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber = std::make_shared<PawnPositionSubscriber>(
         enPassantSubscriber);
     this->fiftyMoveSubscriber = std::make_shared<FiftyMoveSubscriber>(pawnPositionSubscriber);
     this->promotionSubscriber = std::make_shared<PromotionSubscriber>(pawnPositionSubscriber);
-    manager->addSubscription(castleChecker);
+    manager->addSubscription(castleSubscriber);
     manager->addSubscription(kingPositionSubscriber);
     manager->addSubscription(fiftyMoveSubscriber);
     manager->addSubscription(promotionSubscriber);
@@ -48,6 +48,10 @@ void ChessController::startGame(const GameSettings &settings) {
 }
 
 void ChessController::nextTurn() {
+    if (threefoldBoardSubscriber->updateAndCheckIfThreefoldWasReached(*board, *castleSubscriber, *enPassantSubscriber,
+                                                                      whiteToMove)) {
+        QMessageBox::information(nullptr, "Game Over", "Draw by threefold repetition");
+    }
     if (fiftyMoveSubscriber->fiftyMoveRuleIsReached()) {
         QMessageBox::information(nullptr, "Game Over", "Draw by 50 move rule");
     }
@@ -103,7 +107,7 @@ void ChessController::onPieceMoved(int fromRow, int fromCol, int toRow, int toCo
     std::cout << "Move accepted: " << *it << "\n";
 
     auto applyMoveResult = moveApplier->applyMove(*board, *it);
-    manager->notifySubscribers(*applyMoveResult, *board);
+    manager->notifySubscribers(*applyMoveResult);
     emit boardUpdated();
 
     whiteToMove = !whiteToMove;

@@ -1,11 +1,11 @@
 #ifndef KINGPOSITIONSUBSCRIBER_H
 #define KINGPOSITIONSUBSCRIBER_H
-#include "Subscriber.h"
-#include "../move/Coordinates.h"
-#include "../../ChessColor.h"
+#include "MoveSubscriber.h"
+#include "../../move/Coordinates.h"
+#include "../../../ChessColor.h"
 
 
-class KingPositionSubscriber : public Subscriber {
+class KingPositionSubscriber : public MoveSubscriber {
     Coordinates whiteKingCoordinates;
     Coordinates blackKingCoordinates;
 
@@ -15,7 +15,7 @@ public:
 
     [[nodiscard]] Coordinates getKingCoordinates(ChessColor color) const;
 
-    void notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) override;
+    void notify(const ApplyMoveResult &applyMoveResult) override;
 };
 
 

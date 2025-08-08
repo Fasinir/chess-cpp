@@ -11,7 +11,7 @@ PawnPositionSubscriber::PawnPositionSubscriber(std::shared_ptr<EnPassantSubscrib
     }
 }
 
-void PawnPositionSubscriber::notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) {
+void PawnPositionSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
     Move move = applyMoveResult.getMove();
     if (pawnPositions.contains(move.getTo())) {
         pawnPositions.erase(move.getTo());

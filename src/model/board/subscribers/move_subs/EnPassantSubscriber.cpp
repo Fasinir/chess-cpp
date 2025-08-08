@@ -20,7 +20,7 @@ void EnPassantSubscriber::setEnPassantCoordinates(Coordinates coordinates) {
     this->enPassantCoordinates = coordinates;
 }
 
-void EnPassantSubscriber::notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) {
+void EnPassantSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
     enPassantCoordinates.reset();
     Move move = applyMoveResult.getMove();
     if (unmovedPawns.contains(move.getFrom())) {

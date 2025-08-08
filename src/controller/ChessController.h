@@ -4,10 +4,12 @@
 #include "../model/board/ChessBoard.h"
 #include "../model/board/move/MoveApplier.h"
 #include "../model/board/move/LegalMoveGetter.h"
-#include "../model/board/subscribers/FiftyMoveSubscriber.h"
+#include "../model/board/subscribers/board_subs/ThreefoldBoardSubscriber.h"
+#include "../model/board/subscribers/move_subs/FiftyMoveSubscriber.h"
 #include "../view/GameSettings.h"
-#include "../model/board/subscribers/MoveSubscriptionManager.h"
-#include "../model/board/subscribers/PromotionSubscriber.h"
+#include "../model/board/subscribers/move_subs/MoveSubscriptionManager.h"
+#include "../model/board/subscribers/move_subs/PromotionSubscriber.h"
+#include "../model/board/subscribers/move_subs/KingPositionSubscriber.h"
 
 enum class PromotionType { QUEEN, ROOK, BISHOP, KNIGHT };
 
@@ -40,6 +42,9 @@ private:
     std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber;
     std::shared_ptr<FiftyMoveSubscriber> fiftyMoveSubscriber;
     std::shared_ptr<PromotionSubscriber> promotionSubscriber;
+    std::shared_ptr<ThreefoldBoardSubscriber> threefoldBoardSubscriber;
+    std::shared_ptr<CastleSubscriber> castleSubscriber;
+    std::shared_ptr<EnPassantSubscriber> enPassantSubscriber;
     GameSettings settings;
     std::vector<Move> currentLegalMoves;
     std::unique_ptr<MoveSubscriptionManager> manager;

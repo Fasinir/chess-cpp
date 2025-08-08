@@ -4,10 +4,10 @@
 #include <unordered_set>
 
 #include "EnPassantSubscriber.h"
-#include "../move/Coordinates.h"
+#include "../../move/Coordinates.h"
 
 
-class PawnPositionSubscriber : public Subscriber {
+class PawnPositionSubscriber : public MoveSubscriber {
     std::unordered_set<Coordinates> pawnPositions;
     std::shared_ptr<EnPassantSubscriber> enPassantSubscriber;
 
@@ -16,7 +16,7 @@ public:
 
     ~PawnPositionSubscriber() override = default;
 
-    void notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) override;
+    void notify(const ApplyMoveResult &applyMoveResult) override;
 
     std::unordered_set<Coordinates> getPawnPositions();
 };

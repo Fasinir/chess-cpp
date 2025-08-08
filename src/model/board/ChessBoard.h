@@ -4,7 +4,6 @@
 #include <array>
 #include "Field.h"
 #include "../Constants.h"
-#include <iostream>
 #include <optional>
 
 #include "figures/Figure.h"
@@ -33,6 +32,8 @@ public:
     void removeFigure(int x, int y);
 
     friend std::ostream &operator<<(std::ostream &os, const ChessBoard &board);
+
+    [[nodiscard]] std::string toFENBoardPart() const;
 };
 
 

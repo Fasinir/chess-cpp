@@ -3,13 +3,13 @@
 #include <utility>
 #include <vector>
 
-#include "../subscribers/KingPositionSubscriber.h"
+#include "../subscribers/move_subs/KingPositionSubscriber.h"
 #include "Move.h"
 #include "MoveApplier.h"
 #include "VisionBoard.h"
 #include "../ChessBoard.h"
-#include "../subscribers/CastleSubscriber.h"
-#include "../subscribers/EnPassantSubscriber.h"
+#include "../subscribers/move_subs/CastleSubscriber.h"
+#include "../subscribers/move_subs/EnPassantSubscriber.h"
 
 class LegalMoveGetter {
     std::shared_ptr<EnPassantSubscriber> enPassantSubscriber;

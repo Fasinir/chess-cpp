@@ -7,7 +7,7 @@ FiftyMoveSubscriber::FiftyMoveSubscriber(std::shared_ptr<PawnPositionSubscriber>
     this->count = 0;
 }
 
-void FiftyMoveSubscriber::notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) {
+void FiftyMoveSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
     if (applyMoveResult.getTakenFigure().has_value()
         || pawnPositionSubscriber->getPawnPositions().contains(applyMoveResult.getMove().getFrom())) {
         count = 0;

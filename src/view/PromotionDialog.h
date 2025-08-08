@@ -1,31 +1,38 @@
-#ifndef PROMOTIONDIALOG_H
-#define PROMOTIONDIALOG_H
-
+// PromotionDialog.h
+#pragma once
 #include <QDialog>
 #include "../controller/ChessController.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class PromotionDialog; }
+
+namespace Ui {
+    class PromotionDialog;
+}
+
 QT_END_NAMESPACE
 
 class PromotionDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit PromotionDialog(QWidget *parent = nullptr);
-    ~PromotionDialog();
+    explicit PromotionDialog(ChessColor color, QWidget *parent = nullptr);
 
-    PromotionType selectedType() const;
+    ~PromotionDialog() override;
 
-    private slots:
-        void chooseQueen();
+    [[nodiscard]] PromotionType selectedType() const { return choice; }
+
+private slots:
+    void chooseQueen();
+
     void chooseRook();
+
     void chooseBishop();
+
     void chooseKnight();
 
 private:
     Ui::PromotionDialog *ui;
-    PromotionType choice;
-};
+    PromotionType choice = PromotionType::QUEEN;
 
-#endif // PROMOTIONDIALOG_H
+    void setIconsForColor(ChessColor color);
+};

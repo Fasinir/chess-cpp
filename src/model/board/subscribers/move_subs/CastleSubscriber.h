@@ -3,11 +3,11 @@
 
 #include <unordered_set>
 
-#include "Subscriber.h"
-#include "../move/Coordinates.h"
+#include "MoveSubscriber.h"
+#include "../../move/Coordinates.h"
 
 
-class CastleSubscriber : public Subscriber {
+class CastleSubscriber : public MoveSubscriber {
     std::unordered_set<Coordinates> availableCastles;
 
     void handleCastles(const Move &move, int y);
@@ -19,7 +19,7 @@ public:
 
     bool canCastle(Coordinates coordinates) const;
 
-    void notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) override;
+    void notify(const ApplyMoveResult &applyMoveResult) override;
 };
 
 

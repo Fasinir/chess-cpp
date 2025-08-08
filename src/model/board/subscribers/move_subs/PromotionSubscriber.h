@@ -1,19 +1,19 @@
 #ifndef PROMOTIONSUBSCRIBER_H
 #define PROMOTIONSUBSCRIBER_H
 #include "PawnPositionSubscriber.h"
-#include "Subscriber.h"
+#include "MoveSubscriber.h"
 
 
-class PromotionSubscriber : public Subscriber {
+class PromotionSubscriber : public MoveSubscriber {
     std::optional<Coordinates> promotionCoordinates;
     std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber;
 
 public:
     explicit PromotionSubscriber(std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber);
 
-    void notify(const ApplyMoveResult &applyMoveResult, const ChessBoard &chessBoard) override;
+    void notify(const ApplyMoveResult &applyMoveResult) override;
 
-    std::optional<Coordinates> getPromotionCoordinates() const;
+    [[nodiscard]] std::optional<Coordinates> getPromotionCoordinates() const;
 
     void resetPromotionCoordinates();
 };

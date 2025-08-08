@@ -57,28 +57,32 @@ set(PROJECT_SOURCES
         LocalPrintTesting.h
         src/model/board/move/LegalMoveGetter.cpp
         src/model/board/move/LegalMoveGetter.h
-        src/model/board/subscribers/Subscriber.h
-        src/model/board/subscribers/EnPassantSubscriber.cpp
-        src/model/board/subscribers/EnPassantSubscriber.h
-        src/model/board/subscribers/CastleSubscriber.cpp
-        src/model/board/subscribers/CastleSubscriber.h
-        src/model/board/subscribers/KingPositionSubscriber.cpp
-        src/model/board/subscribers/KingPositionSubscriber.h
-        src/model/board/subscribers/MoveSubscriptionManager.cpp
-        src/model/board/subscribers/MoveSubscriptionManager.h
-        src/model/board/subscribers/FiftyMoveSubscriber.cpp
-        src/model/board/subscribers/FiftyMoveSubscriber.h
+        src/model/board/subscribers/move_subs/MoveSubscriber.h
+        src/model/board/subscribers/move_subs/EnPassantSubscriber.cpp
+        src/model/board/subscribers/move_subs/EnPassantSubscriber.h
+        src/model/board/subscribers/move_subs/CastleSubscriber.cpp
+        src/model/board/subscribers/move_subs/CastleSubscriber.h
+        src/model/board/subscribers/move_subs/KingPositionSubscriber.cpp
+        src/model/board/subscribers/move_subs/KingPositionSubscriber.h
+        src/model/board/subscribers/move_subs/MoveSubscriptionManager.cpp
+        src/model/board/subscribers/move_subs/MoveSubscriptionManager.h
+        src/model/board/subscribers/move_subs/FiftyMoveSubscriber.cpp
+        src/model/board/subscribers/move_subs/FiftyMoveSubscriber.h
         src/view/GameSettings.h
-        src/model/board/subscribers/Subscriber.cpp
+        src/model/board/subscribers/move_subs/MoveSubscriber.cpp
         src/model/board/move/VisionBoard.cpp
         src/model/board/move/VisionBoard.h
-        src/model/board/subscribers/PawnPositionSubscriber.cpp
-        src/model/board/subscribers/PawnPositionSubscriber.h
-        src/model/board/subscribers/PromotionSubscriber.cpp
-        src/model/board/subscribers/PromotionSubscriber.h
+        src/model/board/subscribers/move_subs/PawnPositionSubscriber.cpp
+        src/model/board/subscribers/move_subs/PawnPositionSubscriber.h
+        src/model/board/subscribers/move_subs/PromotionSubscriber.cpp
+        src/model/board/subscribers/move_subs/PromotionSubscriber.h
         src/view/PromotionDialog.h
         src/view/PromotionDialog.cpp
         src/view/PromotionDialog.ui
+        src/model/board/subscribers/board_subs/ThreefoldBoardSubscriber.cpp
+        src/model/board/subscribers/board_subs/ThreefoldBoardSubscriber.h
+        src/model/Utils.cpp
+        src/model/Utils.h
 
 )
 
