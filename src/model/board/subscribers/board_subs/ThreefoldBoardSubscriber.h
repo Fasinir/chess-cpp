@@ -9,7 +9,6 @@
 
 
 class ThreefoldBoardSubscriber {
-    //unsure if size_t is the right choice
     std::unordered_map<std::string, int> positionCountMap;
 
 public:
