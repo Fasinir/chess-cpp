@@ -14,31 +14,31 @@
 
 ChessController::ChessController(QObject *parent)
     : QObject(parent),
-      board(ChessBoard::STANDARD_BOARD()),
-      moveApplier(std::make_unique<MoveApplier>()), kingPositionSubscriber(std::make_shared<KingPositionSubscriber>()),
-      settings(),
-      manager(std::make_unique<MoveSubscriptionManager>()),
-      threefoldBoardSubscriber(std::make_unique<ThreefoldBoardSubscriber>()),
-      castleSubscriber(std::make_unique<CastleSubscriber>()),
-      enPassantSubscriber(std::make_shared<EnPassantSubscriber>()) {
-    this->moveGetter = std::make_unique<LegalMoveGetter>(enPassantSubscriber, castleSubscriber,
+      board_(ChessBoard::makeStandardBoard()),
+      move_applier_(std::make_unique<MoveApplier>()), king_position_subscriber_(std::make_shared<KingPositionSubscriber>()),
+      game_settings_(),
+      move_subscription_manager_(std::make_unique<MoveSubscriptionManager>()),
+      threefold_board_subscriber_(std::make_unique<ThreefoldBoardSubscriber>()),
+      castle_subscriber_(std::make_unique<CastleSubscriber>()),
+      en_passant_subscriber_(std::make_shared<EnPassantSubscriber>()) {
+    this->move_getter_ = std::make_unique<LegalMoveGetter>(en_passant_subscriber_, castle_subscriber_,
                                                          std::make_shared<MoveApplier>(),
-                                                         kingPositionSubscriber);
+                                                         king_position_subscriber_);
     std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber = std::make_shared<PawnPositionSubscriber>(
-        enPassantSubscriber);
-    this->fiftyMoveSubscriber = std::make_shared<FiftyMoveSubscriber>(pawnPositionSubscriber);
-    this->promotionSubscriber = std::make_shared<PromotionSubscriber>(pawnPositionSubscriber);
-    manager->addSubscription(castleSubscriber);
-    manager->addSubscription(kingPositionSubscriber);
-    manager->addSubscription(fiftyMoveSubscriber);
-    manager->addSubscription(promotionSubscriber);
-    manager->addSubscription(pawnPositionSubscriber);
-    manager->addSubscription(enPassantSubscriber);
+        en_passant_subscriber_);
+    this->fifty_move_subscriber_ = std::make_shared<FiftyMoveSubscriber>(pawnPositionSubscriber);
+    this->pawn_promotion_subscriber_ = std::make_shared<PromotionSubscriber>(pawnPositionSubscriber);
+    move_subscription_manager_->addSubscription(castle_subscriber_);
+    move_subscription_manager_->addSubscription(king_position_subscriber_);
+    move_subscription_manager_->addSubscription(fifty_move_subscriber_);
+    move_subscription_manager_->addSubscription(pawn_promotion_subscriber_);
+    move_subscription_manager_->addSubscription(pawnPositionSubscriber);
+    move_subscription_manager_->addSubscription(en_passant_subscriber_);
 }
 
 void ChessController::startGame(const GameSettings &settings) {
-    this->settings = settings;
-    this->whiteToMove = true;
+    this->game_settings_ = settings;
+    this->white_to_move_ = true;
 
     std::cout << "Game started\n";
     std::cout << "White: " << settings.whitePlayerName.toStdString() << "\n";
@@ -48,36 +48,36 @@ void ChessController::startGame(const GameSettings &settings) {
 }
 
 void ChessController::nextTurn() {
-    if (threefoldBoardSubscriber->updateAndCheckIfThreefoldWasReached(*board, *castleSubscriber, *enPassantSubscriber,
-                                                                      whiteToMove)) {
+    if (threefold_board_subscriber_->updateAndCheckIfThreefoldWasReached(*board_, *castle_subscriber_, *en_passant_subscriber_,
+                                                                      white_to_move_)) {
         QMessageBox::information(nullptr, "Game Over", "Draw by threefold repetition");
     }
-    if (fiftyMoveSubscriber->fiftyMoveRuleIsReached()) {
+    if (fifty_move_subscriber_->fiftyMoveRuleIsReached()) {
         QMessageBox::information(nullptr, "Game Over", "Draw by 50 move rule");
     }
-    if (promotionSubscriber->getPromotionCoordinates().has_value()) {
-        Coordinates promotionCoordinates = promotionSubscriber->getPromotionCoordinates().value();
-        ChessColor color = board->figureAt(promotionCoordinates.getX(), promotionCoordinates.getY()).value()->
+    if (pawn_promotion_subscriber_->getPromotionCoordinates().has_value()) {
+        Coordinates promotionCoordinates = pawn_promotion_subscriber_->getPromotionCoordinates().value();
+        ChessColor color = board_->figureAt(promotionCoordinates.getX(), promotionCoordinates.getY()).value()->
                 getColor();
-        promotionSubscriber->resetPromotionCoordinates();
+        pawn_promotion_subscriber_->resetPromotionCoordinates();
         emit promotionRequested(promotionCoordinates, color);
         return; // Pause the game until promotion is handled
     }
-    ChessColor color = whiteToMove ? ChessColor::WHITE : ChessColor::BLACK;
-    currentLegalMoves = moveGetter->getLegalMovesForColor(*board, color);
+    ChessColor color = white_to_move_ ? ChessColor::WHITE : ChessColor::BLACK;
+    current_legal_moves_ = move_getter_->getLegalMovesForColor(*board_, color);
 
-    std::cout << (whiteToMove ? "White" : "Black") << "'s turn. Legal moves: "
-            << currentLegalMoves.size() << "\n";
+    std::cout << (white_to_move_ ? "White" : "Black") << "'s turn. Legal moves: "
+            << current_legal_moves_.size() << "\n";
 
-    if (currentLegalMoves.empty()) {
-        Coordinates kingPos = kingPositionSubscriber->getKingCoordinates(color);
+    if (current_legal_moves_.empty()) {
+        Coordinates kingPos = king_position_subscriber_->getKingCoordinates(color);
         std::shared_ptr visionBoard = std::make_shared<VisionBoard>(
-            moveGetter->getLegalMovesForColor(*board, Utils::oppositeColor(color)));
+            move_getter_->getLegalMovesForColor(*board_, Utils::oppositeColor(color)));
         bool inCheck = visionBoard->hasVisionOn(kingPos);
 
         QString resultText;
         if (inCheck)
-            resultText = whiteToMove ? "Checkmate! Black wins." : "Checkmate! White wins.";
+            resultText = white_to_move_ ? "Checkmate! Black wins." : "Checkmate! White wins.";
         else
             resultText = "Stalemate!";
 
@@ -94,11 +94,11 @@ void ChessController::onPieceMoved(int fromRow, int fromCol, int toRow, int toCo
             << ") -> (" << to.getX() << "," << to.getY() << ")\n";
 
 
-    auto it = std::find_if(currentLegalMoves.begin(), currentLegalMoves.end(), [&](const Move &move) {
+    auto it = std::find_if(current_legal_moves_.begin(), current_legal_moves_.end(), [&](const Move &move) {
         return move.getFrom() == from && move.getTo() == to;
     });
 
-    if (it == currentLegalMoves.end()) {
+    if (it == current_legal_moves_.end()) {
         std::cout << "Illegal move attempted.\n";
         emit illegalMoveAttempted();
         return;
@@ -106,11 +106,11 @@ void ChessController::onPieceMoved(int fromRow, int fromCol, int toRow, int toCo
 
     std::cout << "Move accepted: " << *it << "\n";
 
-    auto applyMoveResult = moveApplier->applyMove(*board, *it);
-    manager->notifySubscribers(*applyMoveResult);
+    auto applyMoveResult = move_applier_->applyMove(*board_, *it);
+    move_subscription_manager_->notifySubscribers(*applyMoveResult);
     emit boardUpdated();
 
-    whiteToMove = !whiteToMove;
+    white_to_move_ = !white_to_move_;
     nextTurn();
 }
 
@@ -120,23 +120,23 @@ void ChessController::promote(Coordinates coordinates, PromotionType type) {
     switch (type) {
         case PromotionType::QUEEN:
             promoted = std::make_shared<Queen>(
-                board->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
+                board_->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
             break;
         case PromotionType::ROOK:
             promoted = std::make_shared<Rook>(
-                board->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
+                board_->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
             break;
         case PromotionType::BISHOP:
             promoted = std::make_shared<Bishop>(
-                board->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
+                board_->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
             break;
         case PromotionType::KNIGHT:
             promoted = std::make_shared<Knight>(
-                board->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
+                board_->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
             break;
     }
-    board->removeFigure(coordinates.getX(), coordinates.getY());
-    board->placeFigure(promoted, coordinates.getX(), coordinates.getY());
+    board_->removeFigure(coordinates.getX(), coordinates.getY());
+    board_->placeFigure(promoted, coordinates.getX(), coordinates.getY());
 
     emit boardUpdated();
 

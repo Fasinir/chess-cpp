@@ -20,7 +20,7 @@ public:
     explicit ChessController(QObject *parent = nullptr);
 
     void startGame(const GameSettings &settings);
-    [[nodiscard]] ChessBoard *getBoard() const { return board.get(); }
+    [[nodiscard]] ChessBoard *getBoard() const { return board_.get(); }
 
 
 public slots:
@@ -36,20 +36,20 @@ signals:
     void boardUpdated(); // UI can react to this
 
 private:
-    std::unique_ptr<ChessBoard> board;
-    std::unique_ptr<MoveApplier> moveApplier;
-    std::unique_ptr<LegalMoveGetter> moveGetter;
-    std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber;
-    std::shared_ptr<FiftyMoveSubscriber> fiftyMoveSubscriber;
-    std::shared_ptr<PromotionSubscriber> promotionSubscriber;
-    std::shared_ptr<ThreefoldBoardSubscriber> threefoldBoardSubscriber;
-    std::shared_ptr<CastleSubscriber> castleSubscriber;
-    std::shared_ptr<EnPassantSubscriber> enPassantSubscriber;
-    GameSettings settings;
-    std::vector<Move> currentLegalMoves;
-    std::unique_ptr<MoveSubscriptionManager> manager;
+    std::unique_ptr<ChessBoard> board_;
+    std::unique_ptr<MoveApplier> move_applier_;
+    std::unique_ptr<LegalMoveGetter> move_getter_;
+    std::shared_ptr<KingPositionSubscriber> king_position_subscriber_;
+    std::shared_ptr<FiftyMoveSubscriber> fifty_move_subscriber_;
+    std::shared_ptr<PromotionSubscriber> pawn_promotion_subscriber_;
+    std::shared_ptr<ThreefoldBoardSubscriber> threefold_board_subscriber_;
+    std::shared_ptr<CastleSubscriber> castle_subscriber_;
+    std::shared_ptr<EnPassantSubscriber> en_passant_subscriber_;
+    GameSettings game_settings_;
+    std::vector<Move> current_legal_moves_;
+    std::unique_ptr<MoveSubscriptionManager> move_subscription_manager_;
 
-    bool whiteToMove = true;
+    bool white_to_move_ = true;
 
 
     void nextTurn();

@@ -4,21 +4,21 @@
 #include <algorithm>
 
 std::ostream &operator<<(std::ostream &os, const Coordinates &coordinates) {
-    os << "[" << coordinates.x << ", " << coordinates.y << "]";
+    os << "[" << coordinates.x_ << ", " << coordinates.y_ << "]";
     return os;
 }
 
 int Coordinates::getX() const {
-    return x;
+    return x_;
 }
 
 int Coordinates::getY() const {
-    return y;
+    return y_;
 }
 
 std::string Coordinates::toAlgebraicNotation() const {
     int fileIndex = this->getX();
-    char file = Constants::FILES.at(fileIndex);
+    char file = Constants::kFiles.at(fileIndex);
     int rankIndex = this->getY() + 1;
     return file + std::to_string(rankIndex);
 }
@@ -26,8 +26,8 @@ std::string Coordinates::toAlgebraicNotation() const {
 Coordinates Coordinates::fromAlgebraicNotation(const std::string &algebraicNotation) {
     char file = algebraicNotation.at(0);
     int yCoordinate = algebraicNotation.at(1) - '0' - 1;
-    auto it = std::find(Constants::FILES.begin(), Constants::FILES.end(), file);
-    int xCoordinate = std::distance(Constants::FILES.begin(), it);
+    auto it = std::find(Constants::kFiles.begin(), Constants::kFiles.end(), file);
+    int xCoordinate = std::distance(Constants::kFiles.begin(), it);
     return Coordinates(xCoordinate, yCoordinate);
 }
 

@@ -7,8 +7,8 @@
 
 
 class ApplyMoveResult {
-    Move move;
-    std::optional<std::shared_ptr<Figure> > takenFigure;
+    Move move_;
+    std::optional<std::shared_ptr<Figure> > taken_figure_;
 
 public:
     explicit ApplyMoveResult(const Move &move);

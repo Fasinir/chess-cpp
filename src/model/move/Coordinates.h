@@ -4,11 +4,11 @@
 #include <functional>
 
 class Coordinates {
-    int x;
-    int y;
+    int x_;
+    int y_;
 
 public:
-    Coordinates(const int x, const int y) : x(x), y(y) {
+    Coordinates(const int x, const int y) : x_(x), y_(y) {
     }
 
     Coordinates(const Coordinates &other) = default;

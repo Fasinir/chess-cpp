@@ -9,22 +9,15 @@
 #include "../figures/Figure.h"
 
 class ChessBoard {
-    std::array<std::array<Field, Constants::BOARD_SIZE>, Constants::BOARD_SIZE> board;
+    std::array<std::array<Field, Constants::kBoardSize>, Constants::kBoardSize> board_;
 
 public:
     ChessBoard() = default;
 
     ~ChessBoard() = default;
 
-    static std::unique_ptr<ChessBoard> STANDARD_BOARD();
+    static std::unique_ptr<ChessBoard> makeStandardBoard();
 
-    /**
-     *
-     * @param figure figure to be placed
-     * @param x
-     * @param y
-     * @return optional of pointer to figure that was previously at these coordinates
-     */
     std::optional<std::shared_ptr<Figure> > placeFigure(const std::shared_ptr<Figure>& figure, int x, int y);
 
     [[nodiscard]] std::optional<std::shared_ptr<Figure> > figureAt(int x, int y) const;

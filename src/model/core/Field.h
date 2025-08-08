@@ -7,7 +7,7 @@
 
 
 class Field {
-    std::optional<std::shared_ptr<Figure> > figure;
+    std::optional<std::shared_ptr<Figure> > figure_;
 
 public:
     Field() = default;

@@ -5,12 +5,12 @@
 
 
 class Move {
-    Coordinates from;
-    Coordinates to;
-    MoveType type;
+    Coordinates from_;
+    Coordinates to_;
+    MoveType type_;
 
 public:
-    Move(const Coordinates from, const Coordinates to, const MoveType type) : from(from), to(to), type(type) {
+    Move(const Coordinates from, const Coordinates to, const MoveType type) : from_(from), to_(to), type_(type) {
     };
 
     ~Move() = default;

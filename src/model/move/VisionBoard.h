@@ -7,7 +7,7 @@
 #include "../core/Constants.h"
 
 class VisionBoard {
-    std::array<std::array<bool, Constants::BOARD_SIZE>, Constants::BOARD_SIZE> board;
+    std::array<std::array<bool, Constants::kBoardSize>, Constants::kBoardSize> board;
 
 public:
     VisionBoard() = default;

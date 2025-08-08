@@ -5,7 +5,7 @@
 PawnPositionSubscriber::PawnPositionSubscriber(std::shared_ptr<EnPassantSubscriber> enPassantSubscriber) {
     this->enPassantSubscriber = std::move(enPassantSubscriber);
     this->pawnPositions = std::unordered_set<Coordinates>();
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < Constants::kBoardSize; i++) {
         pawnPositions.insert(Coordinates(i, 1));
         pawnPositions.insert(Coordinates(i, 6));
     }

@@ -13,25 +13,25 @@
 
 std::ostream &operator<<(std::ostream &os, const ChessBoard &board) {
     os << "  ";
-    for (int i = 0; i < board.board.size(); i++) {
+    for (int i = 0; i < board.board_.size(); i++) {
         os << "____";
     }
     os << "_" << std::endl;
-    for (int i = Constants::BOARD_SIZE - 1; i >= 0; i--) {
-        os << Constants::RANKS.at(i) << " ";
-        for (int j = 0; j < Constants::BOARD_SIZE; j++) {
-            os << "|_" << board.board[j][i] << "_";
+    for (int i = Constants::kBoardSize - 1; i >= 0; i--) {
+        os << Constants::kRanks.at(i) << " ";
+        for (int j = 0; j < Constants::kBoardSize; j++) {
+            os << "|_" << board.board_[j][i] << "_";
         }
         os << "|" << std::endl;
     }
     os << "   ";
-    for (int i = 0; i < Constants::FILES.size(); i++) {
-        os << " " << Constants::FILES[i] << "  ";
+    for (int i = 0; i < Constants::kFiles.size(); i++) {
+        os << " " << Constants::kFiles[i] << "  ";
     }
     return os;
 }
 
-std::unique_ptr<ChessBoard> ChessBoard::STANDARD_BOARD() {
+std::unique_ptr<ChessBoard> ChessBoard::makeStandardBoard() {
     std::unique_ptr<ChessBoard> board = std::make_unique<ChessBoard>();
 
     // King
@@ -56,7 +56,7 @@ std::unique_ptr<ChessBoard> ChessBoard::STANDARD_BOARD() {
     board->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 0, 0);
     board->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 7, 0);
 
-    for (int i = 0; i < Constants::BOARD_SIZE; i++) {
+    for (int i = 0; i < Constants::kBoardSize; i++) {
         board->placeFigure(std::make_unique<Pawn>(ChessColor::BLACK), i, 6);
         board->placeFigure(std::make_unique<Pawn>(ChessColor::WHITE), i, 1);
     }
@@ -66,25 +66,25 @@ std::unique_ptr<ChessBoard> ChessBoard::STANDARD_BOARD() {
 
 std::optional<std::shared_ptr<Figure> >
 ChessBoard::placeFigure(const std::shared_ptr<Figure> &figure, int x, int y) {
-    return this->board.at(x).at(y).placeFigure(figure);
+    return this->board_.at(x).at(y).placeFigure(figure);
 }
 
 std::optional<std::shared_ptr<Figure> > ChessBoard::figureAt(int x, int y) const {
-    return board.at(x).at(y).getFigure();
+    return board_.at(x).at(y).getFigure();
 }
 
 void ChessBoard::removeFigure(int x, int y) {
-    board.at(x).at(y).removeFigure();
+    board_.at(x).at(y).removeFigure();
 }
 
 std::string ChessBoard::toFENBoardPart() const {
     std::ostringstream fen;
 
-    for (int rank = Constants::BOARD_SIZE - 1; rank >= 0; --rank) { // 8 to 1
+    for (int rank = Constants::kBoardSize - 1; rank >= 0; --rank) { // 8 to 1
         int emptyCount = 0;
 
-        for (int file = 0; file < Constants::BOARD_SIZE; ++file) { // a to h
-            auto figOpt = board[file][rank].getFigure(); // file = x, rank = y
+        for (int file = 0; file < Constants::kBoardSize; ++file) { // a to h
+            auto figOpt = board_[file][rank].getFigure(); // file = x, rank = y
             if (!figOpt.has_value()) {
                 emptyCount++;
             } else {

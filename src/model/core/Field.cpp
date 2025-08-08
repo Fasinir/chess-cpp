@@ -3,7 +3,7 @@
 
 std::ostream &operator<<(std::ostream &os, const Field &field) {
     if (field.hasFigure()) {
-        os << *field.figure.value();
+        os << *field.figure_.value();
     } else {
         os << "_";
     }
@@ -11,36 +11,36 @@ std::ostream &operator<<(std::ostream &os, const Field &field) {
 }
 
 Field::Field(const Field &other) {
-    if (other.figure) {
-        figure = other.figure.value()->clone();
+    if (other.figure_) {
+        figure_ = other.figure_.value()->clone();
     }
 }
 
 Field &Field::operator=(const Field &other) {
     if (this != &other) {
-        if (other.figure) {
-            figure = other.figure.value()->clone();
+        if (other.figure_) {
+            figure_ = other.figure_.value()->clone();
         } else {
-            figure.reset();
+            figure_.reset();
         }
     }
     return *this;
 }
 
 bool Field::hasFigure() const {
-    return this->figure.has_value();
+    return this->figure_.has_value();
 }
 
 void Field::removeFigure() {
-    this->figure.reset();
+    this->figure_.reset();
 }
 
 std::optional<std::shared_ptr<Figure> > Field::placeFigure(const std::shared_ptr<Figure>& figure) {
-    std::optional<std::shared_ptr<Figure> > oldFigure = this->figure;
-    this->figure = figure;
+    std::optional<std::shared_ptr<Figure> > oldFigure = this->figure_;
+    this->figure_ = figure;
     return oldFigure;
 }
 
 std::optional<std::shared_ptr<Figure> > Field::getFigure() const {
-    return figure;
+    return figure_;
 }
