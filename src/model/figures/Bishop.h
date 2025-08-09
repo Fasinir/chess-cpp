@@ -4,7 +4,7 @@
 #include "../core/ChessColor.h"
 
 
-class Bishop : public Figure {
+class Bishop final : public Figure {
 public:
     explicit Bishop(ChessColor color);
 

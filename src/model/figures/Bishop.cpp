@@ -1,11 +1,11 @@
 #include "Bishop.h"
 
-Bishop::Bishop(ChessColor color) : Figure(color) {
-    this->moves = std::vector{MoveType::BISHOP};
+Bishop::Bishop(const ChessColor color) : Figure(color) {
+    this->move_types_ = std::vector{MoveType::BISHOP};
 }
 
 char Bishop::getSymbol() const {
-    return this->color == ChessColor::WHITE ? 'B' : 'b';
+    return this->color_ == ChessColor::WHITE ? 'B' : 'b';
 }
 
 std::unique_ptr<Figure> Bishop::clone() const {

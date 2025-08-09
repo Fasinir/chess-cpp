@@ -17,10 +17,10 @@ int Coordinates::getY() const {
 }
 
 std::string Coordinates::toAlgebraicNotation() const {
-    int fileIndex = this->getX();
-    char file = Constants::kFiles.at(fileIndex);
-    int rankIndex = this->getY() + 1;
-    return file + std::to_string(rankIndex);
+    const int fileIndex = this->getX();
+    const char file = Constants::kFiles.at(fileIndex);
+    const int rankIndex = this->getY() + 1;
+    return std::string(1, file) + std::to_string(rankIndex);
 }
 
 Coordinates Coordinates::fromAlgebraicNotation(const std::string &algebraicNotation) {

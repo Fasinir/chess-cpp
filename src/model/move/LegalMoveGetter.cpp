@@ -16,7 +16,7 @@ std::vector<Move> LegalMoveGetter::generateMovesFromSquare(const ChessBoard &che
         return {};
     std::shared_ptr<Figure> figure = chessBoard.figureAt(from.getX(), from.getY()).value();
     std::vector<Move> moves{};
-    for (auto moveType: figure->getMoves()) {
+    for (auto moveType: figure->getMoveTypes()) {
         std::vector<Move> toAdd;
         switch (moveType) {
             case MoveType::PAWN_SINGLE_MOVE:

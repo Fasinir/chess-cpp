@@ -10,11 +10,11 @@
 
 class Figure {
 protected:
-    ChessColor color;
-    std::vector<MoveType> moves;
+    ChessColor color_;
+    std::vector<MoveType> move_types_;
 
 public:
-    explicit Figure(const ChessColor color) : color(color) {
+    explicit Figure(const ChessColor color) : color_(color) {
     };
 
     virtual ~Figure() = default;
@@ -25,7 +25,7 @@ public:
 
     [[nodiscard]] virtual std::string getName() const = 0;
 
-    std::vector<MoveType> &getMoves();
+    std::vector<MoveType> &getMoveTypes();
 
     [[nodiscard]] const ChessColor &getColor() const;
 
