@@ -3,18 +3,18 @@
 
 Coordinates KingPositionSubscriber::getKingCoordinates(const ChessColor color) const {
     if (color == ChessColor::WHITE) {
-        return whiteKingCoordinates;
+        return white_king_coordinates_;
     }
-    return blackKingCoordinates;
+    return black_king_coordinates_;
 }
 
 void KingPositionSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
-    if (whiteKingCoordinates == applyMoveResult.getMove().getFrom()) {
-        whiteKingCoordinates = applyMoveResult.getMove().getTo();
-        std::cout << "WhiteKingCoordinates: " << whiteKingCoordinates << "\n";
+    if (white_king_coordinates_ == applyMoveResult.getMove().getFrom()) {
+        white_king_coordinates_ = applyMoveResult.getMove().getTo();
+        std::cout << "WhiteKingCoordinates: " << white_king_coordinates_ << "\n";
     }
-    if (blackKingCoordinates == applyMoveResult.getMove().getFrom()) {
-        blackKingCoordinates = applyMoveResult.getMove().getTo();
-        std::cout << "BlackKingCoordinates: " << blackKingCoordinates << "\n";
+    if (black_king_coordinates_ == applyMoveResult.getMove().getFrom()) {
+        black_king_coordinates_ = applyMoveResult.getMove().getTo();
+        std::cout << "BlackKingCoordinates: " << black_king_coordinates_ << "\n";
     }
 }

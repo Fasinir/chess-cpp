@@ -6,15 +6,15 @@
 
 
 class FiftyMoveSubscriber : public MoveSubscriber {
-    int count;
-    std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber;
+    int count_;
+    std::shared_ptr<PawnPositionSubscriber> pawn_position_subscriber_;
 
 public:
     explicit FiftyMoveSubscriber(std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber);
 
     void notify(const ApplyMoveResult &applyMoveResult) override;
 
-    bool fiftyMoveRuleIsReached() const;
+    [[nodiscard]] bool fiftyMoveRuleIsReached() const;
 };
 
 

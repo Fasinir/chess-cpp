@@ -1,30 +1,30 @@
 #include "EnPassantSubscriber.h"
 
 EnPassantSubscriber::EnPassantSubscriber() {
-    this->enPassantCoordinates;
-    this->unmovedPawns;
+    this->en_passant_coordinates_;
+    this->unmoved_pawns_;
     for (int i = 0; i < 8; i++) {
-        unmovedPawns.insert(Coordinates(i, 1));
-        unmovedPawns.insert(Coordinates(i, 6));
+        unmoved_pawns_.insert(Coordinates(i, 1));
+        unmoved_pawns_.insert(Coordinates(i, 6));
     }
 }
 
 bool EnPassantSubscriber::canBeTakenEnPassant(const Coordinates coordinates) const {
-    if (this->enPassantCoordinates.has_value()) {
-        return coordinates == this->enPassantCoordinates;
+    if (this->en_passant_coordinates_.has_value()) {
+        return coordinates == this->en_passant_coordinates_;
     }
     return false;
 }
 
 void EnPassantSubscriber::setEnPassantCoordinates(Coordinates coordinates) {
-    this->enPassantCoordinates = coordinates;
+    this->en_passant_coordinates_ = coordinates;
 }
 
 void EnPassantSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
-    enPassantCoordinates.reset();
+    en_passant_coordinates_.reset();
     Move move = applyMoveResult.getMove();
-    if (unmovedPawns.contains(move.getFrom())) {
-        unmovedPawns.erase(move.getFrom());
+    if (unmoved_pawns_.contains(move.getFrom())) {
+        unmoved_pawns_.erase(move.getFrom());
         if (std::abs(move.getTo().getY() - move.getFrom().getY()) == 2) {
             const int enPassantYCoordinate = move.getFrom().getY() == 1 ? 2 : 5;
             setEnPassantCoordinates(Coordinates(move.getFrom().getX(), enPassantYCoordinate));
@@ -32,7 +32,7 @@ void EnPassantSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
                     std::endl;
         }
     }
-    if (unmovedPawns.contains(move.getTo())) {
-        unmovedPawns.erase(move.getTo());
+    if (unmoved_pawns_.contains(move.getTo())) {
+        unmoved_pawns_.erase(move.getTo());
     }
 }

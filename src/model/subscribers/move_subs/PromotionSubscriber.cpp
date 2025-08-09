@@ -1,23 +1,23 @@
 #include "PromotionSubscriber.h"
 
 PromotionSubscriber::PromotionSubscriber(
-    std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber) : pawnPositionSubscriber(
+    std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber) : pawn_position_subscriber_(
     std::move(pawnPositionSubscriber)) {
-    this->promotionCoordinates;
+    this->promotion_coordinates_;
 }
 
 void PromotionSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
     int toYCoordinate = applyMoveResult.getMove().getTo().getY();
-    if (pawnPositionSubscriber->getPawnPositions().contains(applyMoveResult.getMove().getFrom())
+    if (pawn_position_subscriber_->getPawnPositions().contains(applyMoveResult.getMove().getFrom())
         && (toYCoordinate == 7 || toYCoordinate == 0)) {
-        promotionCoordinates = applyMoveResult.getMove().getTo();
+        promotion_coordinates_ = applyMoveResult.getMove().getTo();
     }
 }
 
 std::optional<Coordinates> PromotionSubscriber::getPromotionCoordinates() const {
-    return promotionCoordinates;
+    return promotion_coordinates_;
 }
 
 void PromotionSubscriber::resetPromotionCoordinates() {
-    promotionCoordinates.reset();
+    promotion_coordinates_.reset();
 }

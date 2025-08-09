@@ -5,8 +5,8 @@
 
 
 class PromotionSubscriber : public MoveSubscriber {
-    std::optional<Coordinates> promotionCoordinates;
-    std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber;
+    std::optional<Coordinates> promotion_coordinates_;
+    std::shared_ptr<PawnPositionSubscriber> pawn_position_subscriber_;
 
 public:
     explicit PromotionSubscriber(std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber);

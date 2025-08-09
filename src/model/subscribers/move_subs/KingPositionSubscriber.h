@@ -6,11 +6,11 @@
 
 
 class KingPositionSubscriber : public MoveSubscriber {
-    Coordinates whiteKingCoordinates;
-    Coordinates blackKingCoordinates;
+    Coordinates white_king_coordinates_;
+    Coordinates black_king_coordinates_;
 
 public:
-    KingPositionSubscriber() : whiteKingCoordinates(4, 0), blackKingCoordinates(4, 7) {
+    KingPositionSubscriber() : white_king_coordinates_(4, 0), black_king_coordinates_(4, 7) {
     }
 
     [[nodiscard]] Coordinates getKingCoordinates(ChessColor color) const;

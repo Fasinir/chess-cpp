@@ -9,7 +9,7 @@
 
 
 class ThreefoldBoardSubscriber {
-    std::unordered_map<std::string, int> positionCountMap;
+    std::unordered_map<std::string, int> position_count_map_;
 
 public:
     ThreefoldBoardSubscriber() = default;

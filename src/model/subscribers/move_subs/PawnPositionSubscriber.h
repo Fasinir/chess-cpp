@@ -8,8 +8,8 @@
 
 
 class PawnPositionSubscriber : public MoveSubscriber {
-    std::unordered_set<Coordinates> pawnPositions;
-    std::shared_ptr<EnPassantSubscriber> enPassantSubscriber;
+    std::unordered_set<Coordinates> pawn_positions_;
+    std::shared_ptr<EnPassantSubscriber> en_passant_subscriber_;
 
 public:
     explicit PawnPositionSubscriber(std::shared_ptr<EnPassantSubscriber> enPassantSubscriber);

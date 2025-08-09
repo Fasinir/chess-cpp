@@ -5,7 +5,7 @@
 #include "MoveSubscriber.h"
 
 class MoveSubscriptionManager {
-    std::vector<std::shared_ptr<MoveSubscriber> > entireBoardSubscribers;
+    std::vector<std::shared_ptr<MoveSubscriber> > board_subscribers_;
 
 public:
     MoveSubscriptionManager() = default;

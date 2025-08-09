@@ -3,38 +3,38 @@
 #include <utility>
 
 PawnPositionSubscriber::PawnPositionSubscriber(std::shared_ptr<EnPassantSubscriber> enPassantSubscriber) {
-    this->enPassantSubscriber = std::move(enPassantSubscriber);
-    this->pawnPositions = std::unordered_set<Coordinates>();
+    this->en_passant_subscriber_ = std::move(enPassantSubscriber);
+    this->pawn_positions_ = std::unordered_set<Coordinates>();
     for (int i = 0; i < Constants::kBoardSize; i++) {
-        pawnPositions.insert(Coordinates(i, 1));
-        pawnPositions.insert(Coordinates(i, 6));
+        pawn_positions_.insert(Coordinates(i, 1));
+        pawn_positions_.insert(Coordinates(i, 6));
     }
 }
 
 void PawnPositionSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
     Move move = applyMoveResult.getMove();
-    if (pawnPositions.contains(move.getTo())) {
-        pawnPositions.erase(move.getTo());
+    if (pawn_positions_.contains(move.getTo())) {
+        pawn_positions_.erase(move.getTo());
         std::cout << "Pawn was taken regularly" << std::endl;
     }
-    if (pawnPositions.contains(move.getFrom())) {
-        pawnPositions.erase(move.getFrom());
+    if (pawn_positions_.contains(move.getFrom())) {
+        pawn_positions_.erase(move.getFrom());
         // if no promotion update the position
         if (move.getTo().getY() != 0 && move.getTo().getY() != 7) {
-            pawnPositions.insert(move.getTo());
+            pawn_positions_.insert(move.getTo());
             std::cout << "Regular move" << std::endl;
         } else {
             std::cout << "Pawn was promoted" << std::endl;
         }
-        if (enPassantSubscriber->canBeTakenEnPassant(move.getTo())) {
+        if (en_passant_subscriber_->canBeTakenEnPassant(move.getTo())) {
             int takenEnPassantYCoordinate = move.getTo().getY() == 2 ? 3 : 4;
-            pawnPositions.erase(Coordinates(move.getTo().getX(), takenEnPassantYCoordinate));
+            pawn_positions_.erase(Coordinates(move.getTo().getX(), takenEnPassantYCoordinate));
             std::cout << "Pawn was taken en passant" << std::endl;
         }
     }
-    std::cout << pawnPositions.size() << std::endl;
+    std::cout << pawn_positions_.size() << std::endl;
 }
 
 std::unordered_set<Coordinates> PawnPositionSubscriber::getPawnPositions() {
-    return pawnPositions;
+    return pawn_positions_;
 }

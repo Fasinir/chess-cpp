@@ -7,9 +7,9 @@
 #include "../../move/Coordinates.h"
 
 class EnPassantSubscriber : public MoveSubscriber {
-    std::unordered_set<Coordinates> unmovedPawns;
+    std::unordered_set<Coordinates> unmoved_pawns_;
 
-    std::optional<Coordinates> enPassantCoordinates;
+    std::optional<Coordinates> en_passant_coordinates_;
 
 public:
     EnPassantSubscriber();
@@ -20,7 +20,7 @@ public:
 
     void setEnPassantCoordinates(Coordinates coordinates);
 
-    std::optional<Coordinates> getEnPassantCoordinates() const { return enPassantCoordinates; }
+    std::optional<Coordinates> getEnPassantCoordinates() const { return en_passant_coordinates_; }
 
     void notify(const ApplyMoveResult &applyMoveResult) override;
 };

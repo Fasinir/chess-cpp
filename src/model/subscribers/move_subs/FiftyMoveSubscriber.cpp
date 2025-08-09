@@ -3,19 +3,19 @@
 #include <utility>
 
 FiftyMoveSubscriber::FiftyMoveSubscriber(std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber) {
-    this->pawnPositionSubscriber = std::move(pawnPositionSubscriber);
-    this->count = 0;
+    this->pawn_position_subscriber_ = std::move(pawnPositionSubscriber);
+    this->count_ = 0;
 }
 
 void FiftyMoveSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
     if (applyMoveResult.getTakenFigure().has_value()
-        || pawnPositionSubscriber->getPawnPositions().contains(applyMoveResult.getMove().getFrom())) {
-        count = 0;
+        || pawn_position_subscriber_->getPawnPositions().contains(applyMoveResult.getMove().getFrom())) {
+        count_ = 0;
     } else {
-        count++;
+        count_++;
     }
 }
 
 bool FiftyMoveSubscriber::fiftyMoveRuleIsReached() const {
-    return count == 50;
+    return count_ == 50;
 }
