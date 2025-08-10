@@ -1,11 +1,11 @@
 #include "Rook.h"
 
 Rook::Rook(ChessColor color) : Figure(color) {
-    this->move_types_ = std::vector{MoveType::ROOK};
+    this->move_types_ = std::vector{MoveType::kRook};
 }
 
 char Rook::getSymbol() const {
-    return this->color_ == ChessColor::WHITE ? 'R' : 'r';
+    return this->color_ == ChessColor::kWhite ? 'R' : 'r';
 }
 
 std::unique_ptr<Figure> Rook::clone() const {

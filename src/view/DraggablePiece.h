@@ -4,7 +4,7 @@
 #include <QGraphicsSvgItem>
 #include <QGraphicsSceneMouseEvent>
 
-enum class PieceColor { White, Black };
+#include "../model/core/ChessColor.h"
 
 class DraggablePiece final : public QGraphicsSvgItem {
     Q_OBJECT
@@ -14,9 +14,9 @@ public:
 
     void revertToOriginalPosition(); // Called on illegal move
 
-    DraggablePiece(const QString &svg_path, PieceColor color, int start_row, int start_col, int tile_size);
+    DraggablePiece(const QString &svg_path, const ChessColor &color, int start_row, int start_col, int tile_size);
 
-    PieceColor color_;
+    ChessColor color_;
 
 signals:
     void pieceMoved(int from_row, int from_col, int to_row, int to_col);

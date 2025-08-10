@@ -8,8 +8,8 @@
 #include <QTime>
 
 enum class GameMode {
-    Local,
-    Engine
+    kLocal,
+    kEngine
 };
 
 struct GameSettings {

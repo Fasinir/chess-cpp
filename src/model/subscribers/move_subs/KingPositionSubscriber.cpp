@@ -2,7 +2,7 @@
 #include "KingPositionSubscriber.h"
 
 Coordinates KingPositionSubscriber::getKingCoordinates(const ChessColor kColor) const {
-    if (kColor == ChessColor::WHITE) {
+    if (kColor == ChessColor::kWhite) {
         return white_king_coordinates_;
     }
     return black_king_coordinates_;

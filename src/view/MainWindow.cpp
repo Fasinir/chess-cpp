@@ -24,18 +24,18 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::startLocalGame() {
-    showConfigScreen(GameMode::Local);
+    showConfigScreen(GameMode::kLocal);
 }
 
 void MainWindow::startEngineGame() {
-    showConfigScreen(GameMode::Engine);
+    showConfigScreen(GameMode::kEngine);
 }
 
 void MainWindow::showConfigScreen(GameMode mode) {
     current_game_mode_ = mode;
     ui_->stackedWidget->setCurrentWidget(ui_->configPage);
 
-    bool is_engine_game = (mode == GameMode::Engine);
+    bool is_engine_game = (mode == GameMode::kEngine);
     ui_->chessEngineComboBox->setVisible(is_engine_game);
     ui_->playerTwoLineEdit->setVisible(!is_engine_game);
     ui_->playerTwoColorLabel->setVisible(!is_engine_game);
@@ -61,7 +61,7 @@ void MainWindow::proceedToGamePage() {
     settings.base_time_ = ui_->timeEdit->time();
     settings.increment_seconds_ = ui_->incrementSpinBox->value();
 
-    if (current_game_mode_ == GameMode::Engine) {
+    if (current_game_mode_ == GameMode::kEngine) {
         settings.player2_name_ = ui_->chessEngineComboBox->currentText();
     } else {
         settings.player2_name_ = ui_->playerTwoLineEdit->text();
@@ -130,7 +130,7 @@ void MainWindow::drawBoardTiles() {
     ui_->boardGraphicsView->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
 }
 
-void MainWindow::placePiece(const QString &svg_path, PieceColor color, int row, int col) {
+void MainWindow::placePiece(const QString &svg_path, const ChessColor &color, int row, int col) {
     const int kTileSize = 80;
     auto *piece = new DraggablePiece(svg_path, color, row, col, kTileSize);
     scene_->addItem(piece);
@@ -162,18 +162,18 @@ void MainWindow::drawBoardFromModel() {
             if (!opt_figure.has_value()) continue;
 
             auto fig = opt_figure.value();
-            QString color_prefix = (fig->getColor() == ChessColor::WHITE) ? "white" : "black";
+            QString color_prefix = (fig->getColor() == ChessColor::kWhite) ? "white" : "black";
             QString piece_name = QString::fromStdString(fig->getName());
             QString path = QString("../assets/%1_%2.svg").arg(color_prefix, piece_name);
 
-            PieceColor gui_color = (fig->getColor() == ChessColor::WHITE) ? PieceColor::White : PieceColor::Black;
-            placePiece(path, gui_color, row, col);
+            ChessColor piece_color = fig->getColor();
+            placePiece(path, piece_color, row, col);
         }
     }
 }
 
-void MainWindow::handlePromotionRequested(const Coordinates kCoordinates, const ChessColor kColor) {
-    if (PromotionDialog dialog(kColor, this); dialog.exec() == QDialog::Accepted) {
-        controller_->promote(kCoordinates, dialog.selectedType());
+void MainWindow::handlePromotionRequested(const Coordinates &coordinates, const ChessColor &color) {
+    if (PromotionDialog dialog(color, this); dialog.exec() == QDialog::Accepted) {
+        controller_->promote(coordinates, dialog.selectedType());
     }
 }

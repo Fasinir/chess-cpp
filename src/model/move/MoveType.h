@@ -3,11 +3,11 @@
 #include <ostream>
 
 enum class MoveType {
-    PAWN_DOUBLE_MOVE, PAWN_SINGLE_MOVE, EN_PASSANT, PAWN_TAKING,
-    KNIGHT,
-    BISHOP,
-    ROOK,
-    KING, CASTLE
+    kPawnDoubleMove, kPawnSingleMove, kEnPassant, kPawnTaking,
+    kKnight,
+    kBishop,
+    kRook,
+    kKing, kCastle
 };
 
 std::ostream &operator<<(std::ostream &os, MoveType move_type);

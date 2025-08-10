@@ -56,14 +56,14 @@ void ChessController::nextTurn() {
         QMessageBox::information(nullptr, "Game Over", "Draw by 50 move rule");
     }
     if (pawn_promotion_subscriber_->getPromotionCoordinates().has_value()) {
-        const Coordinates promotion_coordinates = pawn_promotion_subscriber_->getPromotionCoordinates().value();
-        const ChessColor color = board_->figureAt(promotion_coordinates.getX(), promotion_coordinates.getY()).value()->
+        Coordinates promotion_coordinates = pawn_promotion_subscriber_->getPromotionCoordinates().value();
+        ChessColor color = board_->figureAt(promotion_coordinates.getX(), promotion_coordinates.getY()).value()->
                 getColor();
         pawn_promotion_subscriber_->resetPromotionCoordinates();
         emit promotionRequested(promotion_coordinates, color);
         return; // Pause the game until promotion is handled
     }
-    ChessColor color = white_to_move_ ? ChessColor::WHITE : ChessColor::BLACK;
+    ChessColor color = white_to_move_ ? ChessColor::kWhite : ChessColor::kBlack;
     current_legal_moves_ = move_getter_->getLegalMovesForColor(*board_, color);
 
     std::cout << (white_to_move_ ? "White" : "Black") << "'s turn. Legal moves: "
@@ -118,19 +118,19 @@ void ChessController::promote(Coordinates coordinates, PromotionType type) {
     std::shared_ptr<Figure> promoted;
 
     switch (type) {
-        case PromotionType::QUEEN:
+        case PromotionType::kQueen:
             promoted = std::make_shared<Queen>(
                 board_->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
             break;
-        case PromotionType::ROOK:
+        case PromotionType::kRook:
             promoted = std::make_shared<Rook>(
                 board_->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
             break;
-        case PromotionType::BISHOP:
+        case PromotionType::kBishop:
             promoted = std::make_shared<Bishop>(
                 board_->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
             break;
-        case PromotionType::KNIGHT:
+        case PromotionType::kKnight:
             promoted = std::make_shared<Knight>(
                 board_->figureAt(coordinates.getX(), coordinates.getY()).value()->getColor());
             break;

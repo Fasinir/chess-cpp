@@ -1,11 +1,11 @@
 #include "King.h"
 
 King::King(const ChessColor kColor) : Figure(kColor) {
-    this->move_types_ = std::vector{MoveType::KING, MoveType::CASTLE};
+    this->move_types_ = std::vector{MoveType::kKing, MoveType::kCastle};
 }
 
 char King::getSymbol() const {
-    return this->color_ == ChessColor::WHITE ? 'K' : 'k';
+    return this->color_ == ChessColor::kWhite ? 'K' : 'k';
 }
 
 std::unique_ptr<Figure> King::clone() const {

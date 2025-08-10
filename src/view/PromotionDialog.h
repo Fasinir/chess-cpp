@@ -32,7 +32,7 @@ private slots:
 
 private:
     Ui::PromotionDialog *ui_;
-    PromotionType choice_ = PromotionType::QUEEN;
+    PromotionType choice_ = PromotionType::kQueen;
 
     void setIconsForColor(ChessColor color);
 };

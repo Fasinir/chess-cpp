@@ -50,7 +50,7 @@ private:
 
     void drawBoardTiles();
 
-    void placePiece(const QString &svg_path, PieceColor color, int row, int col);
+    void placePiece(const QString &svg_path, const ChessColor &color, int row, int col);
 };
 
 #endif // MAINWINDOW_H

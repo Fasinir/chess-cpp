@@ -35,30 +35,30 @@ std::unique_ptr<ChessBoard> ChessBoard::makeStandardBoard() {
     auto board = std::make_unique<ChessBoard>();
 
     // King
-    board->placeFigure(std::make_unique<King>(ChessColor::BLACK), 4, 7);
-    board->placeFigure(std::make_unique<King>(ChessColor::WHITE), 4, 0);
+    board->placeFigure(std::make_unique<King>(ChessColor::kBlack), 4, 7);
+    board->placeFigure(std::make_unique<King>(ChessColor::kWhite), 4, 0);
     // Queen
-    board->placeFigure(std::make_unique<Queen>(ChessColor::BLACK), 3, 7);
-    board->placeFigure(std::make_unique<Queen>(ChessColor::WHITE), 3, 0);
+    board->placeFigure(std::make_unique<Queen>(ChessColor::kBlack), 3, 7);
+    board->placeFigure(std::make_unique<Queen>(ChessColor::kWhite), 3, 0);
     // Bishop
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::BLACK), 2, 7);
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::BLACK), 5, 7);
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::WHITE), 2, 0);
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::WHITE), 5, 0);
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::kBlack), 2, 7);
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::kBlack), 5, 7);
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::kWhite), 2, 0);
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::kWhite), 5, 0);
     // Knight
-    board->placeFigure(std::make_unique<Knight>(ChessColor::BLACK), 1, 7);
-    board->placeFigure(std::make_unique<Knight>(ChessColor::BLACK), 6, 7);
-    board->placeFigure(std::make_unique<Knight>(ChessColor::WHITE), 1, 0);
-    board->placeFigure(std::make_unique<Knight>(ChessColor::WHITE), 6, 0);
+    board->placeFigure(std::make_unique<Knight>(ChessColor::kBlack), 1, 7);
+    board->placeFigure(std::make_unique<Knight>(ChessColor::kBlack), 6, 7);
+    board->placeFigure(std::make_unique<Knight>(ChessColor::kWhite), 1, 0);
+    board->placeFigure(std::make_unique<Knight>(ChessColor::kWhite), 6, 0);
     // Rook
-    board->placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 0, 7);
-    board->placeFigure(std::make_unique<Rook>(ChessColor::BLACK), 7, 7);
-    board->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 0, 0);
-    board->placeFigure(std::make_unique<Rook>(ChessColor::WHITE), 7, 0);
+    board->placeFigure(std::make_unique<Rook>(ChessColor::kBlack), 0, 7);
+    board->placeFigure(std::make_unique<Rook>(ChessColor::kBlack), 7, 7);
+    board->placeFigure(std::make_unique<Rook>(ChessColor::kWhite), 0, 0);
+    board->placeFigure(std::make_unique<Rook>(ChessColor::kWhite), 7, 0);
 
     for (int i = 0; i < Constants::kBoardSize; i++) {
-        board->placeFigure(std::make_unique<Pawn>(ChessColor::BLACK), i, 6);
-        board->placeFigure(std::make_unique<Pawn>(ChessColor::WHITE), i, 1);
+        board->placeFigure(std::make_unique<Pawn>(ChessColor::kBlack), i, 6);
+        board->placeFigure(std::make_unique<Pawn>(ChessColor::kWhite), i, 1);
     }
 
     return board;

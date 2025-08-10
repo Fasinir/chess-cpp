@@ -1,8 +1,5 @@
 #include "Utils.h"
 
-#include "Constants.h"
-#include "../move/Coordinates.h"
-
 #include <string>
 #include <sstream>
 #include "../subscribers/move_subs/CastleSubscriber.h"
@@ -39,5 +36,5 @@ std::string Utils::createFEN(const ChessBoard &board, const CastleSubscriber &ca
 }
 
 ChessColor Utils::oppositeColor(const ChessColor &color) {
-    return color == ChessColor::WHITE ? ChessColor::BLACK : ChessColor::WHITE;
+    return color == ChessColor::kWhite ? ChessColor::kBlack : ChessColor::kWhite;
 }

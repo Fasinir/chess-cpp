@@ -2,9 +2,9 @@
 
 std::unique_ptr<ApplyMoveResult> MoveApplier::applyMove(ChessBoard &chess_board, const Move &move) {
     switch (move.getType()) {
-        case MoveType::EN_PASSANT:
+        case MoveType::kEnPassant:
             return handleEnPassant(chess_board, move);
-        case MoveType::CASTLE:
+        case MoveType::kCastle:
             return handleCastle(chess_board, move);
         default:
             return handleDefault(chess_board, move);
@@ -13,10 +13,10 @@ std::unique_ptr<ApplyMoveResult> MoveApplier::applyMove(ChessBoard &chess_board,
 
 void MoveApplier::undoMove(ChessBoard &chess_board, const ApplyMoveResult &apply_move_result) {
     switch (apply_move_result.getMove().getType()) {
-        case MoveType::EN_PASSANT:
+        case MoveType::kEnPassant:
             undoEnPassant(chess_board, apply_move_result);
             break;
-        case MoveType::CASTLE:
+        case MoveType::kCastle:
             undoCastleMove(chess_board, apply_move_result);
             break;
         default:

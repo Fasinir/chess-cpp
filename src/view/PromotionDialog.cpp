@@ -21,7 +21,7 @@ PromotionDialog::PromotionDialog(ChessColor color, QWidget *parent)
 PromotionDialog::~PromotionDialog() { delete ui_; }
 
 void PromotionDialog::setIconsForColor(ChessColor color) {
-    QString prefix = (color == ChessColor::WHITE) ? "white" : "black";
+    QString prefix = (color == ChessColor::kWhite) ? "white" : "black";
     auto size = QSize(64, 64); // tweak if needed
 
     ui_->queenButton->setIcon(QIcon(QString("../assets/%1_queen.svg").arg(prefix)));
@@ -37,21 +37,21 @@ void PromotionDialog::setIconsForColor(ChessColor color) {
 
 // Slots
 void PromotionDialog::chooseQueen() {
-    choice_ = PromotionType::QUEEN;
+    choice_ = PromotionType::kQueen;
     accept();
 }
 
 void PromotionDialog::chooseRook() {
-    choice_ = PromotionType::ROOK;
+    choice_ = PromotionType::kRook;
     accept();
 }
 
 void PromotionDialog::chooseBishop() {
-    choice_ = PromotionType::BISHOP;
+    choice_ = PromotionType::kBishop;
     accept();
 }
 
 void PromotionDialog::chooseKnight() {
-    choice_ = PromotionType::KNIGHT;
+    choice_ = PromotionType::kKnight;
     accept();
 }

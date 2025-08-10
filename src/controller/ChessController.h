@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+
+#include "PromotionType.h"
 #include "../model/core/ChessBoard.h"
 #include "../model/move/MoveApplier.h"
 #include "../model/move/LegalMoveGetter.h"
@@ -11,7 +13,6 @@
 #include "../model/subscribers/move_subs/PromotionSubscriber.h"
 #include "../model/subscribers/move_subs/KingPositionSubscriber.h"
 
-enum class PromotionType { QUEEN, ROOK, BISHOP, KNIGHT };
 
 class ChessController final : public QObject {
     Q_OBJECT

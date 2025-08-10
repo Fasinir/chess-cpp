@@ -2,12 +2,12 @@
 
 Queen::Queen(ChessColor color) : Figure(color) {
     this->move_types_ = std::vector{
-        MoveType::ROOK, MoveType::BISHOP
+        MoveType::kRook, MoveType::kBishop
     };
 }
 
 char Queen::getSymbol() const {
-    return this->color_ == ChessColor::WHITE ? 'Q' : 'q';
+    return this->color_ == ChessColor::kWhite ? 'Q' : 'q';
 }
 
 std::unique_ptr<Figure> Queen::clone() const {

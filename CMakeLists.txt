@@ -82,6 +82,7 @@ set(PROJECT_SOURCES
         src/model/subscribers/board_subs/ThreefoldBoardSubscriber.h
         src/model/core/Utils.cpp
         src/model/core/Utils.h
+        src/controller/PromotionType.h
 
 )
 
