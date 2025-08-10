@@ -10,5 +10,5 @@ enum class MoveType {
     KING, CASTLE
 };
 
-std::ostream &operator<<(std::ostream &os, MoveType moveType);
+std::ostream &operator<<(std::ostream &os, MoveType move_type);
 #endif //MOVECONDITION_H

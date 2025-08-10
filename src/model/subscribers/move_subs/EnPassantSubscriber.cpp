@@ -9,9 +9,9 @@ EnPassantSubscriber::EnPassantSubscriber() {
     }
 }
 
-bool EnPassantSubscriber::canBeTakenEnPassant(const Coordinates coordinates) const {
+bool EnPassantSubscriber::canBeTakenEnPassant(const Coordinates kCoordinates) const {
     if (this->en_passant_coordinates_.has_value()) {
-        return coordinates == this->en_passant_coordinates_;
+        return kCoordinates == this->en_passant_coordinates_;
     }
     return false;
 }
@@ -20,15 +20,15 @@ void EnPassantSubscriber::setEnPassantCoordinates(Coordinates coordinates) {
     this->en_passant_coordinates_ = coordinates;
 }
 
-void EnPassantSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
+void EnPassantSubscriber::notify(const ApplyMoveResult &apply_move_result) {
     en_passant_coordinates_.reset();
-    Move move = applyMoveResult.getMove();
+    Move move = apply_move_result.getMove();
     if (unmoved_pawns_.contains(move.getFrom())) {
         unmoved_pawns_.erase(move.getFrom());
         if (std::abs(move.getTo().getY() - move.getFrom().getY()) == 2) {
-            const int enPassantYCoordinate = move.getFrom().getY() == 1 ? 2 : 5;
-            setEnPassantCoordinates(Coordinates(move.getFrom().getX(), enPassantYCoordinate));
-            std::cout << "En Passant is possible for: " << Coordinates(move.getFrom().getX(), enPassantYCoordinate) <<
+            const int kEnPassantYCoordinate = move.getFrom().getY() == 1 ? 2 : 5;
+            setEnPassantCoordinates(Coordinates(move.getFrom().getX(), kEnPassantYCoordinate));
+            std::cout << "En Passant is possible for: " << Coordinates(move.getFrom().getX(), kEnPassantYCoordinate) <<
                     std::endl;
         }
     }

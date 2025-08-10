@@ -1,6 +1,6 @@
 #include "King.h"
 
-King::King(const ChessColor color) : Figure(color) {
+King::King(const ChessColor kColor) : Figure(kColor) {
     this->move_types_ = std::vector{MoveType::KING, MoveType::CASTLE};
 }
 

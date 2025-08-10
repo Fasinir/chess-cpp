@@ -36,9 +36,9 @@ void Field::removeFigure() {
 }
 
 std::optional<std::shared_ptr<Figure> > Field::placeFigure(const std::shared_ptr<Figure>& figure) {
-    std::optional<std::shared_ptr<Figure> > oldFigure = this->figure_;
+    std::optional<std::shared_ptr<Figure> > old_figure = this->figure_;
     this->figure_ = figure;
-    return oldFigure;
+    return old_figure;
 }
 
 std::optional<std::shared_ptr<Figure> > Field::getFigure() const {

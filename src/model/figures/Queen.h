@@ -3,7 +3,7 @@
 #include "Figure.h"
 
 
-class Queen : public Figure {
+class Queen final : public Figure {
 public:
     explicit Queen(ChessColor color);
 

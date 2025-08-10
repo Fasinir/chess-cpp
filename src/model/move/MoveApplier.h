@@ -5,24 +5,24 @@
 
 
 class MoveApplier {
-    std::unique_ptr<ApplyMoveResult> handleDefault(ChessBoard &chessBoard, const Move &move);
+    std::unique_ptr<ApplyMoveResult> handleDefault(ChessBoard &chess_board, const Move &move);
 
-    std::unique_ptr<ApplyMoveResult> handleCastle(ChessBoard &chessBoard, const Move &move);
+    std::unique_ptr<ApplyMoveResult> handleCastle(ChessBoard &chess_board, const Move &move);
 
-    std::unique_ptr<ApplyMoveResult> handleEnPassant(ChessBoard &chessBoard, const Move &move);
+    std::unique_ptr<ApplyMoveResult> handleEnPassant(ChessBoard &chess_board, const Move &move);
 
-    void undoDefaultMove(ChessBoard &chessBoard, const ApplyMoveResult &applyMoveResult);
+    void undoDefaultMove(ChessBoard &chess_board, const ApplyMoveResult &apply_move_result);
 
-    void undoCastleMove(ChessBoard &chessBoard, const ApplyMoveResult &applyMoveResult);
+    void undoCastleMove(ChessBoard &chess_board, const ApplyMoveResult &apply_move_result);
 
-    void undoEnPassant(ChessBoard &chessBoard, const ApplyMoveResult &applyMoveResult);
+    void undoEnPassant(ChessBoard &chess_board, const ApplyMoveResult &apply_move_result);
 
 public:
     MoveApplier() = default;
 
-    std::unique_ptr<ApplyMoveResult> applyMove(ChessBoard &chessBoard, const Move &move);
+    std::unique_ptr<ApplyMoveResult> applyMove(ChessBoard &chess_board, const Move &move);
 
-    void undoMove(ChessBoard &chessBoard, const ApplyMoveResult &applyMoveResult);
+    void undoMove(ChessBoard &chess_board, const ApplyMoveResult &apply_move_result);
 
     ~MoveApplier() = default;
 };

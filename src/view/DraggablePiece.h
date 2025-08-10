@@ -6,7 +6,7 @@
 
 enum class PieceColor { White, Black };
 
-class DraggablePiece : public QGraphicsSvgItem {
+class DraggablePiece final : public QGraphicsSvgItem {
     Q_OBJECT
 
 public:
@@ -14,12 +14,12 @@ public:
 
     void revertToOriginalPosition(); // Called on illegal move
 
-    DraggablePiece(const QString &svgPath, PieceColor color, int startRow, int startCol, int tileSize);
+    DraggablePiece(const QString &svg_path, PieceColor color, int start_row, int start_col, int tile_size);
 
-    PieceColor color;
+    PieceColor color_;
 
 signals:
-    void pieceMoved(int fromRow, int fromCol, int toRow, int toCol);
+    void pieceMoved(int from_row, int from_col, int to_row, int to_col);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -29,9 +29,9 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-    int tileSize;
-    int originalRow;
-    int originalCol;
+    int tile_size_;
+    int original_row_;
+    int original_col_;
 };
 
 #endif // DRAGGABLEPIECE_H

@@ -31,9 +31,9 @@ bool CastleSubscriber::canCastle(const Coordinates &coordinates) const {
     return available_castles_.contains(coordinates);
 }
 
-void CastleSubscriber::notify(const ApplyMoveResult &applyMoveResult) {
+void CastleSubscriber::notify(const ApplyMoveResult &apply_move_result) {
     // White
-    handleCastles(applyMoveResult.getMove(), 0);
+    handleCastles(apply_move_result.getMove(), 0);
     // Black
-    handleCastles(applyMoveResult.getMove(), 7);
+    handleCastles(apply_move_result.getMove(), 7);
 }

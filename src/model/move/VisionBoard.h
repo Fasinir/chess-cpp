@@ -7,14 +7,16 @@
 #include "../core/Constants.h"
 
 class VisionBoard {
-    std::array<std::array<bool, Constants::kBoardSize>, Constants::kBoardSize> board;
+    std::array<std::array<bool, Constants::kBoardSize>, Constants::kBoardSize> board_;
 
 public:
     VisionBoard() = default;
-    explicit VisionBoard(const std::vector<Move>& moves);
+
+    explicit VisionBoard(const std::vector<Move> &moves);
+
     ~VisionBoard() = default;
 
-    [[nodiscard]] bool hasVisionOn(Coordinates coordinates) const;
+    [[nodiscard]] bool attacks(const Coordinates &coordinates) const;
 };
 
 

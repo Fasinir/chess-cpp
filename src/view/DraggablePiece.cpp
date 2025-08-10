@@ -4,33 +4,33 @@
 
 void DraggablePiece::moveToSquare(int row, int col) {
     QRectF bounds = boundingRect();
-    qreal scaleFactor = scale();
-    qreal offsetX = (tileSize - bounds.width() * scaleFactor) / 2;
-    qreal offsetY = (tileSize - bounds.height() * scaleFactor) / 2;
-    setPos(col * tileSize + offsetX, (7-row) * tileSize + offsetY);
+    qreal scale_factor = scale();
+    qreal offset_x = (tile_size_ - bounds.width() * scale_factor) / 2;
+    qreal offset_y = (tile_size_ - bounds.height() * scale_factor) / 2;
+    setPos(col * tile_size_ + offset_x, (7-row) * tile_size_ + offset_y);
 
-    originalRow = row;
-    originalCol = col;
+    original_row_ = row;
+    original_col_ = col;
 }
 
 void DraggablePiece::revertToOriginalPosition() {
-    moveToSquare(originalRow, originalCol);
+    moveToSquare(original_row_, original_col_);
 }
 
 
-DraggablePiece::DraggablePiece(const QString &svgPath, PieceColor color, int startRow, int startCol, int tileSize)
-    : QGraphicsSvgItem(svgPath), color(color), tileSize(tileSize),
-      originalRow(startRow), originalCol(startCol) {
+DraggablePiece::DraggablePiece(const QString &svg_path, PieceColor color, int start_row, int start_col, int tile_size)
+    : QGraphicsSvgItem(svg_path), color_(color), tile_size_(tile_size),
+      original_row_(start_row), original_col_(start_col) {
     setFlags(ItemIsMovable | ItemSendsScenePositionChanges);
     setZValue(1);
 
     // Initial positioning
     QRectF bounds = boundingRect();
-    qreal scaleFactor = tileSize / bounds.width();
-    setScale(scaleFactor);
-    qreal offsetX = (tileSize - bounds.width() * scaleFactor) / 2;
-    qreal offsetY = (tileSize - bounds.height() * scaleFactor) / 2;
-    setPos(startCol * tileSize + offsetX, (7-startRow) * tileSize + offsetY);
+    qreal scale_factor = tile_size / bounds.width();
+    setScale(scale_factor);
+    qreal offset_x = (tile_size - bounds.width() * scale_factor) / 2;
+    qreal offset_y = (tile_size - bounds.height() * scale_factor) / 2;
+    setPos(start_col * tile_size + offset_x, (7-start_row) * tile_size + offset_y);
 }
 
 void DraggablePiece::mousePressEvent(QGraphicsSceneMouseEvent *event) {
@@ -43,14 +43,14 @@ void DraggablePiece::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void DraggablePiece::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsSvgItem::mouseReleaseEvent(event);
-    QPointF currentScenePos = this->scenePos();
-    int newCol = static_cast<int>(currentScenePos.x() + tileSize / 2) / tileSize;
-    int newRow = 7 - static_cast<int>(currentScenePos.y() + tileSize / 2) / tileSize;
+    QPointF current_scene_pos = this->scenePos();
+    int new_col = static_cast<int>(current_scene_pos.x() + tile_size_ / 2) / tile_size_;
+    int new_row = 7 - static_cast<int>(current_scene_pos.y() + tile_size_ / 2) / tile_size_;
 
-    newCol = std::clamp(newCol, 0, 7);
-    newRow = std::clamp(newRow, 0, 7);
+    new_col = std::clamp(new_col, 0, 7);
+    new_row = std::clamp(new_row, 0, 7);
 
     // Emit intent to move — controller handles legality
-    emit pieceMoved(originalRow, originalCol, newRow, newCol);
+    emit pieceMoved(original_row_, original_col_, new_row, new_col);
 
 }

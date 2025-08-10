@@ -8,7 +8,7 @@ class Coordinates {
     int y_;
 
 public:
-    Coordinates(const int x, const int y) : x_(x), y_(y) {
+    Coordinates(const int kX, const int kY) : x_(kX), y_(kY) {
     }
 
     Coordinates(const Coordinates &other) = default;
@@ -25,13 +25,13 @@ public:
 
     [[nodiscard]] std::string toAlgebraicNotation() const;
 
-    static Coordinates fromAlgebraicNotation(const std::string &algebraicNotation);
+    static Coordinates fromAlgebraicNotation(const std::string &algebraic_notation);
 };
 
 template<>
 struct std::hash<Coordinates> {
     std::size_t operator()(const Coordinates &coord) const noexcept {
-        return std::hash<int>()(coord.getX()) ^ (std::hash<int>()(coord.getY()) << 1);
+        return std::hash<int>()(coord.getX()) ^ std::hash<int>()(coord.getY()) << 1;
     }
 };
 

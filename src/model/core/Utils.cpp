@@ -8,26 +8,26 @@
 #include "../subscribers/move_subs/CastleSubscriber.h"
 #include "../subscribers/move_subs/EnPassantSubscriber.h"
 
-std::string Utils::createFEN(const ChessBoard &board, const CastleSubscriber &castleSub,
-                             const EnPassantSubscriber &enPassantSub, bool whiteToMove) {
+std::string Utils::createFEN(const ChessBoard &board, const CastleSubscriber &castle_sub,
+                             const EnPassantSubscriber &en_passant_sub, bool white_to_move) {
     std::ostringstream fen;
 
     // 1. Piece placement
     fen << board.toFENBoardPart();
 
     // 2. Active color
-    fen << " " << (whiteToMove ? "w" : "b");
+    fen << " " << (white_to_move ? "w" : "b");
 
     // 3. Castling availability
     std::string castling;
-    if (castleSub.canCastle(Coordinates(6, 0))) castling.push_back('K');
-    if (castleSub.canCastle(Coordinates(2, 0))) castling.push_back('Q');
-    if (castleSub.canCastle(Coordinates(6, 7))) castling.push_back('k');
-    if (castleSub.canCastle(Coordinates(2, 7))) castling.push_back('q');
+    if (castle_sub.canCastle(Coordinates(6, 0))) castling.push_back('K');
+    if (castle_sub.canCastle(Coordinates(2, 0))) castling.push_back('Q');
+    if (castle_sub.canCastle(Coordinates(6, 7))) castling.push_back('k');
+    if (castle_sub.canCastle(Coordinates(2, 7))) castling.push_back('q');
     fen << " " << (castling.empty() ? "-" : castling);
 
     // 4. En passant target square
-    if (auto ep = enPassantSub.getEnPassantCoordinates(); ep.has_value()) {
+    if (auto ep = en_passant_sub.getEnPassantCoordinates(); ep.has_value()) {
         fen << " " << ep->toAlgebraicNotation();
     } else {
         fen << " -";
@@ -38,6 +38,6 @@ std::string Utils::createFEN(const ChessBoard &board, const CastleSubscriber &ca
     return fen.str();
 }
 
-ChessColor Utils::oppositeColor(const ChessColor color) {
+ChessColor Utils::oppositeColor(const ChessColor &color) {
     return color == ChessColor::WHITE ? ChessColor::BLACK : ChessColor::WHITE;
 }

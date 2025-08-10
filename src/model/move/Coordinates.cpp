@@ -17,18 +17,18 @@ int Coordinates::getY() const {
 }
 
 std::string Coordinates::toAlgebraicNotation() const {
-    const int fileIndex = this->getX();
-    const char file = Constants::kFiles.at(fileIndex);
-    const int rankIndex = this->getY() + 1;
-    return std::string(1, file) + std::to_string(rankIndex);
+    const int kFileIndex = this->getX();
+    const char kFile = Constants::kFiles.at(kFileIndex);
+    const int kRankIndex = this->getY() + 1;
+    return std::string(1, kFile) + std::to_string(kRankIndex);
 }
 
-Coordinates Coordinates::fromAlgebraicNotation(const std::string &algebraicNotation) {
-    char file = algebraicNotation.at(0);
-    int yCoordinate = algebraicNotation.at(1) - '0' - 1;
+Coordinates Coordinates::fromAlgebraicNotation(const std::string &algebraic_notation) {
+    char file = algebraic_notation.at(0);
+    int y_coordinate = algebraic_notation.at(1) - '0' - 1;
     auto it = std::find(Constants::kFiles.begin(), Constants::kFiles.end(), file);
-    int xCoordinate = std::distance(Constants::kFiles.begin(), it);
-    return Coordinates(xCoordinate, yCoordinate);
+    int x_coordinate = std::distance(Constants::kFiles.begin(), it);
+    return Coordinates(x_coordinate, y_coordinate);
 }
 
 bool Coordinates::operator==(const Coordinates &b) const {

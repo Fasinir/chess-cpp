@@ -3,9 +3,9 @@
 #include "Figure.h"
 
 
-class Knight : public Figure {
+class Knight final : public Figure {
 public:
-    explicit Knight(ChessColor color);
+    explicit Knight(const ChessColor &color);
 
     [[nodiscard]] char getSymbol() const override;
 

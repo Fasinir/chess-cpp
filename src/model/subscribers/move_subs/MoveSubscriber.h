@@ -11,7 +11,7 @@ public:
 
     virtual ~MoveSubscriber() = default;
 
-    virtual void notify(const ApplyMoveResult &applyMoveResult) = 0;
+    virtual void notify(const ApplyMoveResult &apply_move_result) = 0;
 };
 
 

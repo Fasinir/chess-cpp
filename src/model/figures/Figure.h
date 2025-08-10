@@ -14,8 +14,8 @@ protected:
     std::vector<MoveType> move_types_;
 
 public:
-    explicit Figure(const ChessColor color) : color_(color) {
-    };
+    explicit Figure(const ChessColor &color) : color_(color) {
+    }
 
     virtual ~Figure() = default;
 

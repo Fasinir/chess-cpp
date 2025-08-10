@@ -16,24 +16,24 @@ ChessController::ChessController(QObject *parent)
     : QObject(parent),
       board_(ChessBoard::makeStandardBoard()),
       move_applier_(std::make_unique<MoveApplier>()), king_position_subscriber_(std::make_shared<KingPositionSubscriber>()),
-      game_settings_(),
-      move_subscription_manager_(std::make_unique<MoveSubscriptionManager>()),
       threefold_board_subscriber_(std::make_unique<ThreefoldBoardSubscriber>()),
       castle_subscriber_(std::make_unique<CastleSubscriber>()),
-      en_passant_subscriber_(std::make_shared<EnPassantSubscriber>()) {
+      en_passant_subscriber_(std::make_shared<EnPassantSubscriber>()),
+      game_settings_(),
+      move_subscription_manager_(std::make_unique<MoveSubscriptionManager>()) {
     this->move_getter_ = std::make_unique<LegalMoveGetter>(en_passant_subscriber_, castle_subscriber_,
                                                          std::make_shared<MoveApplier>(),
                                                          king_position_subscriber_);
-    std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber = std::make_shared<PawnPositionSubscriber>(
+    auto pawn_position_subscriber = std::make_shared<PawnPositionSubscriber>(
         en_passant_subscriber_);
-    this->fifty_move_subscriber_ = std::make_shared<FiftyMoveSubscriber>(pawnPositionSubscriber);
-    this->pawn_promotion_subscriber_ = std::make_shared<PromotionSubscriber>(pawnPositionSubscriber);
-    move_subscription_manager_->addSubscription(castle_subscriber_);
-    move_subscription_manager_->addSubscription(king_position_subscriber_);
-    move_subscription_manager_->addSubscription(fifty_move_subscriber_);
-    move_subscription_manager_->addSubscription(pawn_promotion_subscriber_);
-    move_subscription_manager_->addSubscription(pawnPositionSubscriber);
-    move_subscription_manager_->addSubscription(en_passant_subscriber_);
+    this->fifty_move_subscriber_ = std::make_shared<FiftyMoveSubscriber>(pawn_position_subscriber);
+    this->pawn_promotion_subscriber_ = std::make_shared<PromotionSubscriber>(pawn_position_subscriber);
+    move_subscription_manager_->addSubscriber(castle_subscriber_);
+    move_subscription_manager_->addSubscriber(king_position_subscriber_);
+    move_subscription_manager_->addSubscriber(fifty_move_subscriber_);
+    move_subscription_manager_->addSubscriber(pawn_promotion_subscriber_);
+    move_subscription_manager_->addSubscriber(pawn_position_subscriber);
+    move_subscription_manager_->addSubscriber(en_passant_subscriber_);
 }
 
 void ChessController::startGame(const GameSettings &settings) {
@@ -41,26 +41,26 @@ void ChessController::startGame(const GameSettings &settings) {
     this->white_to_move_ = true;
 
     std::cout << "Game started\n";
-    std::cout << "White: " << settings.whitePlayerName.toStdString() << "\n";
-    std::cout << "Black: " << settings.blackPlayerName.toStdString() << "\n";
+    std::cout << "White: " << settings.white_player_name_.toStdString() << "\n";
+    std::cout << "Black: " << settings.black_player_name_.toStdString() << "\n";
 
     nextTurn();
 }
 
 void ChessController::nextTurn() {
-    if (threefold_board_subscriber_->updateAndCheckIfThreefoldWasReached(*board_, *castle_subscriber_, *en_passant_subscriber_,
-                                                                      white_to_move_)) {
+    if (threefold_board_subscriber_->updateAndCheckThreefold(*board_, *castle_subscriber_, *en_passant_subscriber_,
+                                                             white_to_move_)) {
         QMessageBox::information(nullptr, "Game Over", "Draw by threefold repetition");
     }
-    if (fifty_move_subscriber_->fiftyMoveRuleIsReached()) {
+    if (fifty_move_subscriber_->isFiftyMoveRuleReached()) {
         QMessageBox::information(nullptr, "Game Over", "Draw by 50 move rule");
     }
     if (pawn_promotion_subscriber_->getPromotionCoordinates().has_value()) {
-        Coordinates promotionCoordinates = pawn_promotion_subscriber_->getPromotionCoordinates().value();
-        ChessColor color = board_->figureAt(promotionCoordinates.getX(), promotionCoordinates.getY()).value()->
+        const Coordinates promotion_coordinates = pawn_promotion_subscriber_->getPromotionCoordinates().value();
+        const ChessColor color = board_->figureAt(promotion_coordinates.getX(), promotion_coordinates.getY()).value()->
                 getColor();
         pawn_promotion_subscriber_->resetPromotionCoordinates();
-        emit promotionRequested(promotionCoordinates, color);
+        emit promotionRequested(promotion_coordinates, color);
         return; // Pause the game until promotion is handled
     }
     ChessColor color = white_to_move_ ? ChessColor::WHITE : ChessColor::BLACK;
@@ -70,31 +70,31 @@ void ChessController::nextTurn() {
             << current_legal_moves_.size() << "\n";
 
     if (current_legal_moves_.empty()) {
-        Coordinates kingPos = king_position_subscriber_->getKingCoordinates(color);
-        std::shared_ptr visionBoard = std::make_shared<VisionBoard>(
+        Coordinates king_pos = king_position_subscriber_->getKingCoordinates(color);
+        std::shared_ptr vision_board = std::make_shared<VisionBoard>(
             move_getter_->getLegalMovesForColor(*board_, Utils::oppositeColor(color)));
-        bool inCheck = visionBoard->hasVisionOn(kingPos);
+        bool in_check = vision_board->attacks(king_pos);
 
-        QString resultText;
-        if (inCheck)
-            resultText = white_to_move_ ? "Checkmate! Black wins." : "Checkmate! White wins.";
+        QString result_text;
+        if (in_check)
+            result_text = white_to_move_ ? "Checkmate! Black wins." : "Checkmate! White wins.";
         else
-            resultText = "Stalemate!";
+            result_text = "Stalemate!";
 
-        std::cout << "[Game Over] " << resultText.toStdString() << "\n";
-        QMessageBox::information(nullptr, "Game Over", resultText);
+        std::cout << "[Game Over] " << result_text.toStdString() << "\n";
+        QMessageBox::information(nullptr, "Game Over", result_text);
     }
 }
 
-void ChessController::onPieceMoved(int fromRow, int fromCol, int toRow, int toCol) {
-    Coordinates from(fromCol, fromRow);
-    Coordinates to(toCol, toRow);
+void ChessController::onPieceMoved(int from_row, int from_col, int to_row, int to_col) {
+    Coordinates from(from_col, from_row);
+    Coordinates to(to_col, to_row);
 
     std::cout << "Attempting move: (" << from.getX() << "," << from.getY()
             << ") -> (" << to.getX() << "," << to.getY() << ")\n";
 
 
-    auto it = std::find_if(current_legal_moves_.begin(), current_legal_moves_.end(), [&](const Move &move) {
+    auto it = std::ranges::find_if(current_legal_moves_, [&](const Move &move) {
         return move.getFrom() == from && move.getTo() == to;
     });
 
@@ -106,8 +106,8 @@ void ChessController::onPieceMoved(int fromRow, int fromCol, int toRow, int toCo
 
     std::cout << "Move accepted: " << *it << "\n";
 
-    auto applyMoveResult = move_applier_->applyMove(*board_, *it);
-    move_subscription_manager_->notifySubscribers(*applyMoveResult);
+    auto apply_move_result = move_applier_->applyMove(*board_, *it);
+    move_subscription_manager_->notifySubscribers(*apply_move_result);
     emit boardUpdated();
 
     white_to_move_ = !white_to_move_;

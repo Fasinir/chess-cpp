@@ -32,7 +32,7 @@ std::ostream &operator<<(std::ostream &os, const ChessBoard &board) {
 }
 
 std::unique_ptr<ChessBoard> ChessBoard::makeStandardBoard() {
-    std::unique_ptr<ChessBoard> board = std::make_unique<ChessBoard>();
+    auto board = std::make_unique<ChessBoard>();
 
     // King
     board->placeFigure(std::make_unique<King>(ChessColor::BLACK), 4, 7);
@@ -81,27 +81,27 @@ std::string ChessBoard::toFENBoardPart() const {
     std::ostringstream fen;
 
     for (int rank = Constants::kBoardSize - 1; rank >= 0; --rank) { // 8 to 1
-        int emptyCount = 0;
+        int empty_count = 0;
 
         for (int file = 0; file < Constants::kBoardSize; ++file) { // a to h
-            auto figOpt = board_[file][rank].getFigure(); // file = x, rank = y
-            if (!figOpt.has_value()) {
-                emptyCount++;
+            auto fig_opt = board_[file][rank].getFigure(); // file = x, rank = y
+            if (!fig_opt.has_value()) {
+                empty_count++;
             } else {
                 // flush empty squares count
-                if (emptyCount > 0) {
-                    fen << emptyCount;
-                    emptyCount = 0;
+                if (empty_count > 0) {
+                    fen << empty_count;
+                    empty_count = 0;
                 }
 
-                auto fig = figOpt.value();
+                auto fig = fig_opt.value();
                 fen << fig->getSymbol();
             }
         }
 
         // flush remaining empties at end of rank
-        if (emptyCount > 0)
-            fen << emptyCount;
+        if (empty_count > 0)
+            fen << empty_count;
 
         if (rank > 0)
             fen << '/';

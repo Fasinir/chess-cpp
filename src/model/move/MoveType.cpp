@@ -1,7 +1,7 @@
 #include "MoveType.h"
 
-std::ostream& operator<<(std::ostream& os, MoveType moveType) {
-    switch (moveType) {
+std::ostream& operator<<(std::ostream& os, MoveType move_type) {
+    switch (move_type) {
         case MoveType::PAWN_DOUBLE_MOVE: os << "Pawn Double Move"; break;
         case MoveType::PAWN_SINGLE_MOVE: os << "Pawn Single Move"; break;
         case MoveType::EN_PASSANT: os << "En Passant"; break;

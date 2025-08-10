@@ -1,113 +1,113 @@
 #include "MoveApplier.h"
 
-std::unique_ptr<ApplyMoveResult> MoveApplier::applyMove(ChessBoard &chessBoard, const Move &move) {
+std::unique_ptr<ApplyMoveResult> MoveApplier::applyMove(ChessBoard &chess_board, const Move &move) {
     switch (move.getType()) {
         case MoveType::EN_PASSANT:
-            return handleEnPassant(chessBoard, move);
+            return handleEnPassant(chess_board, move);
         case MoveType::CASTLE:
-            return handleCastle(chessBoard, move);
+            return handleCastle(chess_board, move);
         default:
-            return handleDefault(chessBoard, move);
+            return handleDefault(chess_board, move);
     }
 }
 
-void MoveApplier::undoMove(ChessBoard &chessBoard, const ApplyMoveResult &applyMoveResult) {
-    switch (applyMoveResult.getMove().getType()) {
+void MoveApplier::undoMove(ChessBoard &chess_board, const ApplyMoveResult &apply_move_result) {
+    switch (apply_move_result.getMove().getType()) {
         case MoveType::EN_PASSANT:
-            undoEnPassant(chessBoard, applyMoveResult);
+            undoEnPassant(chess_board, apply_move_result);
             break;
         case MoveType::CASTLE:
-            undoCastleMove(chessBoard, applyMoveResult);
+            undoCastleMove(chess_board, apply_move_result);
             break;
         default:
-            undoDefaultMove(chessBoard, applyMoveResult);
+            undoDefaultMove(chess_board, apply_move_result);
     }
 }
 
-std::unique_ptr<ApplyMoveResult> MoveApplier::handleDefault(ChessBoard &chessBoard, const Move &move) {
+std::unique_ptr<ApplyMoveResult> MoveApplier::handleDefault(ChessBoard &chess_board, const Move &move) {
     Coordinates from = move.getFrom();
     Coordinates to = move.getTo();
-    std::shared_ptr<Figure> optionalFromFigure = chessBoard.figureAt(from.getX(), from.getY()).value();
-    chessBoard.removeFigure(from.getX(), from.getY());
-    const std::shared_ptr<Figure> &fromFigure = optionalFromFigure;
-    std::optional<std::shared_ptr<Figure> > optionalToFigure = chessBoard.placeFigure(
-        fromFigure,
+    std::shared_ptr<Figure> optional_from_figure = chess_board.figureAt(from.getX(), from.getY()).value();
+    chess_board.removeFigure(from.getX(), from.getY());
+    const std::shared_ptr<Figure> &from_figure = optional_from_figure;
+    std::optional<std::shared_ptr<Figure> > optional_to_figure = chess_board.placeFigure(
+        from_figure,
         to.getX(), to.getY());
-    return std::make_unique<ApplyMoveResult>(move, optionalToFigure);
+    return std::make_unique<ApplyMoveResult>(move, optional_to_figure);
 }
 
-std::unique_ptr<ApplyMoveResult> MoveApplier::handleCastle(ChessBoard &chessBoard, const Move &move) {
+std::unique_ptr<ApplyMoveResult> MoveApplier::handleCastle(ChessBoard &chess_board, const Move &move) {
     Coordinates from = move.getFrom();
     Coordinates to = move.getTo();
-    std::shared_ptr<Figure> king = chessBoard.figureAt(from.getX(), from.getY()).value();
-    chessBoard.placeFigure(king, to.getX(), to.getY());
-    chessBoard.removeFigure(from.getX(), from.getY());
-    int rookX = to.getX() == 2 ? 0 : 7;
-    int rookY = to.getY();
-    std::shared_ptr<Figure> rook = chessBoard.figureAt(rookX, rookY).value();
-    int newRookX = to.getX() == 2 ? 3 : 5;
-    chessBoard.placeFigure(rook, newRookX, from.getY());
-    chessBoard.removeFigure(rookX, rookY);
+    std::shared_ptr<Figure> king = chess_board.figureAt(from.getX(), from.getY()).value();
+    chess_board.placeFigure(king, to.getX(), to.getY());
+    chess_board.removeFigure(from.getX(), from.getY());
+    int rook_x = to.getX() == 2 ? 0 : 7;
+    int rook_y = to.getY();
+    std::shared_ptr<Figure> rook = chess_board.figureAt(rook_x, rook_y).value();
+    int new_rook_x = to.getX() == 2 ? 3 : 5;
+    chess_board.placeFigure(rook, new_rook_x, from.getY());
+    chess_board.removeFigure(rook_x, rook_y);
     return std::make_unique<ApplyMoveResult>(move);
 }
 
-std::unique_ptr<ApplyMoveResult> MoveApplier::handleEnPassant(ChessBoard &chessBoard, const Move &move) {
+std::unique_ptr<ApplyMoveResult> MoveApplier::handleEnPassant(ChessBoard &chess_board, const Move &move) {
     Coordinates from = move.getFrom();
     Coordinates to = move.getTo();
-    std::shared_ptr<Figure> fromPawn = chessBoard.figureAt(from.getX(), from.getY()).value();
-    chessBoard.placeFigure(fromPawn, to.getX(), to.getY());
-    chessBoard.removeFigure(from.getX(), from.getY());
-    int takenPawnX = to.getX();
-    int takenPawnY = to.getY() == 2
+    std::shared_ptr<Figure> from_pawn = chess_board.figureAt(from.getX(), from.getY()).value();
+    chess_board.placeFigure(from_pawn, to.getX(), to.getY());
+    chess_board.removeFigure(from.getX(), from.getY());
+    int taken_pawn_x = to.getX();
+    int taken_pawn_y = to.getY() == 2
                          ? to.getY() + 1
                          : to.getY() - 1;
-    std::optional<std::shared_ptr<Figure> > optionalFromPawn = chessBoard.figureAt(takenPawnX, takenPawnY);
-    chessBoard.removeFigure(takenPawnX, takenPawnY);
-    return std::make_unique<ApplyMoveResult>(move, optionalFromPawn);
+    std::optional<std::shared_ptr<Figure> > optional_from_pawn = chess_board.figureAt(taken_pawn_x, taken_pawn_y);
+    chess_board.removeFigure(taken_pawn_x, taken_pawn_y);
+    return std::make_unique<ApplyMoveResult>(move, optional_from_pawn);
 }
 
-void MoveApplier::undoDefaultMove(ChessBoard &chessBoard, const ApplyMoveResult &applyMoveResult) {
-    Move move = applyMoveResult.getMove();
+void MoveApplier::undoDefaultMove(ChessBoard &chess_board, const ApplyMoveResult &apply_move_result) {
+    Move move = apply_move_result.getMove();
     Coordinates from = move.getFrom();
     Coordinates to = move.getTo();
-    std::shared_ptr<Figure> toFigure = chessBoard.figureAt(to.getX(), to.getY()).value();
-    chessBoard.placeFigure(toFigure, from.getX(), from.getY());
+    std::shared_ptr<Figure> to_figure = chess_board.figureAt(to.getX(), to.getY()).value();
+    chess_board.placeFigure(to_figure, from.getX(), from.getY());
 
-    if (applyMoveResult.getTakenFigure().has_value()) {
-        std::shared_ptr<Figure> takenFigure = applyMoveResult.getTakenFigure().value();
-        chessBoard.placeFigure(takenFigure, to.getX(), to.getY());
+    if (apply_move_result.getTakenFigure().has_value()) {
+        std::shared_ptr<Figure> taken_figure = apply_move_result.getTakenFigure().value();
+        chess_board.placeFigure(taken_figure, to.getX(), to.getY());
     } else {
-        chessBoard.removeFigure(to.getX(), to.getY());
+        chess_board.removeFigure(to.getX(), to.getY());
     }
 }
 
-void MoveApplier::undoCastleMove(ChessBoard &chessBoard, const ApplyMoveResult &applyMoveResult) {
-    Move move = applyMoveResult.getMove();
+void MoveApplier::undoCastleMove(ChessBoard &chess_board, const ApplyMoveResult &apply_move_result) {
+    Move move = apply_move_result.getMove();
     Coordinates from = move.getFrom();
     Coordinates to = move.getTo();
-    std::shared_ptr<Figure> king = chessBoard.figureAt(to.getX(), to.getY()).value();
-    chessBoard.placeFigure(king, from.getX(), from.getY());
-    chessBoard.removeFigure(to.getX(), to.getY());
+    std::shared_ptr<Figure> king = chess_board.figureAt(to.getX(), to.getY()).value();
+    chess_board.placeFigure(king, from.getX(), from.getY());
+    chess_board.removeFigure(to.getX(), to.getY());
 
-    int currentRookX = to.getX() == 2 ? 3 : 5;
-    int currentRookY = to.getY();
-    std::shared_ptr<Figure> rook = chessBoard.figureAt(currentRookX, currentRookY).value();
-    int newRookX = to.getX() == 2 ? 0 : 7;
-    int newRookY = to.getY();
-    chessBoard.placeFigure(rook, newRookX, newRookY);
-    chessBoard.removeFigure(currentRookX, currentRookY);
+    int current_rook_x = to.getX() == 2 ? 3 : 5;
+    int current_rook_y = to.getY();
+    std::shared_ptr<Figure> rook = chess_board.figureAt(current_rook_x, current_rook_y).value();
+    int new_rook_x = to.getX() == 2 ? 0 : 7;
+    int new_rook_y = to.getY();
+    chess_board.placeFigure(rook, new_rook_x, new_rook_y);
+    chess_board.removeFigure(current_rook_x, current_rook_y);
 }
 
-void MoveApplier::undoEnPassant(ChessBoard &chessBoard, const ApplyMoveResult &applyMoveResult) {
-    Move move = applyMoveResult.getMove();
+void MoveApplier::undoEnPassant(ChessBoard &chess_board, const ApplyMoveResult &apply_move_result) {
+    Move move = apply_move_result.getMove();
     Coordinates from = move.getFrom();
     Coordinates to = move.getTo();
-    std::shared_ptr<Figure> takingPawn = chessBoard.figureAt(to.getX(), to.getY()).value();
-    chessBoard.placeFigure(takingPawn, from.getX(), from.getY());
-    chessBoard.removeFigure(to.getX(), to.getY());
-    int takenPawnX = to.getX();
-    int takenPawnY = to.getY() == 2
+    std::shared_ptr<Figure> taking_pawn = chess_board.figureAt(to.getX(), to.getY()).value();
+    chess_board.placeFigure(taking_pawn, from.getX(), from.getY());
+    chess_board.removeFigure(to.getX(), to.getY());
+    int taken_pawn_x = to.getX();
+    int taken_pawn_y = to.getY() == 2
                          ? to.getY() + 1
                          : to.getY() - 1;
-    chessBoard.placeFigure(applyMoveResult.getTakenFigure().value(), takenPawnX, takenPawnY);
+    chess_board.placeFigure(apply_move_result.getTakenFigure().value(), taken_pawn_x, taken_pawn_y);
 }

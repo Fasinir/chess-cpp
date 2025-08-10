@@ -7,7 +7,7 @@
 #include "../../move/Coordinates.h"
 
 
-class CastleSubscriber : public MoveSubscriber {
+class CastleSubscriber final : public MoveSubscriber {
     std::unordered_set<Coordinates> available_castles_;
 
     void handleCastles(const Move &move, int y);
@@ -19,7 +19,7 @@ public:
 
     bool canCastle(const Coordinates &coordinates) const;
 
-    void notify(const ApplyMoveResult &applyMoveResult) override;
+    void notify(const ApplyMoveResult &apply_move_result) override;
 };
 
 

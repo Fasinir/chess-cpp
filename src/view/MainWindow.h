@@ -16,41 +16,41 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow {
+class MainWindow final : public QMainWindow {
     Q_OBJECT
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
 
-    ~MainWindow();
+    ~MainWindow() override;
 
 private slots:
     void startLocalGame();
 
     void startEngineGame();
 
-    void updatePlayer2ColorLabel();
+    void updatePlayer2ColorLabel() const;
 
     void proceedToGamePage();
 
     void drawBoardFromModel();
 
-    void handlePromotionRequested(Coordinates coordinates, ChessColor color);
+    void handlePromotionRequested(const Coordinates &coordinates, const ChessColor &color);
 
 
 private:
-    Ui::MainWindow *ui;
-    GameMode currentGameMode;
-    QGraphicsScene *scene = nullptr;
-    ChessController *controller = nullptr;
-    GameSettings gameSettings;
+    Ui::MainWindow *ui_;
+    GameMode current_game_mode_;
+    QGraphicsScene *scene_ = nullptr;
+    ChessController *controller_ = nullptr;
+    GameSettings game_settings_;
 
 
     void showConfigScreen(GameMode mode);
 
-    void drawChessBoard();
+    void drawBoardTiles();
 
-    void placePiece(const QString &svgPath, PieceColor color, int row, int col);
+    void placePiece(const QString &svg_path, PieceColor color, int row, int col);
 };
 
 #endif // MAINWINDOW_H

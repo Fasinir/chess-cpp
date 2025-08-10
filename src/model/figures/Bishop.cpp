@@ -1,6 +1,6 @@
 #include "Bishop.h"
 
-Bishop::Bishop(const ChessColor color) : Figure(color) {
+Bishop::Bishop(const ChessColor kColor) : Figure(kColor) {
     this->move_types_ = std::vector{MoveType::BISHOP};
 }
 

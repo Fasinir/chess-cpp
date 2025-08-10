@@ -13,9 +13,9 @@ class ApplyMoveResult {
 public:
     explicit ApplyMoveResult(const Move &move);
 
-    ApplyMoveResult(const Move &move, std::shared_ptr<Figure> takenFigure);
+    ApplyMoveResult(const Move &move, std::shared_ptr<Figure> taken_figure);
 
-    ApplyMoveResult(const Move &move, std::optional<std::shared_ptr<Figure> > takenFigure);
+    ApplyMoveResult(const Move &move, std::optional<std::shared_ptr<Figure> > taken_figure);
 
     [[nodiscard]] Move getMove() const;
 

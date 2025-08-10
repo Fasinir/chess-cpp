@@ -5,7 +5,7 @@
 #include "../../core/ChessColor.h"
 
 
-class KingPositionSubscriber : public MoveSubscriber {
+class KingPositionSubscriber final : public MoveSubscriber {
     Coordinates white_king_coordinates_;
     Coordinates black_king_coordinates_;
 
@@ -15,7 +15,7 @@ public:
 
     [[nodiscard]] Coordinates getKingCoordinates(ChessColor color) const;
 
-    void notify(const ApplyMoveResult &applyMoveResult) override;
+    void notify(const ApplyMoveResult &apply_move_result) override;
 };
 
 

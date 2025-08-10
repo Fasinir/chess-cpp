@@ -13,7 +13,7 @@
 
 enum class PromotionType { QUEEN, ROOK, BISHOP, KNIGHT };
 
-class ChessController : public QObject {
+class ChessController final : public QObject {
     Q_OBJECT
 
 public:
@@ -24,7 +24,7 @@ public:
 
 
 public slots:
-    void onPieceMoved(int fromRow, int fromCol, int toRow, int toCol);
+    void onPieceMoved(int from_row, int from_col, int to_row, int to_col);
 
     void promote(Coordinates coordinates, PromotionType type);
 

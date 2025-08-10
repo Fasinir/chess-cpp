@@ -3,13 +3,13 @@
 
 #include <iostream>
 
-void MoveSubscriptionManager::notifySubscribers(const ApplyMoveResult &applyMoveResult) const {
+void MoveSubscriptionManager::notifySubscribers(const ApplyMoveResult &apply_move_result) const {
     for (auto const& subscriber : board_subscribers_) {
-        subscriber->notify(applyMoveResult);
+        subscriber->notify(apply_move_result);
     }
 }
 
-void MoveSubscriptionManager::addSubscription(const std::shared_ptr<MoveSubscriber>& subscriber) {
+void MoveSubscriptionManager::addSubscriber(const std::shared_ptr<MoveSubscriber>& subscriber) {
     std::cout << "Adding subscriber" << std::endl;
     board_subscribers_.emplace_back(subscriber);
 }

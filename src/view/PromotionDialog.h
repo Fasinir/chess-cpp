@@ -11,7 +11,7 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-class PromotionDialog : public QDialog {
+class PromotionDialog final : public QDialog {
     Q_OBJECT
 
 public:
@@ -19,7 +19,7 @@ public:
 
     ~PromotionDialog() override;
 
-    [[nodiscard]] PromotionType selectedType() const { return choice; }
+    [[nodiscard]] PromotionType selectedType() const { return choice_; }
 
 private slots:
     void chooseQueen();
@@ -31,8 +31,8 @@ private slots:
     void chooseKnight();
 
 private:
-    Ui::PromotionDialog *ui;
-    PromotionType choice = PromotionType::QUEEN;
+    Ui::PromotionDialog *ui_;
+    PromotionType choice_ = PromotionType::QUEEN;
 
     void setIconsForColor(ChessColor color);
 };

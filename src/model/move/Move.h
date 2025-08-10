@@ -10,7 +10,7 @@ class Move {
     MoveType type_;
 
 public:
-    Move(const Coordinates from, const Coordinates to, const MoveType type) : from_(from), to_(to), type_(type) {
+    Move(const Coordinates &from, const Coordinates &to, const MoveType &type) : from_(from), to_(to), type_(type) {
     };
 
     ~Move() = default;

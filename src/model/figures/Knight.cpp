@@ -1,6 +1,6 @@
 #include "Knight.h"
 
-Knight::Knight(ChessColor color) : Figure(color) {
+Knight::Knight(const ChessColor &color) : Figure(color) {
     this->move_types_ = std::vector{MoveType::KNIGHT};
 }
 

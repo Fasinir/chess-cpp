@@ -16,10 +16,10 @@ public:
 
     ~ThreefoldBoardSubscriber() = default;
 
-    bool updateAndCheckIfThreefoldWasReached(const ChessBoard &chessBoard,
-                                             const CastleSubscriber &castleSub,
-                                             const EnPassantSubscriber &enPassantSub,
-                                             bool whiteToMove);
+    bool updateAndCheckThreefold(const ChessBoard &chess_board,
+                                             const CastleSubscriber &castle_sub,
+                                             const EnPassantSubscriber &en_passant_sub,
+                                             bool white_to_move);
 };
 
 

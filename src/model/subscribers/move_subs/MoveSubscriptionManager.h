@@ -12,9 +12,9 @@ public:
 
     ~MoveSubscriptionManager() = default;
 
-    void notifySubscribers(const ApplyMoveResult &applyMoveResult) const;
+    void notifySubscribers(const ApplyMoveResult &apply_move_result) const;
 
-    void addSubscription(const std::shared_ptr<MoveSubscriber>& subscriber);
+    void addSubscriber(const std::shared_ptr<MoveSubscriber>& subscriber);
 };
 
 

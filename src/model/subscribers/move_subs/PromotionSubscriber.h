@@ -4,14 +4,14 @@
 #include "MoveSubscriber.h"
 
 
-class PromotionSubscriber : public MoveSubscriber {
+class PromotionSubscriber final : public MoveSubscriber {
     std::optional<Coordinates> promotion_coordinates_;
     std::shared_ptr<PawnPositionSubscriber> pawn_position_subscriber_;
 
 public:
-    explicit PromotionSubscriber(std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber);
+    explicit PromotionSubscriber(std::shared_ptr<PawnPositionSubscriber> pawn_position_subscriber);
 
-    void notify(const ApplyMoveResult &applyMoveResult) override;
+    void notify(const ApplyMoveResult &apply_move_result) override;
 
     [[nodiscard]] std::optional<Coordinates> getPromotionCoordinates() const;
 

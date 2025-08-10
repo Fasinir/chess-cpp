@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <QString>
 #include <QTime>
 
 enum class GameMode {
@@ -14,11 +13,11 @@ enum class GameMode {
 };
 
 struct GameSettings {
-    GameMode mode;
-    QString player1Name;
-    QString player2Name;
-    QString whitePlayerName;
-    QString blackPlayerName;
-    QTime baseTime;
-    int incrementSeconds;
+    GameMode mode_;
+    QString player1_name_;
+    QString player2_name_;
+    QString white_player_name_;
+    QString black_player_name_;
+    QTime base_time_;
+    int increment_seconds_;
 };

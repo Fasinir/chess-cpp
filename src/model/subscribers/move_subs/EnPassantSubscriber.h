@@ -6,7 +6,7 @@
 #include "MoveSubscriber.h"
 #include "../../move/Coordinates.h"
 
-class EnPassantSubscriber : public MoveSubscriber {
+class EnPassantSubscriber final : public MoveSubscriber {
     std::unordered_set<Coordinates> unmoved_pawns_;
 
     std::optional<Coordinates> en_passant_coordinates_;
@@ -22,7 +22,7 @@ public:
 
     std::optional<Coordinates> getEnPassantCoordinates() const { return en_passant_coordinates_; }
 
-    void notify(const ApplyMoveResult &applyMoveResult) override;
+    void notify(const ApplyMoveResult &apply_move_result) override;
 };
 
 

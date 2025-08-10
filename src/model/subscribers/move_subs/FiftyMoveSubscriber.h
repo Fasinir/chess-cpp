@@ -5,16 +5,16 @@
 #include "MoveSubscriber.h"
 
 
-class FiftyMoveSubscriber : public MoveSubscriber {
+class FiftyMoveSubscriber final : public MoveSubscriber {
     int count_;
     std::shared_ptr<PawnPositionSubscriber> pawn_position_subscriber_;
 
 public:
-    explicit FiftyMoveSubscriber(std::shared_ptr<PawnPositionSubscriber> pawnPositionSubscriber);
+    explicit FiftyMoveSubscriber(std::shared_ptr<PawnPositionSubscriber> pawn_position_subscriber);
 
-    void notify(const ApplyMoveResult &applyMoveResult) override;
+    void notify(const ApplyMoveResult &apply_move_result) override;
 
-    [[nodiscard]] bool fiftyMoveRuleIsReached() const;
+    [[nodiscard]] bool isFiftyMoveRuleReached() const;
 };
 
 
