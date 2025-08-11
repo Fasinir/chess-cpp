@@ -4,9 +4,10 @@
 #include <iostream>
 
 #include "../core/ChessColor.h"
-#include "../core/Constants.h"
 #include "../move/MoveType.h"
+#include "../move/Coordinates.h"
 
+class ChessBoard;
 
 class Figure {
 protected:
@@ -28,6 +29,8 @@ public:
     std::vector<MoveType> &getMoveTypes();
 
     [[nodiscard]] const ChessColor &getColor() const;
+
+    virtual std::vector<Coordinates> getVision(const ChessBoard &board, const Coordinates &from) const = 0;
 
     friend std::ostream &operator<<(std::ostream &os, const Figure &figure);
 };

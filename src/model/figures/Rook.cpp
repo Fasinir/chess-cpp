@@ -1,5 +1,7 @@
 #include "Rook.h"
 
+#include "../move/VisionUtil.h"
+
 Rook::Rook(ChessColor color) : Figure(color) {
     this->move_types_ = std::vector{MoveType::kRook};
 }
@@ -14,4 +16,13 @@ std::unique_ptr<Figure> Rook::clone() const {
 
 std::string Rook::getName() const {
     return "rook";
+}
+
+std::vector<Coordinates> Rook::getVision(const ChessBoard &board, const Coordinates &from) const {
+    std::vector<Coordinates> v;
+    VisionUtil::rayVision(board, from,  1,  0, v);
+    VisionUtil::rayVision(board, from, -1,  0, v);
+    VisionUtil::rayVision(board, from,  0,  1, v);
+    VisionUtil::rayVision(board, from,  0, -1, v);
+    return v;
 }

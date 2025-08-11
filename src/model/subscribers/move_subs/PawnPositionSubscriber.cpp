@@ -1,6 +1,7 @@
 #include "PawnPositionSubscriber.h"
 
 #include <utility>
+#include "../../core/Constants.h"
 
 PawnPositionSubscriber::PawnPositionSubscriber(std::shared_ptr<EnPassantSubscriber> en_passant_subscriber) {
     this->en_passant_subscriber_ = std::move(en_passant_subscriber);

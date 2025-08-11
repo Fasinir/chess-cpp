@@ -15,15 +15,16 @@
 ChessController::ChessController(QObject *parent)
     : QObject(parent),
       board_(ChessBoard::makeStandardBoard()),
-      move_applier_(std::make_unique<MoveApplier>()), king_position_subscriber_(std::make_shared<KingPositionSubscriber>()),
+      move_applier_(std::make_unique<MoveApplier>()),
+      king_position_subscriber_(std::make_shared<KingPositionSubscriber>()),
       threefold_board_subscriber_(std::make_unique<ThreefoldBoardSubscriber>()),
       castle_subscriber_(std::make_unique<CastleSubscriber>()),
       en_passant_subscriber_(std::make_shared<EnPassantSubscriber>()),
       game_settings_(),
       move_subscription_manager_(std::make_unique<MoveSubscriptionManager>()) {
     this->move_getter_ = std::make_unique<LegalMoveGetter>(en_passant_subscriber_, castle_subscriber_,
-                                                         std::make_shared<MoveApplier>(),
-                                                         king_position_subscriber_);
+                                                           std::make_shared<MoveApplier>(),
+                                                           king_position_subscriber_);
     auto pawn_position_subscriber = std::make_shared<PawnPositionSubscriber>(
         en_passant_subscriber_);
     this->fifty_move_subscriber_ = std::make_shared<FiftyMoveSubscriber>(pawn_position_subscriber);
@@ -72,7 +73,7 @@ void ChessController::nextTurn() {
     if (current_legal_moves_.empty()) {
         Coordinates king_pos = king_position_subscriber_->getKingCoordinates(color);
         std::shared_ptr vision_board = std::make_shared<VisionBoard>(
-            move_getter_->getLegalMovesForColor(*board_, Utils::oppositeColor(color)));
+            *board_, Utils::oppositeColor(color));
         bool in_check = vision_board->attacks(king_pos);
 
         QString result_text;

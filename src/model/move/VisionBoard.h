@@ -5,18 +5,19 @@
 #include "Coordinates.h"
 #include "Move.h"
 #include "../core/Constants.h"
+#include  "../core/ChessBoard.h"
 
 class VisionBoard {
-    std::array<std::array<bool, Constants::kBoardSize>, Constants::kBoardSize> board_;
+    std::array<std::array<bool, Constants::kBoardSize>, Constants::kBoardSize> board_{};
 
 public:
     VisionBoard() = default;
 
     explicit VisionBoard(const std::vector<Move> &moves);
 
-    ~VisionBoard() = default;
+    VisionBoard(const ChessBoard &board, ChessColor color);
 
-    [[nodiscard]] bool attacks(const Coordinates &coordinates) const;
+    bool attacks(const Coordinates &coordinates) const;
 };
 
 

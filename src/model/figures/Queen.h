@@ -12,6 +12,8 @@ public:
     [[nodiscard]] std::unique_ptr<Figure> clone() const override;
 
     [[nodiscard]] std::string getName() const override;
+
+    std::vector<Coordinates> getVision(const ChessBoard &board, const Coordinates &from) const override;
 };
 
 

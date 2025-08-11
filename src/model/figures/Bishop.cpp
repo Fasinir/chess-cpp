@@ -1,6 +1,8 @@
 #include "Bishop.h"
 
-Bishop::Bishop(const ChessColor kColor) : Figure(kColor) {
+#include "../move/VisionUtil.h"
+
+Bishop::Bishop(const ChessColor &color) : Figure(color) {
     this->move_types_ = std::vector{MoveType::kBishop};
 }
 
@@ -14,4 +16,13 @@ std::unique_ptr<Figure> Bishop::clone() const {
 
 std::string Bishop::getName() const {
     return "bishop";
+}
+
+std::vector<Coordinates> Bishop::getVision(const ChessBoard &board, const Coordinates &from) const {
+    std::vector<Coordinates> v;
+    VisionUtil::rayVision(board, from, 1, 1, v);
+    VisionUtil::rayVision(board, from, 1, -1, v);
+    VisionUtil::rayVision(board, from, -1, -1, v);
+    VisionUtil::rayVision(board, from, -1, 1, v);
+    return v;
 }

@@ -6,13 +6,15 @@
 
 class Bishop final : public Figure {
 public:
-    explicit Bishop(ChessColor color);
+    explicit Bishop(const ChessColor &color);
 
     [[nodiscard]] char getSymbol() const override;
 
     [[nodiscard]] std::unique_ptr<Figure> clone() const override;
 
     [[nodiscard]] std::string getName() const override;
+
+    std::vector<Coordinates> getVision(const ChessBoard &board, const Coordinates &from) const override;
 };
 
 

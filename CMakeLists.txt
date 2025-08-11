@@ -83,6 +83,8 @@ set(PROJECT_SOURCES
         src/model/core/Utils.cpp
         src/model/core/Utils.h
         src/controller/PromotionType.h
+        src/model/move/VisionUtil.cpp
+        src/model/move/VisionUtil.h
 
 )
 
