@@ -4,6 +4,7 @@
 #include "../model/subscribers/move_subs/KingPositionSubscriber.h"
 #include <QMessageBox>
 #include <iostream>
+#include <QCoreApplication>
 
 #include "../model/figures/Bishop.h"
 #include "../model/figures/Knight.h"
@@ -51,9 +52,13 @@ void ChessController::nextTurn() {
     if (threefold_board_subscriber_->updateAndCheckThreefold(board_, castle_subscriber_, en_passant_subscriber_,
                                                              white_to_move_)) {
         QMessageBox::information(nullptr, "Game Over", "Draw by threefold repetition");
+        QCoreApplication::quit();
+        return;
     }
     if (fifty_move_subscriber_->isFiftyMoveRuleReached()) {
         QMessageBox::information(nullptr, "Game Over", "Draw by 50 move rule");
+        QCoreApplication::quit();
+        return;
     }
     if (pawn_promotion_subscriber_->getPromotionCoordinates().has_value()) {
         Coordinates promotion_coordinates = pawn_promotion_subscriber_->getPromotionCoordinates().value();
@@ -83,6 +88,7 @@ void ChessController::nextTurn() {
 
         std::cout << "[Game Over] " << result_text.toStdString() << "\n";
         QMessageBox::information(nullptr, "Game Over", result_text);
+        QCoreApplication::quit();
     }
 }
 

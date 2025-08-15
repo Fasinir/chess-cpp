@@ -34,7 +34,7 @@
          <item>
           <widget class="QPushButton" name="startLocalGameButton">
            <property name="text">
-            <string>startLocalGameButton</string>
+            <string>Start local game</string>
            </property>
           </widget>
          </item>
