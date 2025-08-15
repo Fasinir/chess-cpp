@@ -18,7 +18,7 @@ std::string Rook::getName() const {
     return "rook";
 }
 
-std::vector<Coordinates> Rook::getVision(const ChessBoard &board, const Coordinates &from) const {
+std::vector<Coordinates> Rook::getVision(std::shared_ptr<ChessBoard> board, const Coordinates &from) const {
     std::vector<Coordinates> v;
     VisionUtil::rayVision(board, from,  1,  0, v);
     VisionUtil::rayVision(board, from, -1,  0, v);

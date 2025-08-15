@@ -8,8 +8,8 @@
 
 class Utils {
 public:
-    static std::string createFEN(const ChessBoard &board, const CastleSubscriber &castle_sub,
-                                 const EnPassantSubscriber &en_passant_sub, bool white_to_move);
+    static std::string createFEN(std::shared_ptr<ChessBoard> board, std::shared_ptr<CastleSubscriber> castle_sub,
+                                 std::shared_ptr<EnPassantSubscriber> en_passant_sub, bool white_to_move);
 
     static ChessColor oppositeColor(const ChessColor &color);
 };

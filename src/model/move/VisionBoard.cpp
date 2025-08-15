@@ -1,9 +1,9 @@
 #include "VisionBoard.h"
 
-VisionBoard::VisionBoard(const ChessBoard &board, ChessColor color) {
+VisionBoard::VisionBoard(std::shared_ptr<ChessBoard> board, ChessColor color) {
     for (int x = 0; x < Constants::kBoardSize; ++x) {
         for (int y = 0; y < Constants::kBoardSize; ++y) {
-            auto f = board.figureAt(x, y);
+            auto f = board->figureAt(x, y);
             if (!f.has_value()) continue;
             if (f.value()->getColor() != color) continue;
             for (auto c: f.value()->getVision(board, Coordinates(x, y))) {

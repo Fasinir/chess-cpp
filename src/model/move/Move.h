@@ -6,7 +6,7 @@
 
 class ApplyMoveResult;
 
-class Move : public std::enable_shared_from_this<Move>{
+class Move : public std::enable_shared_from_this<Move> {
 protected:
     Coordinates from_;
     Coordinates to_;
@@ -26,9 +26,9 @@ public:
 
     [[nodiscard]] std::string getTag() const;
 
-    virtual ApplyMoveResult apply(ChessBoard &chess_board) = 0;
+    virtual ApplyMoveResult apply(std::shared_ptr<ChessBoard> board) = 0;
 
-    virtual void undo(ChessBoard &board, std::optional<std::shared_ptr<Figure>> optional_taken_figure) = 0;
+    virtual void undo(std::shared_ptr<ChessBoard> board, std::optional<std::shared_ptr<Figure> > optional_taken_figure) = 0;
 };
 
 

@@ -18,7 +18,7 @@ public:
 
     static std::unique_ptr<ChessBoard> makeStandardBoard();
 
-    std::optional<std::shared_ptr<Figure> > placeFigure(const std::shared_ptr<Figure>& figure, int x, int y);
+    std::optional<std::shared_ptr<Figure> > placeFigure(const std::shared_ptr<Figure> &figure, int x, int y);
 
     [[nodiscard]] std::optional<std::shared_ptr<Figure> > figureAt(int x, int y) const;
 

@@ -16,9 +16,9 @@ public:
 
     ~ThreefoldBoardSubscriber() = default;
 
-    bool updateAndCheckThreefold(const ChessBoard &chess_board,
-                                             const CastleSubscriber &castle_sub,
-                                             const EnPassantSubscriber &en_passant_sub,
+    bool updateAndCheckThreefold(std::shared_ptr<ChessBoard> chess_board,
+                                             std::shared_ptr<CastleSubscriber> castle_sub,
+                                             std::shared_ptr<EnPassantSubscriber> en_passant_sub,
                                              bool white_to_move);
 };
 

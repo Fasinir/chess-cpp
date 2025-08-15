@@ -52,7 +52,6 @@ set(PROJECT_SOURCES
         src/PrintUtils.h
         src/model/move/ApplyMoveResult.cpp
         src/model/move/ApplyMoveResult.h
-        test/LocalPrintTesting.h
         src/model/move/LegalMoveGetter.cpp
         src/model/move/LegalMoveGetter.h
         src/model/subscribers/move_subs/MoveSubscriber.h

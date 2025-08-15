@@ -21,7 +21,7 @@ public:
 
     void startGame(const GameSettings &settings);
 
-    [[nodiscard]] ChessBoard *getBoard() const { return board_.get(); }
+    [[nodiscard]] std::shared_ptr<ChessBoard> getBoard() const { return board_; }
 
     std::vector<Coordinates> legalDestinationsFrom(int col, int row) const;
 
@@ -38,8 +38,8 @@ signals:
     void boardUpdated(); // UI can react to this
 
 private:
-    std::unique_ptr<ChessBoard> board_;
-    std::unique_ptr<LegalMoveGetter> move_getter_;
+    std::shared_ptr<ChessBoard> board_;
+    std::shared_ptr<LegalMoveGetter> move_getter_;
     std::shared_ptr<KingPositionSubscriber> king_position_subscriber_;
     std::shared_ptr<FiftyMoveSubscriber> fifty_move_subscriber_;
     std::shared_ptr<PromotionSubscriber> pawn_promotion_subscriber_;

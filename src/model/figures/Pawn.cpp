@@ -19,7 +19,7 @@ std::string Pawn::getName() const {
     return "pawn";
 }
 
-std::vector<Coordinates> Pawn::getVision(const ChessBoard &, const Coordinates &from) const {
+std::vector<Coordinates> Pawn::getVision(std::shared_ptr<ChessBoard> board, const Coordinates &from) const {
     std::vector<Coordinates> v;
     int dir = (color_ == ChessColor::kWhite) ? 1 : -1;
     int y = from.getY() + dir;

@@ -17,7 +17,7 @@ std::string Knight::getName() const {
     return "knight";
 }
 
-std::vector<Coordinates> Knight::getVision(const ChessBoard &, const Coordinates &from) const {
+std::vector<Coordinates> Knight::getVision(std::shared_ptr<ChessBoard> board, const Coordinates &from) const {
     static constexpr int dx[8] = {2, 1, -1, -2, -2, -1, 1, 2};
     static constexpr int dy[8] = {1, 2, 2, 1, -1, -2, -2, -1};
     std::vector<Coordinates> v;

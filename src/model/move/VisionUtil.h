@@ -6,7 +6,7 @@
 
 class VisionUtil {
 public:
-    static void rayVision(const ChessBoard &board, const Coordinates &from, int dx, int dy,
+    static void rayVision(std::shared_ptr<ChessBoard> board, const Coordinates &from, int dx, int dy,
                    std::vector<Coordinates> &out);
 };
 

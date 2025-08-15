@@ -13,7 +13,7 @@ public:
 
     [[nodiscard]] std::string getName() const override;
 
-    std::vector<Coordinates> getVision(const ChessBoard &board, const Coordinates &from) const override;
+    std::vector<Coordinates> getVision(std::shared_ptr<ChessBoard> board, const Coordinates &from) const override;
 };
 
 

@@ -20,7 +20,7 @@ std::string Queen::getName() const {
     return "queen";
 }
 
-std::vector<Coordinates> Queen::getVision(const ChessBoard &board, const Coordinates &from) const {
+std::vector<Coordinates> Queen::getVision(std::shared_ptr<ChessBoard> board, const Coordinates &from) const {
     std::vector<Coordinates> v;
     // rook rays
     VisionUtil::rayVision(board, from,  1,  0, v);

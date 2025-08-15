@@ -13,7 +13,7 @@ class VisionBoard {
 public:
     VisionBoard() = default;
 
-    VisionBoard(const ChessBoard &board, ChessColor color);
+    VisionBoard(std::shared_ptr<ChessBoard> board, ChessColor color);
 
     bool attacks(const Coordinates &coordinates) const;
 };

@@ -20,12 +20,12 @@ class LegalMoveGetter {
 
     static bool isWithinBounds(int x, int y);
 
-    bool leavesKingSafe(ChessBoard &board, std::shared_ptr<Move> move, ChessColor &color);
+    bool leavesKingSafe(std::shared_ptr<ChessBoard> board, std::shared_ptr<Move> move, ChessColor &color);
 
-    std::optional<std::shared_ptr<Move> > tryCastle(const ChessBoard &board, Coordinates king_from,
+    std::optional<std::shared_ptr<Move> > tryCastle(std::shared_ptr<ChessBoard> board, Coordinates king_from,
                                                     bool is_castling_queen_side, const VisionBoard &enemy_vision);
 
-    std::vector<std::shared_ptr<Move> > handlePawnMoves(ChessBoard &board, Coordinates from);
+    std::vector<std::shared_ptr<Move> > handlePawnMoves(std::shared_ptr<ChessBoard> board, Coordinates from);
 
 public:
     LegalMoveGetter(std::shared_ptr<EnPassantSubscriber> en_passant_checker,
@@ -42,7 +42,7 @@ public:
 
     ~LegalMoveGetter() = default;
 
-    std::vector<std::shared_ptr<Move> > getLegalMovesForColor(ChessBoard &board, ChessColor color);
+    std::vector<std::shared_ptr<Move> > getLegalMovesForColor(std::shared_ptr<ChessBoard> board, ChessColor color);
 };
 
 

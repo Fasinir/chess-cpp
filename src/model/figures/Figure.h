@@ -30,7 +30,7 @@ public:
 
     [[nodiscard]] const ChessColor &getColor() const;
 
-    virtual std::vector<Coordinates> getVision(const ChessBoard &board, const Coordinates &from) const = 0;
+    virtual std::vector<Coordinates> getVision(std::shared_ptr<ChessBoard> board, const Coordinates &from) const = 0;
 
     friend std::ostream &operator<<(std::ostream &os, const Figure &figure);
 };

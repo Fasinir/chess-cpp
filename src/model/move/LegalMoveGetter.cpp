@@ -10,7 +10,7 @@ bool LegalMoveGetter::isWithinBounds(int x, int y) {
     return x >= 0 && y >= 0 && x < Constants::kBoardSize && y < Constants::kBoardSize;
 }
 
-bool LegalMoveGetter::leavesKingSafe(ChessBoard &board, std::shared_ptr<Move> move, ChessColor &color) {
+bool LegalMoveGetter::leavesKingSafe(std::shared_ptr<ChessBoard> board, std::shared_ptr<Move> move, ChessColor &color) {
     auto apply_result = move->apply(board);
     VisionBoard enemy_pre(board, Utils::oppositeColor(color));
     Coordinates king_pos = king_position_subscriber_->getKingCoordinates(color);
@@ -21,7 +21,7 @@ bool LegalMoveGetter::leavesKingSafe(ChessBoard &board, std::shared_ptr<Move> mo
     return safe;
 }
 
-std::optional<std::shared_ptr<Move> > LegalMoveGetter::tryCastle(const ChessBoard &board, Coordinates king_from,
+std::optional<std::shared_ptr<Move> > LegalMoveGetter::tryCastle(std::shared_ptr<ChessBoard> board, Coordinates king_from,
                                                                  bool is_castling_queen_side,
                                                                  const VisionBoard &enemy_vision) {
     int y = king_from.getY();
@@ -34,7 +34,7 @@ std::optional<std::shared_ptr<Move> > LegalMoveGetter::tryCastle(const ChessBoar
     int empty_start = is_castling_queen_side ? 1 : 5;
     int empty_end = is_castling_queen_side ? 3 : 6;
     for (int i = empty_start; i <= empty_end; ++i)
-        if (board.figureAt(i, y).has_value())
+        if (board->figureAt(i, y).has_value())
             return std::nullopt;
 
     int no_check_start = is_castling_queen_side ? 2 : 5;
@@ -46,16 +46,16 @@ std::optional<std::shared_ptr<Move> > LegalMoveGetter::tryCastle(const ChessBoar
     return std::make_shared<CastleMove>(king_from, dest, "castle");
 }
 
-std::vector<std::shared_ptr<Move> > LegalMoveGetter::handlePawnMoves(ChessBoard &board, Coordinates from) {
+std::vector<std::shared_ptr<Move> > LegalMoveGetter::handlePawnMoves(std::shared_ptr<ChessBoard> board, Coordinates from) {
     int x = from.getX();
     int y = from.getY();
-    ChessColor color = board.figureAt(x, y).value()->getColor();
+    ChessColor color = board->figureAt(x, y).value()->getColor();
     std::vector<std::shared_ptr<Move> > pawn_moves;
 
     int dir = (color == ChessColor::kWhite) ? 1 : -1;
 
     int y1 = y + dir;
-    if (isWithinBounds(x, y1) && !board.figureAt(x, y1).has_value()) {
+    if (isWithinBounds(x, y1) && !board->figureAt(x, y1).has_value()) {
         auto m1 = std::make_shared<DefaultMove>(from, Coordinates{x, y1}, "pawn push");
         if (leavesKingSafe(board, m1, color))
             pawn_moves.emplace_back(std::move(m1));
@@ -63,7 +63,7 @@ std::vector<std::shared_ptr<Move> > LegalMoveGetter::handlePawnMoves(ChessBoard 
         bool on_start = (y == 1 && color == ChessColor::kWhite) || (
                             y == 6 && color == ChessColor::kBlack);
         int y2 = y + 2 * dir;
-        if (on_start && isWithinBounds(x, y2) && !board.figureAt(x, y2).has_value()) {
+        if (on_start && isWithinBounds(x, y2) && !board->figureAt(x, y2).has_value()) {
             auto m2 = std::make_shared<DefaultMove>(from, Coordinates{x, y2}, "pawn double push");
             if (leavesKingSafe(board, m2, color))
                 pawn_moves.emplace_back(std::move(m2));
@@ -83,10 +83,10 @@ std::vector<std::shared_ptr<Move> > LegalMoveGetter::handlePawnMoves(ChessBoard 
     }
 
     // pawn taking regularly
-    std::shared_ptr<Figure> pawn = board.figureAt(x, y).value();
+    std::shared_ptr<Figure> pawn = board->figureAt(x, y).value();
     for (auto taking_move: pawn->getVision(board, from)) {
-        if (board.figureAt(taking_move.getX(), taking_move.getY()).has_value()
-            && board.figureAt(taking_move.getX(), taking_move.getY()).value()->getColor() ==
+        if (board->figureAt(taking_move.getX(), taking_move.getY()).has_value()
+            && board->figureAt(taking_move.getX(), taking_move.getY()).value()->getColor() ==
             Utils::oppositeColor(color)) {
             pawn_moves.emplace_back(std::make_shared<DefaultMove>(from, taking_move, "pawn taking"));
         }
@@ -95,14 +95,14 @@ std::vector<std::shared_ptr<Move> > LegalMoveGetter::handlePawnMoves(ChessBoard 
 }
 
 
-std::vector<std::shared_ptr<Move> > LegalMoveGetter::getLegalMovesForColor(ChessBoard &board, ChessColor color) {
+std::vector<std::shared_ptr<Move> > LegalMoveGetter::getLegalMovesForColor(std::shared_ptr<ChessBoard> board, ChessColor color) {
     std::vector<std::shared_ptr<Move> > legal;
     VisionBoard enemy_pre(board, Utils::oppositeColor(color));
 
     for (int x = 0; x < Constants::kBoardSize; ++x) {
         for (int y = 0; y < Constants::kBoardSize; ++y) {
             Coordinates from{x, y};
-            auto f = board.figureAt(x, y);
+            auto f = board->figureAt(x, y);
             if (!f.has_value() || f.value()->getColor() != color) continue;
 
             if (pawn_position_subscriber_->getPawnPositions().contains(from)) {
@@ -113,7 +113,7 @@ std::vector<std::shared_ptr<Move> > LegalMoveGetter::getLegalMovesForColor(Chess
             }
 
             for (auto to: f.value()->getVision(board, from)) {
-                auto occ = board.figureAt(to.getX(), to.getY());
+                auto occ = board->figureAt(to.getX(), to.getY());
                 if (occ.has_value() && occ.value()->getColor() == color) continue;
 
                 auto mv = std::make_shared<DefaultMove>(from, to, "regular");

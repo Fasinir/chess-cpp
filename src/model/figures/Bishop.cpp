@@ -18,7 +18,7 @@ std::string Bishop::getName() const {
     return "bishop";
 }
 
-std::vector<Coordinates> Bishop::getVision(const ChessBoard &board, const Coordinates &from) const {
+std::vector<Coordinates> Bishop::getVision(std::shared_ptr<ChessBoard> board, const Coordinates &from) const {
     std::vector<Coordinates> v;
     VisionUtil::rayVision(board, from, 1, 1, v);
     VisionUtil::rayVision(board, from, 1, -1, v);

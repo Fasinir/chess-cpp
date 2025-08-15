@@ -48,7 +48,7 @@ void ChessController::startGame(const GameSettings &settings) {
 }
 
 void ChessController::nextTurn() {
-    if (threefold_board_subscriber_->updateAndCheckThreefold(*board_, *castle_subscriber_, *en_passant_subscriber_,
+    if (threefold_board_subscriber_->updateAndCheckThreefold(board_, castle_subscriber_, en_passant_subscriber_,
                                                              white_to_move_)) {
         QMessageBox::information(nullptr, "Game Over", "Draw by threefold repetition");
     }
@@ -64,7 +64,7 @@ void ChessController::nextTurn() {
         return; // Pause the game until promotion is handled
     }
     ChessColor color = white_to_move_ ? ChessColor::kWhite : ChessColor::kBlack;
-    current_legal_moves_ = move_getter_->getLegalMovesForColor(*board_, color);
+    current_legal_moves_ = move_getter_->getLegalMovesForColor(board_, color);
 
     std::cout << (white_to_move_ ? "White" : "Black") << "'s turn. Legal moves: "
             << current_legal_moves_.size() << "\n";
@@ -72,7 +72,7 @@ void ChessController::nextTurn() {
     if (current_legal_moves_.empty()) {
         Coordinates king_pos = king_position_subscriber_->getKingCoordinates(color);
         std::shared_ptr vision_board = std::make_shared<VisionBoard>(
-            *board_, Utils::oppositeColor(color));
+            board_, Utils::oppositeColor(color));
         bool in_check = vision_board->attacks(king_pos);
 
         QString result_text;
@@ -115,7 +115,7 @@ void ChessController::onPieceMoved(int from_row, int from_col, int to_row, int t
 
     std::cout << "Move accepted: " << *it->get() << "\n";
 
-    auto apply_move_result = (*it)->apply(*board_);
+    auto apply_move_result = (*it)->apply(board_);
     move_subscription_manager_->notifySubscribers(apply_move_result);
     emit boardUpdated();
 
