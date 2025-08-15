@@ -113,7 +113,7 @@ void ChessController::onPieceMoved(int from_row, int from_col, int to_row, int t
         return;
     }
 
-    std::cout << "Move accepted: " << *it << "\n";
+    std::cout << "Move accepted: " << *it->get() << "\n";
 
     auto apply_move_result = (*it)->apply(*board_);
     move_subscription_manager_->notifySubscribers(apply_move_result);
