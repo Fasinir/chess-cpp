@@ -2,20 +2,7 @@
 
 #include <utility>
 
-ApplyMoveResult::ApplyMoveResult(const Move &move) : move_(move) {
-    this->taken_figure_ = std::nullopt;
-}
-
-ApplyMoveResult::ApplyMoveResult(const Move &move, std::shared_ptr<Figure> taken_figure) : move_(move),
-    taken_figure_(std::move(taken_figure)) {
-}
-
-ApplyMoveResult::ApplyMoveResult(const Move &move,
-                                 std::optional<std::shared_ptr<Figure> > taken_figure) : move_(move),
-    taken_figure_(std::move(taken_figure)) {
-}
-
-Move ApplyMoveResult::getMove() const {
+std::shared_ptr<Move> ApplyMoveResult::getMove() const {
     return move_;
 }
 

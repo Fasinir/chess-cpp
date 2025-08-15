@@ -9,7 +9,7 @@ FiftyMoveSubscriber::FiftyMoveSubscriber(std::shared_ptr<PawnPositionSubscriber>
 
 void FiftyMoveSubscriber::notify(const ApplyMoveResult &apply_move_result) {
     if (apply_move_result.getTakenFigure().has_value()
-        || pawn_position_subscriber_->getPawnPositions().contains(apply_move_result.getMove().getFrom())) {
+        || pawn_position_subscriber_->getPawnPositions().contains(apply_move_result.getMove()->getFrom())) {
         count_ = 0;
     } else {
         count_++;

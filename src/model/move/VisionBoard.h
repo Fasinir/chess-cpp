@@ -13,8 +13,6 @@ class VisionBoard {
 public:
     VisionBoard() = default;
 
-    explicit VisionBoard(const std::vector<Move> &moves);
-
     VisionBoard(const ChessBoard &board, ChessColor color);
 
     bool attacks(const Coordinates &coordinates) const;

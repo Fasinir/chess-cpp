@@ -1,7 +1,7 @@
 #include "Move.h"
 
 std::ostream &operator<<(std::ostream &os, const Move &move) {
-    os << move.from_ << "->" << move.to_ << "(" << move.type_ << ")";
+    os << move.from_ << "->" << move.to_ << "(" << move.tag_ << ")";
     return os;
 }
 
@@ -13,6 +13,6 @@ Coordinates Move::getTo() const {
     return to_;
 }
 
-MoveType Move::getType() const {
-    return type_;
+std::string Move::getTag() const {
+    return tag_;
 }

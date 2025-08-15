@@ -1,11 +1,5 @@
 #include "VisionBoard.h"
 
-VisionBoard::VisionBoard(const std::vector<Move> &moves) {
-    for (auto move: moves) {
-        board_[move.getTo().getX()][move.getTo().getY()] = true;
-    }
-}
-
 VisionBoard::VisionBoard(const ChessBoard &board, ChessColor color) {
     for (int x = 0; x < Constants::kBoardSize; ++x) {
         for (int y = 0; y < Constants::kBoardSize; ++y) {

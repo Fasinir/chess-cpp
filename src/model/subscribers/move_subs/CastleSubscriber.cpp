@@ -1,20 +1,19 @@
 #include "CastleSubscriber.h"
 
-
-void CastleSubscriber::handleCastles(const Move &move, int y) {
+void CastleSubscriber::handleCastles(std::shared_ptr<Move> move, int y) {
     // king
-    if (move.getFrom() == Coordinates(4, y)) {
+    if (move->getFrom() == Coordinates(4, y)) {
         available_castles_.erase(Coordinates(6, y));
         available_castles_.erase(Coordinates(2, y));
     }
     // left rook
-    else if (move.getFrom() == Coordinates(0, y)
-             || move.getTo() == Coordinates(0, y)) {
+    else if (move->getFrom() == Coordinates(0, y)
+             || move->getTo() == Coordinates(0, y)) {
         available_castles_.erase(Coordinates(2, y));
     }
     // right rook
-    else if (move.getFrom() == Coordinates(7, y)
-             || move.getTo() == Coordinates(7, y)) {
+    else if (move->getFrom() == Coordinates(7, y)
+             || move->getTo() == Coordinates(7, y)) {
         available_castles_.erase(Coordinates(6, y));
     }
 }

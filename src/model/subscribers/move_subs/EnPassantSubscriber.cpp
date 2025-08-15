@@ -22,17 +22,17 @@ void EnPassantSubscriber::setEnPassantCoordinates(Coordinates coordinates) {
 
 void EnPassantSubscriber::notify(const ApplyMoveResult &apply_move_result) {
     en_passant_coordinates_.reset();
-    Move move = apply_move_result.getMove();
-    if (unmoved_pawns_.contains(move.getFrom())) {
-        unmoved_pawns_.erase(move.getFrom());
-        if (std::abs(move.getTo().getY() - move.getFrom().getY()) == 2) {
-            const int kEnPassantYCoordinate = move.getFrom().getY() == 1 ? 2 : 5;
-            setEnPassantCoordinates(Coordinates(move.getFrom().getX(), kEnPassantYCoordinate));
-            std::cout << "En Passant is possible for: " << Coordinates(move.getFrom().getX(), kEnPassantYCoordinate) <<
+    std::shared_ptr move = apply_move_result.getMove();
+    if (unmoved_pawns_.contains(move->getFrom())) {
+        unmoved_pawns_.erase(move->getFrom());
+        if (std::abs(move->getTo().getY() - move->getFrom().getY()) == 2) {
+            const int kEnPassantYCoordinate = move->getFrom().getY() == 1 ? 2 : 5;
+            setEnPassantCoordinates(Coordinates(move->getFrom().getX(), kEnPassantYCoordinate));
+            std::cout << "En Passant is possible for: " << Coordinates(move->getFrom().getX(), kEnPassantYCoordinate) <<
                     std::endl;
         }
     }
-    if (unmoved_pawns_.contains(move.getTo())) {
-        unmoved_pawns_.erase(move.getTo());
+    if (unmoved_pawns_.contains(move->getTo())) {
+        unmoved_pawns_.erase(move->getTo());
     }
 }

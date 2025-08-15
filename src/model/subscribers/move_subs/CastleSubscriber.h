@@ -10,7 +10,7 @@
 class CastleSubscriber final : public MoveSubscriber {
     std::unordered_set<Coordinates> available_castles_;
 
-    void handleCastles(const Move &move, int y);
+    void handleCastles(std::shared_ptr<Move> move, int y);
 
 public:
     CastleSubscriber();

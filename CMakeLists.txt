@@ -50,8 +50,6 @@ set(PROJECT_SOURCES
         src/model/core/ChessColor.h
         src/model/move/MoveType.cpp
         src/PrintUtils.h
-        src/model/move/MoveApplier.cpp
-        src/model/move/MoveApplier.h
         src/model/move/ApplyMoveResult.cpp
         src/model/move/ApplyMoveResult.h
         test/LocalPrintTesting.h
@@ -85,6 +83,12 @@ set(PROJECT_SOURCES
         src/controller/PromotionType.h
         src/model/move/VisionUtil.cpp
         src/model/move/VisionUtil.h
+        src/model/move/DefaultMove.cpp
+        src/model/move/DefaultMove.h
+        src/model/move/EnPassantMove.cpp
+        src/model/move/EnPassantMove.h
+        src/model/move/CastleMove.cpp
+        src/model/move/CastleMove.h
 
 )
 
