@@ -25,9 +25,6 @@ public:
     ~MainWindow() override;
 
 private slots:
-    void startLocalGame();
-
-    void startEngineGame();
 
     void updatePlayer2ColorLabel() const;
 
@@ -40,13 +37,12 @@ private slots:
 
 private:
     Ui::MainWindow *ui_;
-    GameMode current_game_mode_;
     QGraphicsScene *scene_ = nullptr;
     ChessController *controller_ = nullptr;
     GameSettings game_settings_;
 
 
-    void showConfigScreen(GameMode mode);
+    void showConfigScreen();
 
     void drawBoardTiles();
 

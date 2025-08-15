@@ -7,13 +7,7 @@
 
 #include <QTime>
 
-enum class GameMode {
-    kLocal,
-    kEngine
-};
-
 struct GameSettings {
-    GameMode mode_;
     QString player1_name_;
     QString player2_name_;
     QString white_player_name_;

@@ -11,8 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui_->setupUi(this);
     controller_ = new ChessController(this);
 
-    connect(ui_->startLocalGameButton, &QPushButton::clicked, this, &MainWindow::startLocalGame);
-    connect(ui_->startEngineGameButton, &QPushButton::clicked, this, &MainWindow::startEngineGame);
+    connect(ui_->startLocalGameButton, &QPushButton::clicked, this, &MainWindow::showConfigScreen);
     connect(ui_->colorComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::updatePlayer2ColorLabel);
     connect(ui_->startGameButton, &QPushButton::clicked, this, &MainWindow::proceedToGamePage);
     connect(controller_, &ChessController::boardUpdated, this, &MainWindow::drawBoardFromModel);
@@ -23,22 +22,8 @@ MainWindow::~MainWindow() {
     delete ui_;
 }
 
-void MainWindow::startLocalGame() {
-    showConfigScreen(GameMode::kLocal);
-}
-
-void MainWindow::startEngineGame() {
-    showConfigScreen(GameMode::kEngine);
-}
-
-void MainWindow::showConfigScreen(GameMode mode) {
-    current_game_mode_ = mode;
+void MainWindow::showConfigScreen() {
     ui_->stackedWidget->setCurrentWidget(ui_->configPage);
-
-    bool is_engine_game = (mode == GameMode::kEngine);
-    ui_->chessEngineComboBox->setVisible(is_engine_game);
-    ui_->playerTwoLineEdit->setVisible(!is_engine_game);
-    ui_->playerTwoColorLabel->setVisible(!is_engine_game);
 }
 
 void MainWindow::updatePlayer2ColorLabel() const {
@@ -56,16 +41,8 @@ void MainWindow::updatePlayer2ColorLabel() const {
 void MainWindow::proceedToGamePage() {
     GameSettings settings;
 
-    settings.mode_ = current_game_mode_;
     settings.player1_name_ = ui_->playerOneLineEdit->text();
-    settings.base_time_ = ui_->timeEdit->time();
-    settings.increment_seconds_ = ui_->incrementSpinBox->value();
-
-    if (current_game_mode_ == GameMode::kEngine) {
-        settings.player2_name_ = ui_->chessEngineComboBox->currentText();
-    } else {
-        settings.player2_name_ = ui_->playerTwoLineEdit->text();
-    }
+    settings.player2_name_ = ui_->playerTwoLineEdit->text();
 
     QString color_choice = ui_->colorComboBox->currentText();
     if (color_choice == "White") {
@@ -92,8 +69,6 @@ void MainWindow::proceedToGamePage() {
     ui_->blackPlayerNameLabel->setText(settings.black_player_name_);
 
     QString formatted_time = settings.base_time_.toString("hh:mm:ss");
-    ui_->whitePlayerTimerLabel->setText(formatted_time);
-    ui_->blackPlayerTimerLabel->setText(formatted_time);
 
     ui_->stackedWidget->setCurrentWidget(ui_->gamePage);
     drawBoardTiles();
