@@ -46,6 +46,55 @@ std::optional<std::shared_ptr<Move> > LegalMoveGetter::tryCastle(const ChessBoar
     return std::make_shared<CastleMove>(king_from, dest, "castle");
 }
 
+std::vector<std::shared_ptr<Move> > LegalMoveGetter::handlePawnMoves(ChessBoard &board, Coordinates from) {
+    int x = from.getX();
+    int y = from.getY();
+    ChessColor color = board.figureAt(x, y).value()->getColor();
+    std::vector<std::shared_ptr<Move> > pawn_moves;
+
+    int dir = (color == ChessColor::kWhite) ? 1 : -1;
+
+    int y1 = y + dir;
+    if (isWithinBounds(x, y1) && !board.figureAt(x, y1).has_value()) {
+        auto m1 = std::make_shared<DefaultMove>(from, Coordinates{x, y1}, "pawn push");
+        if (leavesKingSafe(board, m1, color))
+            pawn_moves.emplace_back(std::move(m1));
+
+        bool on_start = (y == 1 && color == ChessColor::kWhite) || (
+                            y == 6 && color == ChessColor::kBlack);
+        int y2 = y + 2 * dir;
+        if (on_start && isWithinBounds(x, y2) && !board.figureAt(x, y2).has_value()) {
+            auto m2 = std::make_shared<DefaultMove>(from, Coordinates{x, y2}, "pawn double push");
+            if (leavesKingSafe(board, m2, color))
+                pawn_moves.emplace_back(std::move(m2));
+        }
+    }
+
+    int cap_y = y + dir;
+    for (int dx: {-1, 1}) {
+        int cx = x + dx;
+        if (!isWithinBounds(cx, cap_y)) continue;
+        Coordinates to{cx, cap_y};
+        if (en_passant_subscriber_->canBeTakenEnPassant(to)) {
+            auto m = std::make_shared<EnPassantMove>(from, to, "en passant");
+            if (leavesKingSafe(board, m, color))
+                pawn_moves.emplace_back(std::move(m));
+        }
+    }
+
+    // pawn taking regularly
+    std::shared_ptr<Figure> pawn = board.figureAt(x, y).value();
+    for (auto taking_move: pawn->getVision(board, from)) {
+        if (board.figureAt(taking_move.getX(), taking_move.getY()).has_value()
+            && board.figureAt(taking_move.getX(), taking_move.getY()).value()->getColor() ==
+            Utils::oppositeColor(color)) {
+            pawn_moves.emplace_back(std::make_shared<DefaultMove>(from, taking_move, "pawn taking"));
+        }
+    }
+    return pawn_moves;
+}
+
+
 std::vector<std::shared_ptr<Move> > LegalMoveGetter::getLegalMovesForColor(ChessBoard &board, ChessColor color) {
     std::vector<std::shared_ptr<Move> > legal;
     VisionBoard enemy_pre(board, Utils::oppositeColor(color));
@@ -56,6 +105,13 @@ std::vector<std::shared_ptr<Move> > LegalMoveGetter::getLegalMovesForColor(Chess
             auto f = board.figureAt(x, y);
             if (!f.has_value() || f.value()->getColor() != color) continue;
 
+            if (pawn_position_subscriber_->getPawnPositions().contains(from)) {
+                for (auto pawn_move: handlePawnMoves(board, from)) {
+                    legal.emplace_back(pawn_move);
+                }
+                continue;
+            }
+
             for (auto to: f.value()->getVision(board, from)) {
                 auto occ = board.figureAt(to.getX(), to.getY());
                 if (occ.has_value() && occ.value()->getColor() == color) continue;
@@ -65,48 +121,15 @@ std::vector<std::shared_ptr<Move> > LegalMoveGetter::getLegalMovesForColor(Chess
                     legal.emplace_back(std::move(mv));
             }
 
-            if (pawn_position_subscriber_->getPawnPositions().contains(from)) {
-                int dir = (color == ChessColor::kWhite) ? 1 : -1;
-
-                int y1 = y + dir;
-                if (isWithinBounds(x, y1) && !board.figureAt(x, y1).has_value()) {
-                    auto m1 = std::make_shared<DefaultMove>(from, Coordinates{x, y1}, "pawn push");
-                    if (leavesKingSafe(board, m1, color))
-                        legal.emplace_back(std::move(m1));
-
-                    bool on_start = (y == 1 && color == ChessColor::kWhite) || (
-                                        y == 6 && color == ChessColor::kBlack);
-                    int y2 = y + 2 * dir;
-                    if (on_start && isWithinBounds(x, y2) && !board.figureAt(x, y2).has_value()) {
-                        auto m2 = std::make_shared<DefaultMove>(from, Coordinates{x, y2}, "pawn double push");
-                        if (leavesKingSafe(board, m2, color))
-                            legal.emplace_back(std::move(m2));
-                    }
-                }
-
-                int cap_y = y + dir;
-                for (int dx: {-1, 1}) {
-                    int cx = x + dx;
-                    if (!isWithinBounds(cx, cap_y)) continue;
-                    Coordinates to{cx, cap_y};
-                    if (en_passant_subscriber_->canBeTakenEnPassant(to)) {
-                        auto m = std::make_shared<EnPassantMove>(from, to, "en passant");
-                        if (leavesKingSafe(board, m, color))
-                            legal.emplace_back(std::move(m));
-                    }
-                }
-            }
-
             if (king_position_subscriber_->getKingCoordinates(color) == from
                 && !enemy_pre.attacks(from)) {
-                if (auto m = tryCastle(board, from, /*queen_side=*/true, enemy_pre)) {
+                if (auto m = tryCastle(board, from, true, enemy_pre)) {
                     legal.emplace_back(std::move(*m));
                 }
-                if (auto m = tryCastle(board, from, /*queen_side=*/false, enemy_pre)) {
+                if (auto m = tryCastle(board, from, false, enemy_pre)) {
                     legal.emplace_back(std::move(*m));
                 }
             }
-            std::cout << "finished processing " << from.toAlgebraicNotation() << std::endl;
         }
     }
     return legal;
