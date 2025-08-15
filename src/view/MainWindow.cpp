@@ -22,6 +22,30 @@ MainWindow::~MainWindow() {
     delete ui_;
 }
 
+void MainWindow::showLegalMoveHighlights(int from_row, int from_col) {
+    clearLegalMoveHighlights();
+    const int tileSize = 80;
+    auto dests = controller_->legalDestinationsFrom(from_col, from_row);
+
+    for (const auto &c: dests) {
+        int col = c.getX();
+        int row = c.getY();
+
+        QRectF square(col * tileSize, (7 - row) * tileSize, tileSize, tileSize);
+        auto *rect = scene_->addRect(square, Qt::NoPen, QColor(0, 200, 0, 90)); // semi‑transparent green
+        rect->setZValue(0.5); // under pieces (pieces are at 1)
+        move_highlights_.push_back(rect);
+    }
+}
+
+void MainWindow::clearLegalMoveHighlights() {
+    for (auto *it: move_highlights_) {
+        scene_->removeItem(it);
+        delete it;
+    }
+    move_highlights_.clear();
+}
+
 void MainWindow::showConfigScreen() {
     ui_->stackedWidget->setCurrentWidget(ui_->configPage);
 }
@@ -83,6 +107,9 @@ void MainWindow::drawBoardTiles() {
     ui_->boardGraphicsView->setScene(scene_);
     ui_->boardGraphicsView->setRenderHint(QPainter::Antialiasing);
 
+    // NEW: listen for clicks on the scene
+    scene_->installEventFilter(this);
+
     const int kTileSize = 80;
 
     for (int row = 0; row < 8; ++row) {
@@ -119,10 +146,34 @@ void MainWindow::placePiece(const QString &svg_path, const ChessColor &color, in
     connect(piece, &DraggablePiece::pieceMoved,
             controller_, &ChessController::onPieceMoved);
     connect(controller_, &ChessController::illegalMoveAttempted, piece, &DraggablePiece::revertToOriginalPosition);
+    connect(piece, &DraggablePiece::pieceSelected,
+            this, [this](int r, int c) { showLegalMoveHighlights(r, c); });
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == scene_ && event->type() == QEvent::GraphicsSceneMousePress) {
+        auto* ev = static_cast<QGraphicsSceneMouseEvent*>(event);
+
+        // Check what was clicked at that scene position
+        const auto items_at_pos = scene_->items(ev->scenePos());
+
+        bool clicked_piece = false;
+        for (QGraphicsItem* it : items_at_pos) {
+            if (qgraphicsitem_cast<DraggablePiece*>(it)) {
+                clicked_piece = true;
+                break;
+            }
+        }
+
+        if (!clicked_piece) {
+            clearLegalMoveHighlights();
+        }
+    }
+    return QMainWindow::eventFilter(obj, event);
 }
 
 void MainWindow::drawBoardFromModel() {
-    // Remove all pieces, but leave the board tiles
+    clearLegalMoveHighlights();
     for (auto item: scene_->items()) {
         auto *piece = dynamic_cast<DraggablePiece *>(item);
         if (piece) {

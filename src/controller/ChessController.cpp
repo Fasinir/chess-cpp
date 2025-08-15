@@ -86,6 +86,15 @@ void ChessController::nextTurn() {
     }
 }
 
+std::vector<Coordinates> ChessController::legalDestinationsFrom(int col, int row) const {
+    Coordinates from(col, row);
+    std::vector<Coordinates> outs;
+    for (const auto &m: current_legal_moves_) {
+        if (m->getFrom() == from) outs.emplace_back(m->getTo());
+    }
+    return outs;
+}
+
 void ChessController::onPieceMoved(int from_row, int from_col, int to_row, int to_col) {
     Coordinates from(from_col, from_row);
     Coordinates to(to_col, to_row);

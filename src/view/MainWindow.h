@@ -25,7 +25,6 @@ public:
     ~MainWindow() override;
 
 private slots:
-
     void updatePlayer2ColorLabel() const;
 
     void proceedToGamePage();
@@ -34,19 +33,26 @@ private slots:
 
     void handlePromotionRequested(const Coordinates &coordinates, const ChessColor &color);
 
-
 private:
     Ui::MainWindow *ui_;
     QGraphicsScene *scene_ = nullptr;
     ChessController *controller_ = nullptr;
     GameSettings game_settings_;
 
+    QVector<QGraphicsItem *> move_highlights_; // green overlays
+
+    void showLegalMoveHighlights(int from_row, int from_col);
+
+    void clearLegalMoveHighlights();
 
     void showConfigScreen();
 
     void drawBoardTiles();
 
     void placePiece(const QString &svg_path, const ChessColor &color, int row, int col);
+
+protected:
+    bool eventFilter(QObject* obj, QEvent* event) override;
 };
 
 #endif // MAINWINDOW_H

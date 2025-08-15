@@ -21,6 +21,8 @@ public:
 signals:
     void pieceMoved(int from_row, int from_col, int to_row, int to_col);
 
+    void pieceSelected(int row, int col);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 

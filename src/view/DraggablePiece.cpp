@@ -38,6 +38,7 @@ DraggablePiece::DraggablePiece(const QString &svg_path, const ChessColor &color,
 
 void DraggablePiece::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsSvgItem::mousePressEvent(event);
+    emit pieceSelected(original_row_, original_col_);
 }
 
 void DraggablePiece::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {

@@ -23,6 +23,8 @@ public:
 
     [[nodiscard]] ChessBoard *getBoard() const { return board_.get(); }
 
+    std::vector<Coordinates> legalDestinationsFrom(int col, int row) const;
+
 public slots:
     void onPieceMoved(int from_row, int from_col, int to_row, int to_col);
 
