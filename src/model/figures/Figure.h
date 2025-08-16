@@ -4,7 +4,6 @@
 #include <iostream>
 
 #include "../core/ChessColor.h"
-#include "../move/MoveType.h"
 #include "../move/Coordinates.h"
 
 class ChessBoard;
@@ -12,7 +11,6 @@ class ChessBoard;
 class Figure {
 protected:
     ChessColor color_;
-    std::vector<MoveType> move_types_;
 
 public:
     explicit Figure(const ChessColor &color) : color_(color) {
@@ -25,8 +23,6 @@ public:
     [[nodiscard]] virtual std::unique_ptr<Figure> clone() const = 0;
 
     [[nodiscard]] virtual std::string getName() const = 0;
-
-    std::vector<MoveType> &getMoveTypes();
 
     [[nodiscard]] const ChessColor &getColor() const;
 

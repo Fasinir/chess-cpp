@@ -3,9 +3,6 @@
 #include "../move/VisionUtil.h"
 
 Queen::Queen(ChessColor color) : Figure(color) {
-    this->move_types_ = std::vector{
-        MoveType::kRook, MoveType::kBishop
-    };
 }
 
 char Queen::getSymbol() const {

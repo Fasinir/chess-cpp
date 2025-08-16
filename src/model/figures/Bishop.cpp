@@ -3,7 +3,6 @@
 #include "../move/VisionUtil.h"
 
 Bishop::Bishop(const ChessColor &color) : Figure(color) {
-    this->move_types_ = std::vector{MoveType::kBishop};
 }
 
 char Bishop::getSymbol() const {

@@ -3,7 +3,6 @@
 #include <utility>
 #include <vector>
 
-#include "DefaultMove.h"
 #include "../subscribers/move_subs/KingPositionSubscriber.h"
 #include "Move.h"
 #include "VisionBoard.h"
@@ -17,8 +16,6 @@ class LegalMoveGetter {
     std::shared_ptr<CastleSubscriber> castle_subscriber_;
     std::shared_ptr<KingPositionSubscriber> king_position_subscriber_;
     std::shared_ptr<PawnPositionSubscriber> pawn_position_subscriber_;
-
-    static bool isWithinBounds(int x, int y);
 
     bool leavesKingSafe(std::shared_ptr<ChessBoard> board, std::shared_ptr<Move> move, ChessColor &color);
 

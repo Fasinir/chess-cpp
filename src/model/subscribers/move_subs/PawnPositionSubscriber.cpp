@@ -1,7 +1,7 @@
 #include "PawnPositionSubscriber.h"
 
 #include <utility>
-#include "../../core/Constants.h"
+#include "../../../Constants.h"
 
 PawnPositionSubscriber::PawnPositionSubscriber(std::shared_ptr<EnPassantSubscriber> en_passant_subscriber) {
     this->en_passant_subscriber_ = std::move(en_passant_subscriber);
@@ -20,7 +20,6 @@ void PawnPositionSubscriber::notify(const ApplyMoveResult &apply_move_result) {
     }
     if (pawn_positions_.contains(move->getFrom())) {
         pawn_positions_.erase(move->getFrom());
-        // if no promotion update the position
         if (move->getTo().getY() != 0 && move->getTo().getY() != 7) {
             pawn_positions_.insert(move->getTo());
             std::cout << "Regular move" << std::endl;

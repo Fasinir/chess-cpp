@@ -1,6 +1,6 @@
 #include "Coordinates.h"
 
-#include "../core/Constants.h"
+#include "../../Constants.h"
 #include <algorithm>
 
 std::ostream &operator<<(std::ostream &os, const Coordinates &coordinates) {

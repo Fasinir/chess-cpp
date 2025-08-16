@@ -3,7 +3,6 @@
 #include "../move/VisionUtil.h"
 
 Rook::Rook(ChessColor color) : Figure(color) {
-    this->move_types_ = std::vector{MoveType::kRook};
 }
 
 char Rook::getSymbol() const {

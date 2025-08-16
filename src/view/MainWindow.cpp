@@ -6,6 +6,10 @@
 
 #include "PromotionDialog.h"
 
+const QColor MainWindow::kHighlightColor = QColor(0, 200, 0, 90);
+const QColor MainWindow::kWhiteFieldColor = QColor(0xf0d9b5);
+const QColor MainWindow::kBlackFieldColor = QColor(0xb58863);
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui_(new Ui::MainWindow) {
     ui_->setupUi(this);
@@ -24,16 +28,15 @@ MainWindow::~MainWindow() {
 
 void MainWindow::showLegalMoveHighlights(int from_row, int from_col) {
     clearLegalMoveHighlights();
-    const int tileSize = 80;
     auto dests = controller_->legalDestinationsFrom(from_col, from_row);
 
     for (const auto &c: dests) {
         int col = c.getX();
         int row = c.getY();
 
-        QRectF square(col * tileSize, (7 - row) * tileSize, tileSize, tileSize);
-        auto *rect = scene_->addRect(square, Qt::NoPen, QColor(0, 200, 0, 90)); // semi‑transparent green
-        rect->setZValue(0.5); // under pieces (pieces are at 1)
+        QRectF square(col * kTileSize, (7 - row) * kTileSize, kTileSize, kTileSize);
+        auto *rect = scene_->addRect(square, Qt::NoPen, kHighlightColor);
+        rect->setZValue(0.5);
         move_highlights_.push_back(rect);
     }
 }
@@ -85,14 +88,10 @@ void MainWindow::proceedToGamePage() {
         }
     }
 
-    // Store or pass to controller
     this->game_settings_ = settings;
 
-    // Update UI
     ui_->whitePlayerNameLabel->setText(settings.white_player_name_);
     ui_->blackPlayerNameLabel->setText(settings.black_player_name_);
-
-    QString formatted_time = settings.base_time_.toString("hh:mm:ss");
 
     ui_->stackedWidget->setCurrentWidget(ui_->gamePage);
     drawBoardTiles();
@@ -107,33 +106,27 @@ void MainWindow::drawBoardTiles() {
     ui_->boardGraphicsView->setScene(scene_);
     ui_->boardGraphicsView->setRenderHint(QPainter::Antialiasing);
 
-    // NEW: listen for clicks on the scene
     scene_->installEventFilter(this);
-
-    const int kTileSize = 80;
 
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
             QRectF square(col * kTileSize, row * kTileSize, kTileSize, kTileSize);
             auto *rect = scene_->addRect(square);
 
-            QColor color = (row + col) % 2 == 0 ? QColor(0xf0d9b5) : QColor(0xb58863);
+            QColor color = (row + col) % 2 == 0 ? kWhiteFieldColor : kBlackFieldColor;
             rect->setBrush(color);
         }
     }
     // Set fixed scene size to exactly fit the board
     scene_->setSceneRect(0, 0, 8 * kTileSize, 8 * kTileSize);
 
-    // Disable scrollbars
     ui_->boardGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui_->boardGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    // Optional: Resize view to fit the scene exactly (if view size changes)
     ui_->boardGraphicsView->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
 }
 
 void MainWindow::placePiece(const QString &svg_path, const ChessColor &color, int row, int col) {
-    const int kTileSize = 80;
     auto *piece = new DraggablePiece(svg_path, color, row, col, kTileSize);
     scene_->addItem(piece);
 
@@ -152,14 +145,14 @@ void MainWindow::placePiece(const QString &svg_path, const ChessColor &color, in
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     if (obj == scene_ && event->type() == QEvent::GraphicsSceneMousePress) {
-        auto* ev = static_cast<QGraphicsSceneMouseEvent*>(event);
+        auto *ev = static_cast<QGraphicsSceneMouseEvent *>(event);
 
         // Check what was clicked at that scene position
         const auto items_at_pos = scene_->items(ev->scenePos());
 
         bool clicked_piece = false;
-        for (QGraphicsItem* it : items_at_pos) {
-            if (qgraphicsitem_cast<DraggablePiece*>(it)) {
+        for (QGraphicsItem *it: items_at_pos) {
+            if (qgraphicsitem_cast<DraggablePiece *>(it)) {
                 clicked_piece = true;
                 break;
             }
@@ -184,7 +177,7 @@ void MainWindow::drawBoardFromModel() {
 
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
-            auto opt_figure = controller_->getBoard()->figureAt(col, row);
+            auto opt_figure = controller_->getBoard()->figureAt(Coordinates(col, row));
             if (!opt_figure.has_value()) continue;
 
             auto fig = opt_figure.value();

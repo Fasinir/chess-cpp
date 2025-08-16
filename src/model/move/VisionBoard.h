@@ -3,8 +3,7 @@
 #include <array>
 
 #include "Coordinates.h"
-#include "Move.h"
-#include "../core/Constants.h"
+#include "../../Constants.h"
 #include  "../core/ChessBoard.h"
 
 class VisionBoard {

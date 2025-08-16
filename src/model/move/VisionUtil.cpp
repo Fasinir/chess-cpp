@@ -4,9 +4,9 @@ void VisionUtil::rayVision(std::shared_ptr<ChessBoard> board, const Coordinates 
                            std::vector<Coordinates> &out) {
     int x = from.getX() + dx;
     int y = from.getY() + dy;
-    while (x >= 0 && y >= 0 && x < Constants::kBoardSize && y < Constants::kBoardSize) {
+    while (Constants::InBounds(x, y)) {
         out.emplace_back(x, y);
-        if (board->figureAt(x, y).has_value()) break; // blocked
+        if (board->figureAt(Coordinates(x, y)).has_value()) break;
         x += dx;
         y += dy;
     }

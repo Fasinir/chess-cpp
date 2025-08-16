@@ -2,7 +2,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 
-#include "../model/core/Constants.h"
+#include "../Constants.h"
 
 void DraggablePiece::moveToSquare(int row, int col) {
     QRectF bounds = boundingRect();
@@ -27,7 +27,6 @@ DraggablePiece::DraggablePiece(const QString &svg_path, const ChessColor &color,
     setFlags(ItemIsMovable | ItemSendsScenePositionChanges);
     setZValue(1);
 
-    // Initial positioning
     QRectF bounds = QGraphicsSvgItem::boundingRect();
     qreal scale_factor = tile_size / bounds.width();
     setScale(scale_factor);

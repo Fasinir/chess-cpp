@@ -3,7 +3,7 @@
 
 #include <array>
 #include "Field.h"
-#include "Constants.h"
+#include "../../Constants.h"
 #include <optional>
 
 #include "../figures/Figure.h"
@@ -18,11 +18,11 @@ public:
 
     static std::unique_ptr<ChessBoard> makeStandardBoard();
 
-    std::optional<std::shared_ptr<Figure> > placeFigure(const std::shared_ptr<Figure> &figure, int x, int y);
+    std::optional<std::shared_ptr<Figure> > placeFigure(const std::shared_ptr<Figure> &figure, const Coordinates &coordinates);
 
-    [[nodiscard]] std::optional<std::shared_ptr<Figure> > figureAt(int x, int y) const;
+    [[nodiscard]] std::optional<std::shared_ptr<Figure> > figureAt(const Coordinates &coordinates) const;
 
-    void removeFigure(int x, int y);
+    void removeFigure(const Coordinates &coordinates);
 
     friend std::ostream &operator<<(std::ostream &os, const ChessBoard &board);
 

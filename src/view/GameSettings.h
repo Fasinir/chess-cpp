@@ -12,6 +12,4 @@ struct GameSettings {
     QString player2_name_;
     QString white_player_name_;
     QString black_player_name_;
-    QTime base_time_;
-    int increment_seconds_;
 };

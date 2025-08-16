@@ -1,4 +1,3 @@
-// PromotionDialog.h
 #pragma once
 #include <QDialog>
 #include "../controller/ChessController.h"

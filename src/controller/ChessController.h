@@ -35,7 +35,7 @@ signals:
 
     void illegalMoveAttempted();
 
-    void boardUpdated(); // UI can react to this
+    void boardUpdated();
 
 private:
     std::shared_ptr<ChessBoard> board_;

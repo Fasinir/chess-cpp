@@ -22,7 +22,7 @@ set(PROJECT_SOURCES
         src/controller/ChessController.h
         src/view/DraggablePiece.cpp
         src/view/DraggablePiece.h
-        src/model/core/Constants.h
+        src/Constants.h
         src/model/core/ChessBoard.cpp
         src/model/core/ChessBoard.h
         src/model/core/Field.cpp
@@ -46,9 +46,7 @@ set(PROJECT_SOURCES
         src/model/move/Coordinates.h
         src/model/move/Move.cpp
         src/model/move/Move.h
-        src/model/move/MoveType.h
         src/model/core/ChessColor.h
-        src/model/move/MoveType.cpp
         src/PrintUtils.h
         src/model/move/ApplyMoveResult.cpp
         src/model/move/ApplyMoveResult.h

@@ -8,13 +8,11 @@ PromotionDialog::PromotionDialog(ChessColor color, QWidget *parent)
     ui_->setupUi(this);
     setWindowTitle("Choose promotion");
 
-    // Hook up button clicks
     connect(ui_->queenButton, &QPushButton::clicked, this, &PromotionDialog::chooseQueen);
     connect(ui_->rookButton, &QPushButton::clicked, this, &PromotionDialog::chooseRook);
     connect(ui_->bishopButton, &QPushButton::clicked, this, &PromotionDialog::chooseBishop);
     connect(ui_->knightButton, &QPushButton::clicked, this, &PromotionDialog::chooseKnight);
 
-    // Apply colored icons
     setIconsForColor(color);
 }
 

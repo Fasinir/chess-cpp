@@ -10,9 +10,9 @@ class DraggablePiece final : public QGraphicsSvgItem {
     Q_OBJECT
 
 public:
-    void moveToSquare(int row, int col); // Called from controller/view
+    void moveToSquare(int row, int col);
 
-    void revertToOriginalPosition(); // Called on illegal move
+    void revertToOriginalPosition();
 
     DraggablePiece(const QString &svg_path, const ChessColor &color, int start_row, int start_col, int tile_size);
 

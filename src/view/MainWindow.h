@@ -39,7 +39,12 @@ private:
     ChessController *controller_ = nullptr;
     GameSettings game_settings_;
 
-    QVector<QGraphicsItem *> move_highlights_; // green overlays
+    static const QColor kHighlightColor;
+    static const QColor kWhiteFieldColor;
+    static const QColor kBlackFieldColor;
+    static constexpr int kTileSize = 80;
+
+    QVector<QGraphicsItem *> move_highlights_;
 
     void showLegalMoveHighlights(int from_row, int from_col);
 
@@ -52,7 +57,7 @@ private:
     void placePiece(const QString &svg_path, const ChessColor &color, int row, int col);
 
 protected:
-    bool eventFilter(QObject* obj, QEvent* event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 };
 
 #endif // MAINWINDOW_H

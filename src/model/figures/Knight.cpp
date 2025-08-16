@@ -1,8 +1,7 @@
 #include "Knight.h"
-#include "../core/Constants.h"
+#include "../../Constants.h"
 
 Knight::Knight(const ChessColor &color) : Figure(color) {
-    this->move_types_ = std::vector{MoveType::kKnight};
 }
 
 char Knight::getSymbol() const {
@@ -24,7 +23,7 @@ std::vector<Coordinates> Knight::getVision(std::shared_ptr<ChessBoard> board, co
     for (int i = 0; i < 8; ++i) {
         int x = from.getX() + dx[i];
         int y = from.getY() + dy[i];
-        if (x >= 0 && y >= 0 && x < Constants::kBoardSize && y < Constants::kBoardSize)
+        if (Constants::InBounds(x, y))
             v.emplace_back(x, y);
     }
     return v;

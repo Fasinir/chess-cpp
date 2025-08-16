@@ -1,10 +1,7 @@
 #include "Pawn.h"
-#include "../core/Constants.h"
+#include "../../Constants.h"
 
 Pawn::Pawn(ChessColor color) : Figure(color) {
-    this->move_types_ = std::vector{
-        MoveType::kPawnTaking, MoveType::kPawnSingleMove, MoveType::kPawnDoubleMove, MoveType::kEnPassant
-    };
 }
 
 char Pawn::getSymbol() const {
@@ -25,9 +22,11 @@ std::vector<Coordinates> Pawn::getVision(std::shared_ptr<ChessBoard> board, cons
     int y = from.getY() + dir;
     int x1 = from.getX() + 1;
     int x2 = from.getX() - 1;
-    if (y >= 0 && y < Constants::kBoardSize) {
-        if (x1 >= 0 && x1 < Constants::kBoardSize) v.emplace_back(x1, y);
-        if (x2 >= 0 && x2 < Constants::kBoardSize) v.emplace_back(x2, y);
+    if (Constants::InBounds(x1, y)) {
+        v.emplace_back(x1, y);
+    }
+    if (Constants::InBounds(x2, y)) {
+        v.emplace_back(x2, y);
     }
     return v;
 }
