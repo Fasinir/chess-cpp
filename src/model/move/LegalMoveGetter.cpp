@@ -22,20 +22,30 @@ std::optional<std::shared_ptr<Move> > LegalMoveGetter::tryCastle(std::shared_ptr
                                                                  bool is_castling_queen_side,
                                                                  const VisionBoard &enemy_vision) {
     int y = king_from.getY();
-    int dest_x = is_castling_queen_side ? 2 : 6;
+    int dest_x = is_castling_queen_side ? Constants::kQueensideCastlingFile : Constants::kKingsideCastlingFile;
     Coordinates dest(dest_x, y);
 
     if (!castle_subscriber_->canCastle(dest)) return std::nullopt;
     if (enemy_vision.attacks(king_from)) return std::nullopt;
 
-    int empty_start = is_castling_queen_side ? 1 : 5;
-    int empty_end = is_castling_queen_side ? 3 : 6;
+    // fields between rook and king must be empty
+    int empty_start = is_castling_queen_side
+                          ? Constants::kQueensideCastlingRookFile + 1
+                          : Constants::kKingStartingFile + 1;
+    int empty_end = is_castling_queen_side
+                        ? Constants::kKingStartingFile - 1
+                        : Constants::kKingsideCastlingRookFile - 1;
     for (int i = empty_start; i <= empty_end; ++i)
         if (board->figureAt(Coordinates(i, y)).has_value())
             return std::nullopt;
 
-    int no_check_start = is_castling_queen_side ? 2 : 5;
-    int no_check_end = is_castling_queen_side ? 4 : 6;
+    // an enemy must not have vision on 2 fields left or right from king
+    int no_check_start = is_castling_queen_side
+                             ? Constants::kKingStartingFile - 2
+                             : Constants::kKingStartingFile;
+    int no_check_end = is_castling_queen_side
+                           ? Constants::kKingStartingFile
+                           : Constants::kKingStartingFile + 2;
     for (int i = no_check_start; i <= no_check_end; ++i)
         if (enemy_vision.attacks(Coordinates(i, y)))
             return std::nullopt;
@@ -58,8 +68,8 @@ std::vector<std::shared_ptr<Move> > LegalMoveGetter::handlePawnMoves(std::shared
         if (leavesKingSafe(board, m1, color))
             pawn_moves.emplace_back(std::move(m1));
 
-        bool on_start = (y == 1 && color == ChessColor::kWhite) || (
-                            y == 6 && color == ChessColor::kBlack);
+        bool on_start = (y == Constants::kWhitePawnStartRank && color == ChessColor::kWhite) || (
+                            y == Constants::kBlackPawnStartRank && color == ChessColor::kBlack);
         int y2 = y + 2 * dir;
         if (on_start && Constants::InBounds(x, y2) && !board->figureAt(Coordinates(x, y2)).has_value()) {
             auto m2 = std::make_shared<DefaultMove>(from, Coordinates{x, y2}, "pawn double push");

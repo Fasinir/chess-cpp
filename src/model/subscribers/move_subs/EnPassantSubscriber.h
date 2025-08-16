@@ -4,7 +4,7 @@
 #include <unordered_set>
 
 #include "MoveSubscriber.h"
-#include "../../move/Coordinates.h"
+#include "../../core/Coordinates.h"
 
 class EnPassantSubscriber final : public MoveSubscriber {
     std::unordered_set<Coordinates> unmoved_pawns_;

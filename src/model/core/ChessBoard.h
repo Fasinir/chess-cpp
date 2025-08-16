@@ -18,7 +18,8 @@ public:
 
     static std::unique_ptr<ChessBoard> makeStandardBoard();
 
-    std::optional<std::shared_ptr<Figure> > placeFigure(const std::shared_ptr<Figure> &figure, const Coordinates &coordinates);
+    std::optional<std::shared_ptr<Figure> > placeFigure(const std::shared_ptr<Figure> &figure,
+                                                        const Coordinates &coordinates);
 
     [[nodiscard]] std::optional<std::shared_ptr<Figure> > figureAt(const Coordinates &coordinates) const;
 

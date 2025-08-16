@@ -7,7 +7,7 @@ ApplyMoveResult EnPassantMove::apply(std::shared_ptr<ChessBoard> board) {
     board->removeFigure(from_);
 
     int taken_x = to_.getX();
-    int taken_y = (to_.getY() == 2) ? (to_.getY() + 1) : (to_.getY() - 1);
+    int taken_y = (to_.getY() == Constants::kWhiteEnPassantTakingRank) ? (to_.getY() + 1) : (to_.getY() - 1);
     auto taken = board->figureAt(Coordinates(taken_x, taken_y));
     board->removeFigure(Coordinates(taken_x, taken_y));
 
@@ -21,6 +21,6 @@ void EnPassantMove::undo(std::shared_ptr<ChessBoard> board,
     board->removeFigure(to_);
 
     int taken_x = to_.getX();
-    int taken_y = (to_.getY() == 2) ? (to_.getY() + 1) : (to_.getY() - 1);
+    int taken_y = (to_.getY() == Constants::kWhiteEnPassantTakingRank) ? (to_.getY() + 1) : (to_.getY() - 1);
     board->placeFigure(optional_taken_figure.value(), Coordinates(taken_x, taken_y));
 }

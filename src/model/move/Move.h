@@ -1,6 +1,6 @@
 #ifndef MOVE_H
 #define MOVE_H
-#include "Coordinates.h"
+#include "../core/Coordinates.h"
 #include "../core/ChessBoard.h"
 
 class ApplyMoveResult;

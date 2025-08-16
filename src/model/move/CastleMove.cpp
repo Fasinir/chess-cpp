@@ -6,11 +6,16 @@ ApplyMoveResult CastleMove::apply(std::shared_ptr<ChessBoard> board) {
     board->placeFigure(king, to_);
     board->removeFigure(from_);
 
-    int rook_x = (to_.getX() == 2) ? 0 : 7;
+    int rook_x = (to_.getX() == Constants::kQueensideCastlingFile)
+                     ? Constants::kQueensideCastlingRookFile
+                     : Constants::kKingsideCastlingRookFile;
     int rook_y = to_.getY();
 
     auto rook = board->figureAt(Coordinates(rook_x, rook_y)).value();
-    int new_rook_x = (to_.getX() == 2) ? 3 : 5;
+    // rook always lands "behind" king
+    int new_rook_x = (to_.getX() == Constants::kQueensideCastlingFile)
+                         ? Constants::kQueensideCastlingFile + 1
+                         : Constants::kKingsideCastlingFile - 1;
     board->placeFigure(rook, Coordinates(new_rook_x, from_.getY()));
     board->removeFigure(Coordinates(rook_x, rook_y));
 
@@ -23,10 +28,14 @@ void CastleMove::undo(std::shared_ptr<ChessBoard> board,
     board->placeFigure(king, from_);
     board->removeFigure(to_);
 
-    int cur_rook_x = (to_.getX() == 2) ? 3 : 5;
+    int cur_rook_x = (to_.getX() == Constants::kQueensideCastlingFile)
+                         ? Constants::kQueensideCastlingFile + 1
+                         : Constants::kKingsideCastlingFile - 1;
     int cur_rook_y = to_.getY();
     auto rook = board->figureAt(Coordinates(cur_rook_x, cur_rook_y)).value();
-    int new_rook_x = (to_.getX() == 2) ? 0 : 7;
+    int new_rook_x = (to_.getX() == Constants::kQueensideCastlingFile)
+                         ? Constants::kQueensideCastlingRookFile
+                         : Constants::kKingsideCastlingRookFile;
     board->placeFigure(rook, Coordinates(new_rook_x, to_.getY()));
     board->removeFigure(Coordinates(cur_rook_x, cur_rook_y));
 }

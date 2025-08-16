@@ -2,7 +2,7 @@
 #define VISIONBOARD_H
 #include <array>
 
-#include "Coordinates.h"
+#include "../core/Coordinates.h"
 #include "../../Constants.h"
 #include  "../core/ChessBoard.h"
 

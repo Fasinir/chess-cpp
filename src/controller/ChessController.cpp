@@ -1,6 +1,6 @@
 #include "ChessController.h"
 
-#include "../model/move/Coordinates.h"
+#include "../model/core/Coordinates.h"
 #include "../model/subscribers/move_subs/KingPositionSubscriber.h"
 #include <QMessageBox>
 #include <iostream>

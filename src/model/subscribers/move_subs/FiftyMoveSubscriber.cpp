@@ -17,5 +17,5 @@ void FiftyMoveSubscriber::notify(const ApplyMoveResult &apply_move_result) {
 }
 
 bool FiftyMoveSubscriber::isFiftyMoveRuleReached() const {
-    return count_ == 50;
+    return count_ == Constants::kFiftyMoveLimit;
 }

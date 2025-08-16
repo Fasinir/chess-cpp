@@ -7,8 +7,8 @@ PawnPositionSubscriber::PawnPositionSubscriber(std::shared_ptr<EnPassantSubscrib
     this->en_passant_subscriber_ = std::move(en_passant_subscriber);
     this->pawn_positions_ = std::unordered_set<Coordinates>();
     for (int i = 0; i < Constants::kBoardSize; i++) {
-        pawn_positions_.insert(Coordinates(i, 1));
-        pawn_positions_.insert(Coordinates(i, 6));
+        pawn_positions_.insert(Coordinates(i, Constants::kWhitePawnStartRank));
+        pawn_positions_.insert(Coordinates(i, Constants::kBlackPawnStartRank));
     }
 }
 
@@ -20,14 +20,17 @@ void PawnPositionSubscriber::notify(const ApplyMoveResult &apply_move_result) {
     }
     if (pawn_positions_.contains(move->getFrom())) {
         pawn_positions_.erase(move->getFrom());
-        if (move->getTo().getY() != 0 && move->getTo().getY() != 7) {
+        if (move->getTo().getY() != Constants::kWhitePromotionRank && move->getTo().getY() !=
+            Constants::kBlackPromotionRank) {
             pawn_positions_.insert(move->getTo());
             std::cout << "Regular move" << std::endl;
         } else {
             std::cout << "Pawn was promoted" << std::endl;
         }
         if (en_passant_subscriber_->canBeTakenEnPassant(move->getTo())) {
-            int taken_en_passant_y_coordinate = move->getTo().getY() == 2 ? 3 : 4;
+            int taken_en_passant_y_coordinate = move->getTo().getY() == Constants::kWhiteEnPassantTakingRank
+                                                    ? Constants::kWhiteEnPassantTakingRank + 1
+                                                    : Constants::kBlackEnPassantTakingRank - 1;
             pawn_positions_.erase(Coordinates(move->getTo().getX(), taken_en_passant_y_coordinate));
             std::cout << "Pawn was taken en passant" << std::endl;
         }

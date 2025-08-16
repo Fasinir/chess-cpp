@@ -1,8 +1,9 @@
 #ifndef KINGPOSITIONSUBSCRIBER_H
 #define KINGPOSITIONSUBSCRIBER_H
 #include "MoveSubscriber.h"
-#include "../../move/Coordinates.h"
+#include "../../core/Coordinates.h"
 #include "../../core/ChessColor.h"
+#include "../../core/ConstantCoordinates.h"
 
 
 class KingPositionSubscriber final : public MoveSubscriber {
@@ -10,7 +11,8 @@ class KingPositionSubscriber final : public MoveSubscriber {
     Coordinates black_king_coordinates_;
 
 public:
-    KingPositionSubscriber() : white_king_coordinates_(4, 0), black_king_coordinates_(4, 7) {
+    KingPositionSubscriber() : white_king_coordinates_(ConstantCoordinates::kWhiteKing),
+                               black_king_coordinates_(ConstantCoordinates::kBlackKing) {
     }
 
     [[nodiscard]] Coordinates getKingCoordinates(ChessColor color) const;

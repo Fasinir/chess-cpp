@@ -4,7 +4,7 @@
 #include <unordered_set>
 
 #include "EnPassantSubscriber.h"
-#include "../../move/Coordinates.h"
+#include "../../core/Coordinates.h"
 
 
 class PawnPositionSubscriber final : public MoveSubscriber {

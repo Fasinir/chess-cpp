@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "../core/ChessColor.h"
-#include "../move/Coordinates.h"
+#include "../core/Coordinates.h"
 
 class ChessBoard;
 

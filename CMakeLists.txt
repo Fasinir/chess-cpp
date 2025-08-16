@@ -42,8 +42,8 @@ set(PROJECT_SOURCES
         src/model/figures/Rook.h
         src/model/figures/Pawn.cpp
         src/model/figures/Pawn.h
-        src/model/move/Coordinates.cpp
-        src/model/move/Coordinates.h
+        src/model/core/Coordinates.cpp
+        src/model/core/Coordinates.h
         src/model/move/Move.cpp
         src/model/move/Move.h
         src/model/core/ChessColor.h
@@ -86,6 +86,7 @@ set(PROJECT_SOURCES
         src/model/move/EnPassantMove.h
         src/model/move/CastleMove.cpp
         src/model/move/CastleMove.h
+        src/model/core/ConstantCoordinates.h
 
 )
 

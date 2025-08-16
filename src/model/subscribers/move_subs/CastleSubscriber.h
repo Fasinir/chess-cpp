@@ -4,13 +4,13 @@
 #include <unordered_set>
 
 #include "MoveSubscriber.h"
-#include "../../move/Coordinates.h"
+#include "../../core/Coordinates.h"
 
 
 class CastleSubscriber final : public MoveSubscriber {
     std::unordered_set<Coordinates> available_castles_;
 
-    void handleCastles(std::shared_ptr<Move> move, int y);
+    void handleCastles(std::shared_ptr<Move> move, const ChessColor &color);
 
 public:
     CastleSubscriber();

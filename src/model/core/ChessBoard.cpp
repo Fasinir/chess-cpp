@@ -3,13 +3,14 @@
 #include <ostream>
 #include <sstream>
 
+#include "ConstantCoordinates.h"
 #include "../figures/Bishop.h"
 #include "../figures/King.h"
 #include "../figures/Knight.h"
 #include "../figures/Pawn.h"
 #include "../figures/Queen.h"
 #include "../figures/Rook.h"
-#include "../move/Coordinates.h"
+#include "Coordinates.h"
 
 std::ostream &operator<<(std::ostream &os, const ChessBoard &board) {
     os << "  ";
@@ -35,30 +36,30 @@ std::unique_ptr<ChessBoard> ChessBoard::makeStandardBoard() {
     auto board = std::make_unique<ChessBoard>();
 
     // King
-    board->placeFigure(std::make_unique<King>(ChessColor::kBlack), Coordinates(4, 7));
-    board->placeFigure(std::make_unique<King>(ChessColor::kWhite), Coordinates(4, 0));
+    board->placeFigure(std::make_unique<King>(ChessColor::kBlack), ConstantCoordinates::kBlackKing);
+    board->placeFigure(std::make_unique<King>(ChessColor::kWhite), ConstantCoordinates::kWhiteKing);
     // Queen
-    board->placeFigure(std::make_unique<Queen>(ChessColor::kBlack), Coordinates(3, 7));
-    board->placeFigure(std::make_unique<Queen>(ChessColor::kWhite), Coordinates(3, 0));
+    board->placeFigure(std::make_unique<Queen>(ChessColor::kBlack), ConstantCoordinates::kBlackQueen);
+    board->placeFigure(std::make_unique<Queen>(ChessColor::kWhite), ConstantCoordinates::kWhiteQueen);
     // Bishop
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::kBlack), Coordinates(2, 7));
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::kBlack), Coordinates(5, 7));
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::kWhite), Coordinates(2, 0));
-    board->placeFigure(std::make_unique<Bishop>(ChessColor::kWhite), Coordinates(5, 0));
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::kBlack), ConstantCoordinates::kBlackBishopC);
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::kBlack), ConstantCoordinates::kBlackBishopF);
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::kWhite), ConstantCoordinates::kWhiteBishopC);
+    board->placeFigure(std::make_unique<Bishop>(ChessColor::kWhite), ConstantCoordinates::kWhiteBishopF);
     // Knight
-    board->placeFigure(std::make_unique<Knight>(ChessColor::kBlack), Coordinates(1, 7));
-    board->placeFigure(std::make_unique<Knight>(ChessColor::kBlack), Coordinates(6, 7));
-    board->placeFigure(std::make_unique<Knight>(ChessColor::kWhite), Coordinates(1, 0));
-    board->placeFigure(std::make_unique<Knight>(ChessColor::kWhite), Coordinates(6, 0));
+    board->placeFigure(std::make_unique<Knight>(ChessColor::kBlack), ConstantCoordinates::kBlackKnightB);
+    board->placeFigure(std::make_unique<Knight>(ChessColor::kBlack), ConstantCoordinates::kBlackKnightG);
+    board->placeFigure(std::make_unique<Knight>(ChessColor::kWhite), ConstantCoordinates::kWhiteKnightB);
+    board->placeFigure(std::make_unique<Knight>(ChessColor::kWhite), ConstantCoordinates::kWhiteKnightG);
     // Rook
-    board->placeFigure(std::make_unique<Rook>(ChessColor::kBlack), Coordinates(0, 7));
-    board->placeFigure(std::make_unique<Rook>(ChessColor::kBlack), Coordinates(7, 7));
-    board->placeFigure(std::make_unique<Rook>(ChessColor::kWhite), Coordinates(0, 0));
-    board->placeFigure(std::make_unique<Rook>(ChessColor::kWhite), Coordinates(7, 0));
+    board->placeFigure(std::make_unique<Rook>(ChessColor::kBlack), ConstantCoordinates::kBlackRookA);
+    board->placeFigure(std::make_unique<Rook>(ChessColor::kBlack), ConstantCoordinates::kBlackRookH);
+    board->placeFigure(std::make_unique<Rook>(ChessColor::kWhite), ConstantCoordinates::kWhiteRookA);
+    board->placeFigure(std::make_unique<Rook>(ChessColor::kWhite), ConstantCoordinates::kWhiteRookH);
 
     for (int i = 0; i < Constants::kBoardSize; i++) {
-        board->placeFigure(std::make_unique<Pawn>(ChessColor::kBlack), Coordinates(i, 6));
-        board->placeFigure(std::make_unique<Pawn>(ChessColor::kWhite), Coordinates(i, 1));
+        board->placeFigure(std::make_unique<Pawn>(ChessColor::kBlack), Coordinates(i, Constants::kBlackPawnStartRank));
+        board->placeFigure(std::make_unique<Pawn>(ChessColor::kWhite), Coordinates(i, Constants::kWhitePawnStartRank));
     }
 
     return board;
