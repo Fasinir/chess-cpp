@@ -1,0 +1,21 @@
+#ifndef VISIONBOARD_H
+#define VISIONBOARD_H
+#include <array>
+
+#include "../core/Coordinates.h"
+#include "../../Constants.h"
+#include  "../core/ChessBoard.h"
+
+class VisionBoard {
+    std::array<std::array<bool, Constants::kBoardSize>, Constants::kBoardSize> board_{};
+
+public:
+    VisionBoard() = default;
+
+    VisionBoard(std::shared_ptr<ChessBoard> board, ChessColor color);
+
+    bool attacks(const Coordinates &coordinates) const;
+};
+
+
+#endif //VISIONBOARD_H

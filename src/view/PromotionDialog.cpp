@@ -4,54 +4,52 @@
 #include <QSize>
 
 PromotionDialog::PromotionDialog(ChessColor color, QWidget *parent)
-    : QDialog(parent), ui(new Ui::PromotionDialog) {
-    ui->setupUi(this);
+    : QDialog(parent), ui_(new Ui::PromotionDialog) {
+    ui_->setupUi(this);
     setWindowTitle("Choose promotion");
 
-    // Hook up button clicks
-    connect(ui->queenButton, &QPushButton::clicked, this, &PromotionDialog::chooseQueen);
-    connect(ui->rookButton, &QPushButton::clicked, this, &PromotionDialog::chooseRook);
-    connect(ui->bishopButton, &QPushButton::clicked, this, &PromotionDialog::chooseBishop);
-    connect(ui->knightButton, &QPushButton::clicked, this, &PromotionDialog::chooseKnight);
+    connect(ui_->queenButton, &QPushButton::clicked, this, &PromotionDialog::chooseQueen);
+    connect(ui_->rookButton, &QPushButton::clicked, this, &PromotionDialog::chooseRook);
+    connect(ui_->bishopButton, &QPushButton::clicked, this, &PromotionDialog::chooseBishop);
+    connect(ui_->knightButton, &QPushButton::clicked, this, &PromotionDialog::chooseKnight);
 
-    // Apply colored icons
     setIconsForColor(color);
 }
 
-PromotionDialog::~PromotionDialog() { delete ui; }
+PromotionDialog::~PromotionDialog() { delete ui_; }
 
 void PromotionDialog::setIconsForColor(ChessColor color) {
-    const QString prefix = (color == ChessColor::WHITE) ? "white" : "black";
-    const auto size = QSize(64, 64); // tweak if needed
+    QString prefix = (color == ChessColor::kWhite) ? "white" : "black";
+    auto size = QSize(64, 64); // tweak if needed
 
-    ui->queenButton->setIcon(QIcon(QString("../assets/%1_queen.svg").arg(prefix)));
-    ui->rookButton->setIcon(QIcon(QString("../assets/%1_rook.svg").arg(prefix)));
-    ui->bishopButton->setIcon(QIcon(QString("../assets/%1_bishop.svg").arg(prefix)));
-    ui->knightButton->setIcon(QIcon(QString("../assets/%1_knight.svg").arg(prefix)));
+    ui_->queenButton->setIcon(QIcon(QString("../assets/%1_queen.svg").arg(prefix)));
+    ui_->rookButton->setIcon(QIcon(QString("../assets/%1_rook.svg").arg(prefix)));
+    ui_->bishopButton->setIcon(QIcon(QString("../assets/%1_bishop.svg").arg(prefix)));
+    ui_->knightButton->setIcon(QIcon(QString("../assets/%1_knight.svg").arg(prefix)));
 
-    ui->queenButton->setIconSize(size);
-    ui->rookButton->setIconSize(size);
-    ui->bishopButton->setIconSize(size);
-    ui->knightButton->setIconSize(size);
+    ui_->queenButton->setIconSize(size);
+    ui_->rookButton->setIconSize(size);
+    ui_->bishopButton->setIconSize(size);
+    ui_->knightButton->setIconSize(size);
 }
 
 // Slots
 void PromotionDialog::chooseQueen() {
-    choice = PromotionType::QUEEN;
+    choice_ = PromotionType::kQueen;
     accept();
 }
 
 void PromotionDialog::chooseRook() {
-    choice = PromotionType::ROOK;
+    choice_ = PromotionType::kRook;
     accept();
 }
 
 void PromotionDialog::chooseBishop() {
-    choice = PromotionType::BISHOP;
+    choice_ = PromotionType::kBishop;
     accept();
 }
 
 void PromotionDialog::chooseKnight() {
-    choice = PromotionType::KNIGHT;
+    choice_ = PromotionType::kKnight;
     accept();
 }

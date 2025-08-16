@@ -14,220 +14,136 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QStackedWidget" name="stackedWidget">
-    <property name="geometry">
-     <rect>
-      <x>-1</x>
-      <y>-1</y>
-      <width>801</width>
-      <height>601</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="mainMenuPage">
-     <widget class="QWidget" name="verticalLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>310</x>
-        <y>260</y>
-        <width>168</width>
-        <height>80</height>
-       </rect>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QPushButton" name="startLocalGameButton">
-         <property name="text">
-          <string>startLocalGameButton</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="startEngineGameButton">
-         <property name="text">
-          <string>startEngineGameButton</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="configPage">
-     <widget class="QWidget" name="formLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>260</x>
-        <y>180</y>
-        <width>260</width>
-        <height>208</height>
-       </rect>
-      </property>
-      <layout class="QFormLayout" name="formLayout">
-       <item row="0" column="0">
-        <widget class="QTimeEdit" name="timeEdit">
-         <property name="minimumTime">
-          <time>
-           <hour>0</hour>
-           <minute>0</minute>
-           <second>1</second>
-          </time>
-         </property>
-         <property name="displayFormat">
-          <string>hh:mm:ss</string>
-         </property>
-         <property name="time">
-          <time>
-           <hour>0</hour>
-           <minute>10</minute>
-           <second>0</second>
-          </time>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="timeLabel">
-         <property name="text">
-          <string>Time</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QSpinBox" name="incrementSpinBox">
-         <property name="maximum">
-          <number>99999</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="incrementLabel">
-         <property name="text">
-          <string>Increment</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLineEdit" name="playerOneLineEdit">
-         <property name="text">
-          <string>Player1</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QComboBox" name="colorComboBox">
+      <widget class="QWidget" name="mainMenuPage">
+       <widget class="QWidget" name="verticalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>310</x>
+          <y>260</y>
+          <width>168</width>
+          <height>80</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <property name="text">
-           <string>White</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Black</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Random color</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLineEdit" name="playerTwoLineEdit">
-         <property name="text">
-          <string>Player2</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="playerTwoColorLabel">
-         <property name="text">
-          <string>Black</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="QComboBox" name="chessEngineComboBox">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <item>
-          <property name="text">
-           <string>Stockfish</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Random Moves</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
-        <widget class="QPushButton" name="startGameButton">
-         <property name="text">
-          <string>Start Game</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="gamePage">
-     <widget class="QWidget" name="verticalLayoutWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>801</width>
-        <height>601</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="gamePageVerticalLayout">
-       <item>
-        <layout class="QHBoxLayout" name="blackPlayerHorizontalLayout">
-         <item>
-          <widget class="QLabel" name="blackPlayerTimerLabel">
+          <widget class="QPushButton" name="startLocalGameButton">
            <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="blackPlayerNameLabel">
-           <property name="text">
-            <string>TextLabel</string>
+            <string>Start local game</string>
            </property>
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QGraphicsView" name="boardGraphicsView"/>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="whitePlayerHorizontalLayout">
-         <item>
-          <widget class="QLabel" name="whitePlayerTimerLabel">
+       </widget>
+      </widget>
+      <widget class="QWidget" name="configPage">
+       <widget class="QWidget" name="formLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>250</y>
+          <width>260</width>
+          <height>111</height>
+         </rect>
+        </property>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLineEdit" name="playerOneLineEdit">
            <property name="text">
-            <string>TextLabel</string>
+            <string>Player1</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QLabel" name="whitePlayerNameLabel">
+         <item row="0" column="1">
+          <widget class="QComboBox" name="colorComboBox">
+           <item>
+            <property name="text">
+             <string>White</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Black</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Random color</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLineEdit" name="playerTwoLineEdit">
            <property name="text">
-            <string>TextLabel</string>
+            <string>Player2</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="playerTwoColorLabel">
+           <property name="text">
+            <string>Black</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" colspan="2">
+          <widget class="QPushButton" name="startGameButton">
+           <property name="text">
+            <string>Start Game</string>
            </property>
           </widget>
          </item>
         </layout>
-       </item>
-      </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="gamePage">
+       <widget class="QWidget" name="verticalLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>771</width>
+          <height>571</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="gamePageVerticalLayout">
+         <item>
+          <layout class="QHBoxLayout" name="blackPlayerHorizontalLayout">
+           <item>
+            <widget class="QLabel" name="blackPlayerNameLabel">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QGraphicsView" name="boardGraphicsView"/>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="whitePlayerHorizontalLayout">
+           <item>
+            <widget class="QLabel" name="whitePlayerNameLabel">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
      </widget>
-    </widget>
-   </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

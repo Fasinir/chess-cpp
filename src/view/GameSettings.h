@@ -5,20 +5,11 @@
 
 #pragma once
 
-#include <QString>
 #include <QTime>
 
-enum class GameMode {
-    Local,
-    Engine
-};
-
 struct GameSettings {
-    GameMode mode;
-    QString player1Name;
-    QString player2Name;
-    QString whitePlayerName;
-    QString blackPlayerName;
-    QTime baseTime;
-    int incrementSeconds;
+    QString player1_name_;
+    QString player2_name_;
+    QString white_player_name_;
+    QString black_player_name_;
 };

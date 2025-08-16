@@ -1,0 +1,29 @@
+#ifndef ENPASSANTCHECKER_H
+#define ENPASSANTCHECKER_H
+#include <optional>
+#include <unordered_set>
+
+#include "MoveSubscriber.h"
+#include "../../core/Coordinates.h"
+
+class EnPassantSubscriber final : public MoveSubscriber {
+    std::unordered_set<Coordinates> unmoved_pawns_;
+
+    std::optional<Coordinates> en_passant_coordinates_;
+
+public:
+    EnPassantSubscriber();
+
+    ~EnPassantSubscriber() override = default;
+
+    bool canBeTakenEnPassant(Coordinates coordinates) const;
+
+    void setEnPassantCoordinates(Coordinates coordinates);
+
+    std::optional<Coordinates> getEnPassantCoordinates() const { return en_passant_coordinates_; }
+
+    void notify(const ApplyMoveResult &apply_move_result) override;
+};
+
+
+#endif //ENPASSANTCHECKER_H

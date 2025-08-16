@@ -2,181 +2,197 @@
 #include "./ui_MainWindow.h"
 #include <QGraphicsRectItem>
 #include <QTime>
-#include <QDebug>
 #include <QRandomGenerator>
 
 #include "PromotionDialog.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
-    ui->setupUi(this);
-    controller = new ChessController(this);
+const QColor MainWindow::kHighlightColor = QColor(0, 200, 0, 90);
+const QColor MainWindow::kWhiteFieldColor = QColor(0xf0d9b5);
+const QColor MainWindow::kBlackFieldColor = QColor(0xb58863);
 
-    connect(ui->startLocalGameButton, &QPushButton::clicked, this, &MainWindow::startLocalGame);
-    connect(ui->startEngineGameButton, &QPushButton::clicked, this, &MainWindow::startEngineGame);
-    connect(ui->colorComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::updatePlayer2ColorLabel);
-    connect(ui->startGameButton, &QPushButton::clicked, this, &MainWindow::proceedToGamePage);
-    connect(controller, &ChessController::boardUpdated, this, &MainWindow::drawBoardFromModel);
-    connect(controller, &ChessController::promotionRequested, this, &MainWindow::handlePromotionRequested);
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), ui_(new Ui::MainWindow) {
+    ui_->setupUi(this);
+    controller_ = new ChessController(this);
+
+    connect(ui_->startLocalGameButton, &QPushButton::clicked, this, &MainWindow::showConfigScreen);
+    connect(ui_->colorComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::updatePlayer2ColorLabel);
+    connect(ui_->startGameButton, &QPushButton::clicked, this, &MainWindow::proceedToGamePage);
+    connect(controller_, &ChessController::boardUpdated, this, &MainWindow::drawBoardFromModel);
+    connect(controller_, &ChessController::promotionRequested, this, &MainWindow::handlePromotionRequested);
 }
 
 MainWindow::~MainWindow() {
-    delete ui;
+    delete ui_;
 }
 
-void MainWindow::startLocalGame() {
-    showConfigScreen(GameMode::Local);
+void MainWindow::showLegalMoveHighlights(int from_row, int from_col) {
+    clearLegalMoveHighlights();
+    auto dests = controller_->legalDestinationsFrom(from_col, from_row);
+
+    for (const auto &c: dests) {
+        int col = c.getX();
+        int row = c.getY();
+
+        QRectF square(col * kTileSize, (7 - row) * kTileSize, kTileSize, kTileSize);
+        auto *rect = scene_->addRect(square, Qt::NoPen, kHighlightColor);
+        rect->setZValue(0.5);
+        move_highlights_.push_back(rect);
+    }
 }
 
-void MainWindow::startEngineGame() {
-    showConfigScreen(GameMode::Engine);
+void MainWindow::clearLegalMoveHighlights() {
+    for (auto *it: move_highlights_) {
+        scene_->removeItem(it);
+        delete it;
+    }
+    move_highlights_.clear();
 }
 
-void MainWindow::showConfigScreen(GameMode mode) {
-    currentGameMode = mode;
-    ui->stackedWidget->setCurrentWidget(ui->configPage);
-
-    bool isEngineGame = (mode == GameMode::Engine);
-    ui->chessEngineComboBox->setVisible(isEngineGame);
-    ui->playerTwoLineEdit->setVisible(!isEngineGame);
-    ui->playerTwoColorLabel->setVisible(!isEngineGame);
+void MainWindow::showConfigScreen() {
+    ui_->stackedWidget->setCurrentWidget(ui_->configPage);
 }
 
-void MainWindow::updatePlayer2ColorLabel() {
-    const QString choice = ui->colorComboBox->currentText();
+void MainWindow::updatePlayer2ColorLabel() const {
+    const QString kChoice = ui_->colorComboBox->currentText();
 
-    if (choice == "White") {
-        ui->playerTwoColorLabel->setText("Black");
-    } else if (choice == "Black") {
-        ui->playerTwoColorLabel->setText("White");
+    if (kChoice == "White") {
+        ui_->playerTwoColorLabel->setText("Black");
+    } else if (kChoice == "Black") {
+        ui_->playerTwoColorLabel->setText("White");
     } else {
-        ui->playerTwoColorLabel->setText("Random color");
+        ui_->playerTwoColorLabel->setText("Random color");
     }
 }
 
 void MainWindow::proceedToGamePage() {
     GameSettings settings;
 
-    settings.mode = currentGameMode;
-    settings.player1Name = ui->playerOneLineEdit->text();
-    settings.baseTime = ui->timeEdit->time();
-    settings.incrementSeconds = ui->incrementSpinBox->value();
+    settings.player1_name_ = ui_->playerOneLineEdit->text();
+    settings.player2_name_ = ui_->playerTwoLineEdit->text();
 
-    if (currentGameMode == GameMode::Engine) {
-        settings.player2Name = ui->chessEngineComboBox->currentText();
-    } else {
-        settings.player2Name = ui->playerTwoLineEdit->text();
-    }
-
-    QString colorChoice = ui->colorComboBox->currentText();
-    if (colorChoice == "White") {
-        settings.whitePlayerName = settings.player1Name;
-        settings.blackPlayerName = settings.player2Name;
-    } else if (colorChoice == "Black") {
-        settings.whitePlayerName = settings.player2Name;
-        settings.blackPlayerName = settings.player1Name;
+    QString color_choice = ui_->colorComboBox->currentText();
+    if (color_choice == "White") {
+        settings.white_player_name_ = settings.player1_name_;
+        settings.black_player_name_ = settings.player2_name_;
+    } else if (color_choice == "Black") {
+        settings.white_player_name_ = settings.player2_name_;
+        settings.black_player_name_ = settings.player1_name_;
     } else {
         if (QRandomGenerator::global()->bounded(2) == 0) {
-            settings.whitePlayerName = settings.player1Name;
-            settings.blackPlayerName = settings.player2Name;
+            settings.white_player_name_ = settings.player1_name_;
+            settings.black_player_name_ = settings.player2_name_;
         } else {
-            settings.whitePlayerName = settings.player2Name;
-            settings.blackPlayerName = settings.player1Name;
+            settings.white_player_name_ = settings.player2_name_;
+            settings.black_player_name_ = settings.player1_name_;
         }
     }
 
-    // Store or pass to controller
-    this->gameSettings = settings;
+    this->game_settings_ = settings;
 
-    // Update UI
-    ui->whitePlayerNameLabel->setText(settings.whitePlayerName);
-    ui->blackPlayerNameLabel->setText(settings.blackPlayerName);
+    ui_->whitePlayerNameLabel->setText(settings.white_player_name_);
+    ui_->blackPlayerNameLabel->setText(settings.black_player_name_);
 
-    QString formattedTime = settings.baseTime.toString("hh:mm:ss");
-    ui->whitePlayerTimerLabel->setText(formattedTime);
-    ui->blackPlayerTimerLabel->setText(formattedTime);
-
-    ui->stackedWidget->setCurrentWidget(ui->gamePage);
-    drawChessBoard();
+    ui_->stackedWidget->setCurrentWidget(ui_->gamePage);
+    drawBoardTiles();
     drawBoardFromModel();
-    controller->startGame(settings);
+    controller_->startGame(settings);
 }
 
 
-void MainWindow::drawChessBoard() {
-    if (scene) delete scene;
-    scene = new QGraphicsScene(this);
-    ui->boardGraphicsView->setScene(scene);
-    ui->boardGraphicsView->setRenderHint(QPainter::Antialiasing);
+void MainWindow::drawBoardTiles() {
+    if (scene_) delete scene_;
+    scene_ = new QGraphicsScene(this);
+    ui_->boardGraphicsView->setScene(scene_);
+    ui_->boardGraphicsView->setRenderHint(QPainter::Antialiasing);
 
-    const int tileSize = 80;
+    scene_->installEventFilter(this);
 
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
-            QRectF square(col * tileSize, row * tileSize, tileSize, tileSize);
-            auto *rect = scene->addRect(square);
+            QRectF square(col * kTileSize, row * kTileSize, kTileSize, kTileSize);
+            auto *rect = scene_->addRect(square);
 
-            QColor color = (row + col) % 2 == 0 ? QColor(0xf0d9b5) : QColor(0xb58863);
+            QColor color = (row + col) % 2 == 0 ? kWhiteFieldColor : kBlackFieldColor;
             rect->setBrush(color);
         }
     }
     // Set fixed scene size to exactly fit the board
-    scene->setSceneRect(0, 0, 8 * tileSize, 8 * tileSize);
+    scene_->setSceneRect(0, 0, 8 * kTileSize, 8 * kTileSize);
 
-    // Disable scrollbars
-    ui->boardGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->boardGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui_->boardGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui_->boardGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    // Optional: Resize view to fit the scene exactly (if view size changes)
-    ui->boardGraphicsView->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
+    ui_->boardGraphicsView->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
 }
 
-void MainWindow::placePiece(const QString &svgPath, PieceColor color, int row, int col) {
-    const int tileSize = 80;
-    auto *piece = new DraggablePiece(svgPath, color, row, col, tileSize);
-    scene->addItem(piece);
+void MainWindow::placePiece(const QString &svg_path, const ChessColor &color, int row, int col) {
+    auto *piece = new DraggablePiece(svg_path, color, row, col, kTileSize);
+    scene_->addItem(piece);
 
-    piece->setScale(tileSize / piece->boundingRect().width());
+    piece->setScale(kTileSize / piece->boundingRect().width());
 
-    qreal offsetX = (tileSize - piece->boundingRect().width() * piece->scale()) / 2;
-    qreal offsetY = (tileSize - piece->boundingRect().height() * piece->scale()) / 2;
+    qreal offset_x = (kTileSize - piece->boundingRect().width() * piece->scale()) / 2;
+    qreal offset_y = (kTileSize - piece->boundingRect().height() * piece->scale()) / 2;
 
-    piece->setPos(col * tileSize + offsetX, (7 - row) * tileSize + offsetY);
+    piece->setPos(col * kTileSize + offset_x, (7 - row) * kTileSize + offset_y);
     connect(piece, &DraggablePiece::pieceMoved,
-            controller, &ChessController::onPieceMoved);
-    connect(controller, &ChessController::illegalMoveAttempted, piece, &DraggablePiece::revertToOriginalPosition);
+            controller_, &ChessController::onPieceMoved);
+    connect(controller_, &ChessController::illegalMoveAttempted, piece, &DraggablePiece::revertToOriginalPosition);
+    connect(piece, &DraggablePiece::pieceSelected,
+            this, [this](int r, int c) { showLegalMoveHighlights(r, c); });
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == scene_ && event->type() == QEvent::GraphicsSceneMousePress) {
+        auto *ev = static_cast<QGraphicsSceneMouseEvent *>(event);
+
+        // Check what was clicked at that scene position
+        const auto items_at_pos = scene_->items(ev->scenePos());
+
+        bool clicked_piece = false;
+        for (QGraphicsItem *it: items_at_pos) {
+            if (qgraphicsitem_cast<DraggablePiece *>(it)) {
+                clicked_piece = true;
+                break;
+            }
+        }
+
+        if (!clicked_piece) {
+            clearLegalMoveHighlights();
+        }
+    }
+    return QMainWindow::eventFilter(obj, event);
 }
 
 void MainWindow::drawBoardFromModel() {
-    // Remove all pieces, but leave the board tiles
-    for (auto item: scene->items()) {
+    clearLegalMoveHighlights();
+    for (auto item: scene_->items()) {
         auto *piece = dynamic_cast<DraggablePiece *>(item);
         if (piece) {
-            scene->removeItem(piece);
+            scene_->removeItem(piece);
             delete piece;
         }
     }
 
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
-            auto optFigure = controller->getBoard()->figureAt(col, row);
-            if (!optFigure.has_value()) continue;
+            auto opt_figure = controller_->getBoard()->figureAt(Coordinates(col, row));
+            if (!opt_figure.has_value()) continue;
 
-            auto fig = optFigure.value();
-            QString colorPrefix = (fig->getColor() == ChessColor::WHITE) ? "white" : "black";
-            QString pieceName = QString::fromStdString(fig->getName());
-            QString path = QString("../assets/%1_%2.svg").arg(colorPrefix, pieceName);
+            auto fig = opt_figure.value();
+            QString color_prefix = (fig->getColor() == ChessColor::kWhite) ? "white" : "black";
+            QString piece_name = QString::fromStdString(fig->getName());
+            QString path = QString("../assets/%1_%2.svg").arg(color_prefix, piece_name);
 
-            PieceColor guiColor = (fig->getColor() == ChessColor::WHITE) ? PieceColor::White : PieceColor::Black;
-            placePiece(path, guiColor, row, col);
+            ChessColor piece_color = fig->getColor();
+            placePiece(path, piece_color, row, col);
         }
     }
 }
 
-void MainWindow::handlePromotionRequested(Coordinates coordinates, ChessColor color) {
-    PromotionDialog dialog(color, this);
-
-    if (dialog.exec() == QDialog::Accepted) {
-        controller->promote(coordinates, dialog.selectedType());
+void MainWindow::handlePromotionRequested(const Coordinates &coordinates, const ChessColor &color) {
+    if (PromotionDialog dialog(color, this); dialog.exec() == QDialog::Accepted) {
+        controller_->promote(coordinates, dialog.selectedType());
     }
 }

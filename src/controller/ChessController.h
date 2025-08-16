@@ -1,30 +1,32 @@
 #pragma once
 
 #include <memory>
-#include "../model/board/ChessBoard.h"
-#include "../model/board/move/MoveApplier.h"
-#include "../model/board/move/LegalMoveGetter.h"
-#include "../model/board/subscribers/board_subs/ThreefoldBoardSubscriber.h"
-#include "../model/board/subscribers/move_subs/FiftyMoveSubscriber.h"
+
+#include "PromotionType.h"
+#include "../model/core/ChessBoard.h"
+#include "../model/move/LegalMoveGetter.h"
+#include "../model/subscribers/board_subs/ThreefoldBoardSubscriber.h"
+#include "../model/subscribers/move_subs/FiftyMoveSubscriber.h"
 #include "../view/GameSettings.h"
-#include "../model/board/subscribers/move_subs/MoveSubscriptionManager.h"
-#include "../model/board/subscribers/move_subs/PromotionSubscriber.h"
-#include "../model/board/subscribers/move_subs/KingPositionSubscriber.h"
+#include "../model/subscribers/move_subs/MoveSubscriptionManager.h"
+#include "../model/subscribers/move_subs/PromotionSubscriber.h"
+#include "../model/subscribers/move_subs/KingPositionSubscriber.h"
 
-enum class PromotionType { QUEEN, ROOK, BISHOP, KNIGHT };
 
-class ChessController : public QObject {
+class ChessController final : public QObject {
     Q_OBJECT
 
 public:
     explicit ChessController(QObject *parent = nullptr);
 
     void startGame(const GameSettings &settings);
-    [[nodiscard]] ChessBoard *getBoard() const { return board.get(); }
 
+    [[nodiscard]] std::shared_ptr<ChessBoard> getBoard() const { return board_; }
+
+    std::vector<Coordinates> legalDestinationsFrom(int col, int row) const;
 
 public slots:
-    void onPieceMoved(int fromRow, int fromCol, int toRow, int toCol);
+    void onPieceMoved(int from_row, int from_col, int to_row, int to_col);
 
     void promote(Coordinates coordinates, PromotionType type);
 
@@ -33,23 +35,22 @@ signals:
 
     void illegalMoveAttempted();
 
-    void boardUpdated(); // UI can react to this
+    void boardUpdated();
 
 private:
-    std::unique_ptr<ChessBoard> board;
-    std::unique_ptr<MoveApplier> moveApplier;
-    std::unique_ptr<LegalMoveGetter> moveGetter;
-    std::shared_ptr<KingPositionSubscriber> kingPositionSubscriber;
-    std::shared_ptr<FiftyMoveSubscriber> fiftyMoveSubscriber;
-    std::shared_ptr<PromotionSubscriber> promotionSubscriber;
-    std::shared_ptr<ThreefoldBoardSubscriber> threefoldBoardSubscriber;
-    std::shared_ptr<CastleSubscriber> castleSubscriber;
-    std::shared_ptr<EnPassantSubscriber> enPassantSubscriber;
-    GameSettings settings;
-    std::vector<Move> currentLegalMoves;
-    std::unique_ptr<MoveSubscriptionManager> manager;
+    std::shared_ptr<ChessBoard> board_;
+    std::shared_ptr<LegalMoveGetter> move_getter_;
+    std::shared_ptr<KingPositionSubscriber> king_position_subscriber_;
+    std::shared_ptr<FiftyMoveSubscriber> fifty_move_subscriber_;
+    std::shared_ptr<PromotionSubscriber> pawn_promotion_subscriber_;
+    std::shared_ptr<ThreefoldBoardSubscriber> threefold_board_subscriber_;
+    std::shared_ptr<CastleSubscriber> castle_subscriber_;
+    std::shared_ptr<EnPassantSubscriber> en_passant_subscriber_;
+    GameSettings game_settings_;
+    std::vector<std::shared_ptr<Move> > current_legal_moves_;
+    std::unique_ptr<MoveSubscriptionManager> move_subscription_manager_;
 
-    bool whiteToMove = true;
+    bool white_to_move_ = true;
 
 
     void nextTurn();
