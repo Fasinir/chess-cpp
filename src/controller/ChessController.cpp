@@ -45,6 +45,7 @@ void ChessController::startGame(const GameSettings &settings) {
     std::cout << "White: " << settings.white_player_name_.toStdString() << "\n";
     std::cout << "Black: " << settings.black_player_name_.toStdString() << "\n";
 
+    emit currentPlayerChanged(ChessColor::kWhite);
     nextTurn();
 }
 
@@ -127,6 +128,7 @@ void ChessController::onPieceMoved(int from_row, int from_col, int to_row, int t
     emit boardUpdated();
 
     white_to_move_ = !white_to_move_;
+    emit currentPlayerChanged(white_to_move_ ? ChessColor::kWhite : ChessColor::kBlack);
     nextTurn();
 }
 

@@ -9,6 +9,8 @@
 const QColor MainWindow::kHighlightColor = QColor(0, 200, 0, 90);
 const QColor MainWindow::kWhiteFieldColor = QColor(0xf0d9b5);
 const QColor MainWindow::kBlackFieldColor = QColor(0xb58863);
+const QString MainWindow::kActivePlayerFont = QString("font-weight:600; color:#2e7d32;");
+const QString MainWindow::kInactivePlayerFont = QString("font-weight:400; color:#222;");
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui_(new Ui::MainWindow) {
@@ -20,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui_->startGameButton, &QPushButton::clicked, this, &MainWindow::proceedToGamePage);
     connect(controller_, &ChessController::boardUpdated, this, &MainWindow::drawBoardFromModel);
     connect(controller_, &ChessController::promotionRequested, this, &MainWindow::handlePromotionRequested);
+    connect(controller_, &ChessController::currentPlayerChanged, this, &MainWindow::updateCurrentPlayer);
 }
 
 MainWindow::~MainWindow() {
@@ -143,6 +146,11 @@ void MainWindow::placePiece(const QString &svg_path, const ChessColor &color, in
             this, [this](int r, int c) { showLegalMoveHighlights(r, c); });
 }
 
+void MainWindow::setActivePlayerStyles(bool white_active) {
+    ui_->whitePlayerNameLabel->setStyleSheet(white_active ? kActivePlayerFont : kInactivePlayerFont);
+    ui_->blackPlayerNameLabel->setStyleSheet(white_active ? kInactivePlayerFont : kActivePlayerFont);
+}
+
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
     if (obj == scene_ && event->type() == QEvent::GraphicsSceneMousePress) {
         auto *ev = static_cast<QGraphicsSceneMouseEvent *>(event);
@@ -195,4 +203,10 @@ void MainWindow::handlePromotionRequested(const Coordinates &coordinates, const 
     if (PromotionDialog dialog(color, this); dialog.exec() == QDialog::Accepted) {
         controller_->promote(coordinates, dialog.selectedType());
     }
+}
+
+void MainWindow::updateCurrentPlayer(ChessColor color) {
+    bool white_active = (color == ChessColor::kWhite);
+    setActivePlayerStyles(white_active);
+    ui_->statusBar->showMessage(white_active ? "White to move" : "Black to move");
 }
