@@ -33,6 +33,8 @@ private slots:
 
     void handlePromotionRequested(const Coordinates &coordinates, const ChessColor &color);
 
+    void updateCurrentPlayer(ChessColor color);
+
 private:
     Ui::MainWindow *ui_;
     QGraphicsScene *scene_ = nullptr;
@@ -42,6 +44,8 @@ private:
     static const QColor kHighlightColor;
     static const QColor kWhiteFieldColor;
     static const QColor kBlackFieldColor;
+    static const QString kActivePlayerFont;
+    static const QString kInactivePlayerFont;
     static constexpr int kTileSize = 80;
 
     QVector<QGraphicsItem *> move_highlights_;
@@ -55,6 +59,8 @@ private:
     void drawBoardTiles();
 
     void placePiece(const QString &svg_path, const ChessColor &color, int row, int col);
+
+    void setActivePlayerStyles(bool white_active);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

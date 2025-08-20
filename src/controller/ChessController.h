@@ -37,6 +37,8 @@ signals:
 
     void boardUpdated();
 
+    void currentPlayerChanged(ChessColor color);
+
 private:
     std::shared_ptr<ChessBoard> board_;
     std::shared_ptr<LegalMoveGetter> move_getter_;
